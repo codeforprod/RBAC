@@ -1,0 +1,47 @@
+import { ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@holocron/rbac-core';
+import { ICacheAdapter, ICacheMetrics, ICacheHealthStatus } from '../interfaces';
+import { MemoryCacheOptions } from '../types';
+export declare class MemoryCacheAdapter implements ICacheAdapter {
+    readonly name = "memory";
+    private readonly options;
+    private readonly lru;
+    private readonly ttl;
+    private readonly tagIndex;
+    private initialized;
+    private startedAt;
+    private metrics;
+    constructor(options?: Partial<MemoryCacheOptions>);
+    initialize(): Promise<void>;
+    isReady(): boolean;
+    get<T>(key: string, options?: ICacheGetOptions): Promise<T | null>;
+    set<T>(key: string, value: T, options?: ICacheSetOptions): Promise<void>;
+    delete(key: string): Promise<boolean>;
+    exists(key: string): Promise<boolean>;
+    deletePattern(pattern: string): Promise<number>;
+    deleteByTag(tag: string): Promise<number>;
+    deleteByTags(tags: string[]): Promise<number>;
+    getMany<T>(keys: string[]): Promise<Map<string, T | null>>;
+    setMany<T>(entries: Map<string, T>, options?: ICacheSetOptions): Promise<void>;
+    clear(): Promise<number>;
+    getStats(): Promise<ICacheStats>;
+    resetStats(): Promise<void>;
+    getOrSet<T>(key: string, factory: () => Promise<T>, options?: ICacheSetOptions): Promise<T>;
+    lock(key: string, ttl?: number): Promise<(() => Promise<void>) | null>;
+    healthCheck(): Promise<boolean>;
+    shutdown(): Promise<void>;
+    getMetrics(): Promise<ICacheMetrics>;
+    getHealthStatus(): Promise<ICacheHealthStatus>;
+    getTtl(key: string): Promise<number>;
+    updateTtl(key: string, ttl: number): Promise<boolean>;
+    keys(pattern: string): Promise<string[]>;
+    touch(key: string): Promise<boolean>;
+    private handleEviction;
+    private handleExpiration;
+    private addToTagIndex;
+    private removeFromTagIndex;
+    private patternToRegex;
+    private estimateSize;
+    private calculateMemoryUsage;
+    private ensureInitialized;
+}
+//# sourceMappingURL=memory-cache.adapter.d.ts.map

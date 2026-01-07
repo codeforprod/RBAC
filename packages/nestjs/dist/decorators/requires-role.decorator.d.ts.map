@@ -1,0 +1,1 @@
+{"version":3,"file":"requires-role.decorator.d.ts","sourceRoot":"","sources":["../../src/decorators/requires-role.decorator.ts"],"names":[],"mappings":"AA0CA,wBAAgB,YAAY,CAAC,IAAI,EAAE,MAAM,GAAG,eAAe,GAAG,cAAc,CAK3E;AAoBD,wBAAgB,aAAa,CAAC,KAAK,EAAE,MAAM,EAAE,GAAG,eAAe,GAAG,cAAc,CAK/E;AAoBD,wBAAgB,eAAe,CAAC,KAAK,EAAE,MAAM,EAAE,GAAG,eAAe,GAAG,cAAc,CAKjF"}

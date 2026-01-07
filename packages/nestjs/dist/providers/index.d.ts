@@ -1,0 +1,2 @@
+export { RBAC_OPTIONS_TOKEN, RBAC_ENGINE_TOKEN, USER_EXTRACTION_STRATEGY_TOKEN, createRbacProviders, createRbacAsyncProviders, DefaultUserExtractionStrategy, } from './rbac-options.provider';
+//# sourceMappingURL=index.d.ts.map

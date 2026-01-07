@@ -1,0 +1,4 @@
+
+> @holocron/rbac-core@1.0.0 build
+> tsc -p tsconfig.build.json
+

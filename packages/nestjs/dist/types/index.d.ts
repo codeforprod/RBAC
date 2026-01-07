@@ -1,0 +1,2 @@
+export { RbacModuleOptions, RbacModuleAsyncOptions, RbacOptionsFactory, IUserExtractionStrategy, AuthorizationFailureHandler, RBAC_METADATA, PermissionCheckMode, CustomAuthorizer, PermissionMetadata, RoleMetadata, } from './module-options.types';
+//# sourceMappingURL=index.d.ts.map
