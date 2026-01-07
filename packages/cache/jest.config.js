@@ -28,7 +28,7 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    '@holocron/rbac-core': '<rootDir>/../core/src',
+    '@callairis/rbac-core': '<rootDir>/../core/src',
   },
   verbose: true,
 };

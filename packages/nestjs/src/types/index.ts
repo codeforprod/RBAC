@@ -1,5 +1,5 @@
 /**
- * @fileoverview Type definitions for the @holocron/rbac-nestjs package.
+ * @fileoverview Type definitions for the @callairis/rbac-nestjs package.
  *
  * This module exports all TypeScript types, interfaces, and enums used
  * throughout the NestJS RBAC integration.

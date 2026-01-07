@@ -1,7 +1,7 @@
 /**
  * @fileoverview
  * Central export file for all RBAC services.
- * Import from '@holocron/rbac-core' to access all services.
+ * Import from '@callairis/rbac-core' to access all services.
  *
  * @example
  * ```typescript
@@ -11,7 +11,7 @@
  *   InMemoryAuditLogger,
  *   ContextualAuditLogger,
  *   createAuditLogger
- * } from '@holocron/rbac-core';
+ * } from '@callairis/rbac-core';
  *
  * // Create engine with full configuration
  * const engine = await RBACEngine.create({

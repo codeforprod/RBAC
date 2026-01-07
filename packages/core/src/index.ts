@@ -1,6 +1,6 @@
 /**
  * @fileoverview
- * @holocron/rbac-core - Framework-agnostic Role-Based Access Control library
+ * @callairis/rbac-core - Framework-agnostic Role-Based Access Control library
  *
  * This package provides a complete RBAC implementation with:
  * - Permission matching with wildcard support (*, **)
@@ -18,7 +18,7 @@
  *   RBACEngine,
  *   InMemoryCache,
  *   InMemoryAuditLogger
- * } from '@holocron/rbac-core';
+ * } from '@callairis/rbac-core';
  *
  * // Create RBAC engine
  * const rbac = await RBACEngine.create({
@@ -87,7 +87,7 @@
  *
  * @example Implementing Custom Adapter
  * ```typescript
- * import { IRBACAdapter, IRole, IPermission } from '@holocron/rbac-core';
+ * import { IRBACAdapter, IRole, IPermission } from '@callairis/rbac-core';
  *
  * class MyDatabaseAdapter implements IRBACAdapter {
  *   async findRoleById(id: string): Promise<IRole | null> {
@@ -259,4 +259,4 @@ export const VERSION = '1.0.0';
 /**
  * Package name.
  */
-export const PACKAGE_NAME = '@holocron/rbac-core';
+export const PACKAGE_NAME = '@callairis/rbac-core';

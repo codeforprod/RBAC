@@ -36,5 +36,5 @@ Object.defineProperty(exports, "InMemoryAuditLogger", { enumerable: true, get: f
 Object.defineProperty(exports, "ContextualAuditLogger", { enumerable: true, get: function () { return services_1.ContextualAuditLogger; } });
 Object.defineProperty(exports, "createAuditLogger", { enumerable: true, get: function () { return services_1.createAuditLogger; } });
 exports.VERSION = '1.0.0';
-exports.PACKAGE_NAME = '@holocron/rbac-core';
+exports.PACKAGE_NAME = '@callairis/rbac-core';
 //# sourceMappingURL=index.js.map

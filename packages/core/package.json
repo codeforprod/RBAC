@@ -1,5 +1,5 @@
 {
-  "name": "@holocron/rbac-core",
+  "name": "@callairis/rbac-core",
   "version": "1.0.0",
   "description": "Core RBAC engine with database-agnostic interfaces and authorization logic",
   "main": "dist/index.js",
@@ -26,7 +26,7 @@
     "permissions",
     "roles"
   ],
-  "author": "Holocron Team",
+  "author": "CallAiris Team",
   "license": "MIT",
   "peerDependencies": {
     "reflect-metadata": "^0.1.13 || ^0.2.0"

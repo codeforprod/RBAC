@@ -1,5 +1,5 @@
 /**
- * @holocron/rbac-mongoose
+ * @callairis/rbac-mongoose
  *
  * Mongoose adapter for RBAC system (MongoDB)
  */

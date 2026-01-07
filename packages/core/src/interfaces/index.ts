@@ -1,7 +1,7 @@
 /**
  * @fileoverview
  * Central export file for all RBAC core interfaces.
- * Import from '@holocron/rbac-core' to access all interfaces.
+ * Import from '@callairis/rbac-core' to access all interfaces.
  *
  * @example
  * ```typescript
@@ -12,7 +12,7 @@
  *   IRBACCache,
  *   IAuditLogger,
  *   IUserRoleAssignment
- * } from '@holocron/rbac-core';
+ * } from '@callairis/rbac-core';
  * ```
  */
 

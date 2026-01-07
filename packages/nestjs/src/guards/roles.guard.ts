@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { ROLES_KEY } from '../decorators/roles.decorator';
-import { RBACEngine } from '@holocron/rbac-core';
+import { RBACEngine } from '@callairis/rbac-core';
 
 /**
  * Guard that checks if user has required roles

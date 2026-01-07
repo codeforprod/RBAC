@@ -6,7 +6,7 @@ import {
   IPaginatedResult,
   IRole,
   IPermission,
-} from '@holocron/rbac-core';
+} from '@callairis/rbac-core';
 import { UserRoleModel, UserRoleDocument, createUserRoleModel } from '../schemas/user-role.schema';
 import { createRoleModel, RoleModel } from '../schemas/role.schema';
 import { createRolePermissionModel, RolePermissionModel } from '../schemas/role-permission.schema';
