@@ -278,10 +278,8 @@ export class RedisCacheAdapter implements ICacheAdapter {
 
       // Handle sliding expiration
       if (options?.refreshTtl) {
-        const currentTtl = await this.client!.ttl(key);
-        if (currentTtl > 0) {
-          await this.client!.expire(key, currentTtl);
-        }
+        const ttl = options.ttl ?? this.options.defaultTtl;
+        await this.client!.expire(key, ttl);
       }
 
       this.metrics.hits++;
@@ -451,14 +449,27 @@ export class RedisCacheAdapter implements ICacheAdapter {
       const keysToDelete = new Set<string>();
 
       for (const tag of tags) {
-        const tagKey = `${this.tagPrefix}${tag}`;
-        const members = await this.client!.keys(`${tagKey}:*`);
+        const tagPattern = `${this.tagPrefix}${tag}:*`;
+        let cursor = '0';
 
-        for (const member of members) {
-          // Extract the actual key from the tag member
-          const actualKey = member.replace(`${tagKey}:`, '');
-          keysToDelete.add(actualKey);
-        }
+        // Use SCAN instead of KEYS to avoid blocking
+        do {
+          const [nextCursor, members] = await this.client!.scan(
+            cursor,
+            'MATCH',
+            tagPattern,
+            'COUNT',
+            this.options.scanCount
+          );
+
+          cursor = nextCursor;
+
+          for (const member of members) {
+            // Extract the actual key from the tag member
+            const actualKey = member.replace(`${this.tagPrefix}${tag}:`, '');
+            keysToDelete.add(actualKey);
+          }
+        } while (cursor !== '0');
       }
 
       if (keysToDelete.size === 0) {

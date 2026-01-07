@@ -28,13 +28,11 @@ export const RolePermissionSchema = new Schema<RolePermissionDocument>(
       type: Schema.Types.ObjectId,
       ref: 'Role',
       required: true,
-      index: true,
     },
     permissionId: {
       type: Schema.Types.ObjectId,
       ref: 'Permission',
       required: true,
-      index: true,
     },
     grantedAt: {
       type: Date,
@@ -124,5 +122,5 @@ export function createRolePermissionModel(
   if (mongoose.models.RolePermission) {
     return mongoose.models.RolePermission as RolePermissionModel;
   }
-  return mongoose.model('RolePermission', RolePermissionSchema) as RolePermissionModel;
+  return mongoose.model('RolePermission', RolePermissionSchema, 'rbac_role_permissions') as RolePermissionModel;
 }

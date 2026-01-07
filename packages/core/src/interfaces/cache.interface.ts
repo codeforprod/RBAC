@@ -20,6 +20,9 @@ export interface ICacheSetOptions {
 export interface ICacheGetOptions {
   /** Whether to refresh TTL on access (sliding expiration) */
   refreshTtl?: boolean;
+
+  /** TTL to use when refreshing (defaults to adapter's defaultTtl) */
+  ttl?: number;
 }
 
 /**
@@ -455,8 +458,8 @@ export class InMemoryCache implements IRBACCache {
     }
 
     if (options?.refreshTtl && entry.expiresAt !== null) {
-      const ttl = entry.expiresAt - Date.now();
-      entry.expiresAt = Date.now() + ttl;
+      const ttl = options.ttl ?? (entry.expiresAt - Date.now()) / 1000;
+      entry.expiresAt = Date.now() + ttl * 1000;
     }
 
     this.stats.hits++;

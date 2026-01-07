@@ -18,7 +18,7 @@ export class UserRoleRepository {
   async findById(id: string): Promise<UserRoleEntity | null> {
     return this.repository.findOne({
       where: { id },
-      relations: ['role', 'role.permissions'],
+      relations: ['role', 'role.rolePermissions', 'role.rolePermissions.permission'],
     });
   }
 
@@ -32,7 +32,8 @@ export class UserRoleRepository {
     const queryBuilder = this.repository
       .createQueryBuilder('userRole')
       .leftJoinAndSelect('userRole.role', 'role')
-      .leftJoinAndSelect('role.permissions', 'permission')
+      .leftJoinAndSelect('role.rolePermissions', 'rolePermission')
+      .leftJoinAndSelect('rolePermission.permission', 'permission')
       .where('userRole.userId = :userId', { userId })
       .andWhere('userRole.isActive = :isActive', { isActive: true })
       .andWhere('(userRole.expiresAt IS NULL OR userRole.expiresAt > :now)', {

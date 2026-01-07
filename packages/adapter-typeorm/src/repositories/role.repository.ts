@@ -18,7 +18,7 @@ export class RoleRepository {
   async findById(id: string): Promise<RoleEntity | null> {
     return this.repository.findOne({
       where: { id },
-      relations: ['permissions'],
+      relations: ['rolePermissions', 'rolePermissions.permission'],
     });
   }
 
@@ -31,7 +31,7 @@ export class RoleRepository {
         name,
         organizationId: organizationId ?? undefined,
       },
-      relations: ['permissions'],
+      relations: ['rolePermissions', 'rolePermissions.permission'],
     });
   }
 
@@ -45,7 +45,7 @@ export class RoleRepository {
 
     return this.repository.find({
       where: { id: In(ids) },
-      relations: ['permissions'],
+      relations: ['rolePermissions', 'rolePermissions.permission'],
     });
   }
 
@@ -62,7 +62,8 @@ export class RoleRepository {
   }): Promise<{ data: RoleEntity[]; total: number }> {
     const queryBuilder = this.repository
       .createQueryBuilder('role')
-      .leftJoinAndSelect('role.permissions', 'permission');
+      .leftJoinAndSelect('role.rolePermissions', 'rolePermission')
+      .leftJoinAndSelect('rolePermission.permission', 'permission');
 
     if (options?.organizationId !== undefined) {
       queryBuilder.andWhere('role.organizationId = :orgId', {
@@ -109,7 +110,8 @@ export class RoleRepository {
    * Update an existing role.
    */
   async update(id: string, updates: Partial<RoleEntity>): Promise<RoleEntity> {
-    await this.repository.update(id, updates as any);
+    const { rolePermissions, userRoles, ...updateData } = updates;
+    await this.repository.update(id, updateData as any);
     const role = await this.findById(id);
 
     if (!role) {
@@ -133,7 +135,8 @@ export class RoleRepository {
   async findChildRoles(parentRoleId: string): Promise<RoleEntity[]> {
     return this.repository
       .createQueryBuilder('role')
-      .leftJoinAndSelect('role.permissions', 'permission')
+      .leftJoinAndSelect('role.rolePermissions', 'rolePermission')
+      .leftJoinAndSelect('rolePermission.permission', 'permission')
       .where(':parentId = ANY(role.parentRoleIds)', { parentId: parentRoleId })
       .getMany();
   }

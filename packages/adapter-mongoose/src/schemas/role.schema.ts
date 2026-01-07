@@ -105,6 +105,52 @@ RoleSchema.index(
 );
 
 /**
+ * Pre-save validation to prevent circular dependencies in role hierarchy.
+ */
+RoleSchema.pre('save', async function (next) {
+  const doc = this as RoleDocument;
+  if (!doc.isModified('parentRoles') || doc.parentRoles.length === 0) {
+    return next();
+  }
+
+  const visited = new Set<string>();
+  const checkCircular = async (roleId: Types.ObjectId): Promise<boolean> => {
+    const roleIdStr = roleId.toString();
+
+    if (roleIdStr === doc._id.toString()) {
+      return true; // Circular dependency detected
+    }
+
+    if (visited.has(roleIdStr)) {
+      return false; // Already checked this path
+    }
+
+    visited.add(roleIdStr);
+
+    const role = await doc.model('Role').findById(roleId).select('parentRoles').lean() as { parentRoles?: Types.ObjectId[] } | null;
+    if (!role || !role.parentRoles || role.parentRoles.length === 0) {
+      return false;
+    }
+
+    for (const parentId of role.parentRoles) {
+      if (await checkCircular(parentId)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  for (const parentId of doc.parentRoles) {
+    if (await checkCircular(parentId)) {
+      return next(new Error('Circular dependency detected in role hierarchy'));
+    }
+  }
+
+  next();
+});
+
+/**
  * Transform for JSON serialization.
  */
 RoleSchema.set('toJSON', {
@@ -148,5 +194,5 @@ export function createRoleModel(
   if (mongoose.models.Role) {
     return mongoose.models.Role as RoleModel;
   }
-  return mongoose.model('Role', RoleSchema) as RoleModel;
+  return mongoose.model('Role', RoleSchema, 'rbac_roles') as RoleModel;
 }

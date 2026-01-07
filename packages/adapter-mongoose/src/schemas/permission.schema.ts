@@ -129,5 +129,5 @@ export function createPermissionModel(
   if (mongoose.models.Permission) {
     return mongoose.models.Permission as PermissionModel;
   }
-  return mongoose.model('Permission', PermissionSchema) as PermissionModel;
+  return mongoose.model('Permission', PermissionSchema, 'rbac_permissions') as PermissionModel;
 }
