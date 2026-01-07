@@ -42,7 +42,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/holocron/rbac.git"
+    "url": "https://github.com/codeforprod/RBAC.git"
   },
   "keywords": [
     "rbac",
