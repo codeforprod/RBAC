@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { RolesGuard } from '../../../src/guards/roles.guard';
-import { RBACEngine } from '@holocron/rbac-core';
+import { RBACEngine } from '@callairis/rbac-core';
 
 describe('RolesGuard', () => {
   let guard: RolesGuard;

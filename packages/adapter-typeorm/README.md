@@ -1,6 +1,6 @@
-# @holocron/rbac-adapter-typeorm
+# @callairis/rbac-typeorm
 
-TypeORM adapter for @holocron/rbac-core providing PostgreSQL, MySQL, and SQLite database integration.
+TypeORM adapter for @callairis/rbac-core providing PostgreSQL, MySQL, and SQLite database integration.
 
 ## Features
 
@@ -15,11 +15,11 @@ TypeORM adapter for @holocron/rbac-core providing PostgreSQL, MySQL, and SQLite 
 ## Installation
 
 ```bash
-npm install @holocron/rbac-adapter-typeorm @holocron/rbac-core typeorm reflect-metadata
+npm install @callairis/rbac-typeorm @callairis/rbac-core typeorm reflect-metadata
 # or
-yarn add @holocron/rbac-adapter-typeorm @holocron/rbac-core typeorm reflect-metadata
+yarn add @callairis/rbac-typeorm @callairis/rbac-core typeorm reflect-metadata
 # or
-pnpm add @holocron/rbac-adapter-typeorm @holocron/rbac-core typeorm reflect-metadata
+pnpm add @callairis/rbac-typeorm @callairis/rbac-core typeorm reflect-metadata
 ```
 
 Install database driver:
@@ -38,8 +38,8 @@ npm install better-sqlite3
 
 ```typescript
 import { DataSource } from 'typeorm';
-import { RBACEngine } from '@holocron/rbac-core';
-import { TypeORMAdapter, entities } from '@holocron/rbac-adapter-typeorm';
+import { RBACEngine } from '@callairis/rbac-core';
+import { TypeORMAdapter, entities } from '@callairis/rbac-typeorm';
 
 // 1. Create TypeORM DataSource
 const dataSource = new DataSource({
@@ -68,7 +68,7 @@ const rbac = await RBACEngine.create({ adapter });
 
 ```typescript
 import { DataSource } from 'typeorm';
-import { entities } from '@holocron/rbac-adapter-typeorm';
+import { entities } from '@callairis/rbac-typeorm';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -121,7 +121,7 @@ The adapter provides five main entities:
 Represents roles in the system.
 
 ```typescript
-import { RoleEntity } from '@holocron/rbac-adapter-typeorm';
+import { RoleEntity } from '@callairis/rbac-typeorm';
 
 // Entity structure
 class RoleEntity {
@@ -147,7 +147,7 @@ class RoleEntity {
 Represents permissions that can be assigned to roles.
 
 ```typescript
-import { PermissionEntity } from '@holocron/rbac-adapter-typeorm';
+import { PermissionEntity } from '@callairis/rbac-typeorm';
 
 class PermissionEntity {
   id: string;                    // UUID primary key
@@ -169,7 +169,7 @@ class PermissionEntity {
 Junction table linking roles and permissions.
 
 ```typescript
-import { RolePermissionEntity } from '@holocron/rbac-adapter-typeorm';
+import { RolePermissionEntity } from '@callairis/rbac-typeorm';
 
 class RolePermissionEntity {
   id: string;
@@ -189,7 +189,7 @@ class RolePermissionEntity {
 Associates users with roles.
 
 ```typescript
-import { UserRoleEntity } from '@holocron/rbac-adapter-typeorm';
+import { UserRoleEntity } from '@callairis/rbac-typeorm';
 
 class UserRoleEntity {
   id: string;
@@ -210,7 +210,7 @@ class UserRoleEntity {
 Tracks all RBAC operations for audit purposes.
 
 ```typescript
-import { AuditLogEntity } from '@holocron/rbac-adapter-typeorm';
+import { AuditLogEntity } from '@callairis/rbac-typeorm';
 
 class AuditLogEntity {
   id: string;
@@ -231,7 +231,7 @@ The adapter provides specialized repositories for database operations.
 ### RoleRepository
 
 ```typescript
-import { RoleRepository } from '@holocron/rbac-adapter-typeorm';
+import { RoleRepository } from '@callairis/rbac-typeorm';
 
 const roleRepo = new RoleRepository(dataSource);
 
@@ -258,7 +258,7 @@ await roleRepo.deactivateRole(role.id);
 ### PermissionRepository
 
 ```typescript
-import { PermissionRepository } from '@holocron/rbac-adapter-typeorm';
+import { PermissionRepository } from '@callairis/rbac-typeorm';
 
 const permRepo = new PermissionRepository(dataSource);
 
@@ -284,7 +284,7 @@ const perms = await permRepo.bulkCreatePermissions([
 ### UserRoleRepository
 
 ```typescript
-import { UserRoleRepository } from '@holocron/rbac-adapter-typeorm';
+import { UserRoleRepository } from '@callairis/rbac-typeorm';
 
 const userRoleRepo = new UserRoleRepository(dataSource);
 
@@ -309,7 +309,7 @@ const hasRole = await userRoleRepo.hasRole('user-123', role.id, 'org-123');
 ### AuditRepository
 
 ```typescript
-import { AuditRepository } from '@holocron/rbac-adapter-typeorm';
+import { AuditRepository } from '@callairis/rbac-typeorm';
 
 const auditRepo = new AuditRepository(dataSource);
 
@@ -388,7 +388,7 @@ export class CreateRBACTables1704067200000 implements MigrationInterface {
 Use TypeORM transactions for atomic operations:
 
 ```typescript
-import { TypeORMAdapter } from '@holocron/rbac-adapter-typeorm';
+import { TypeORMAdapter } from '@callairis/rbac-typeorm';
 
 const adapter = new TypeORMAdapter(dataSource);
 
@@ -471,8 +471,8 @@ const roles = await dataSource
 ```typescript
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { RBACEngine } from '@holocron/rbac-core';
-import { TypeORMAdapter, entities } from '@holocron/rbac-adapter-typeorm';
+import { RBACEngine } from '@callairis/rbac-core';
+import { TypeORMAdapter, entities } from '@callairis/rbac-typeorm';
 
 async function main() {
   // 1. Initialize database

@@ -1,4 +1,4 @@
-# @holocron/rbac
+# @callairis/rbac
 
 A production-ready, framework-agnostic Role-Based Access Control (RBAC) system for Node.js applications. Built with TypeScript and designed for high performance and flexibility.
 
@@ -19,40 +19,40 @@ A production-ready, framework-agnostic Role-Based Access Control (RBAC) system f
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [@holocron/rbac-core](./packages/core) | 1.0.0 | Core RBAC engine and interfaces |
-| [@holocron/rbac-nestjs](./packages/nestjs) | 1.0.0 | NestJS integration with guards and decorators |
-| [@holocron/rbac-cache](./packages/cache) | 1.0.0 | Cache adapters (Memory, Redis) |
-| [@holocron/rbac-adapter-typeorm](./packages/adapter-typeorm) | 1.0.0 | TypeORM database adapter |
-| [@holocron/rbac-adapter-mongoose](./packages/adapter-mongoose) | 1.0.0 | Mongoose database adapter |
+| [@callairis/rbac-core](./packages/core) | 1.0.0 | Core RBAC engine and interfaces |
+| [@callairis/rbac-nestjs](./packages/nestjs) | 1.0.0 | NestJS integration with guards and decorators |
+| [@callairis/rbac-cache](./packages/cache) | 1.0.0 | Cache adapters (Memory, Redis) |
+| [@callairis/rbac-typeorm](./packages/adapter-typeorm) | 1.0.0 | TypeORM database adapter |
+| [@callairis/rbac-mongoose](./packages/adapter-mongoose) | 1.0.0 | Mongoose database adapter |
 
 ## Installation
 
 Install the core package:
 
 ```bash
-npm install @holocron/rbac-core
+npm install @callairis/rbac-core
 ```
 
 For NestJS applications:
 
 ```bash
-npm install @holocron/rbac-core @holocron/rbac-nestjs
+npm install @callairis/rbac-core @callairis/rbac-nestjs
 ```
 
 Choose a database adapter:
 
 ```bash
 # TypeORM
-npm install @holocron/rbac-adapter-typeorm
+npm install @callairis/rbac-typeorm
 
 # Mongoose
-npm install @holocron/rbac-adapter-mongoose
+npm install @callairis/rbac-mongoose
 ```
 
 Optional cache adapter:
 
 ```bash
-npm install @holocron/rbac-cache
+npm install @callairis/rbac-cache
 ```
 
 ## Quick Start
@@ -60,9 +60,9 @@ npm install @holocron/rbac-cache
 ### Basic Usage
 
 ```typescript
-import { RBACEngine } from '@holocron/rbac-core';
-import { TypeOrmAdapter } from '@holocron/rbac-adapter-typeorm';
-import { RedisCacheAdapter } from '@holocron/rbac-cache';
+import { RBACEngine } from '@callairis/rbac-core';
+import { TypeOrmAdapter } from '@callairis/rbac-typeorm';
+import { RedisCacheAdapter } from '@callairis/rbac-cache';
 
 // Create RBAC engine
 const rbac = await RBACEngine.create({
@@ -94,8 +94,8 @@ const canRead = await rbac.can('user-123', 'posts:read'); // true (inherited fro
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { RbacModule } from '@holocron/rbac-nestjs';
-import { TypeOrmAdapter } from '@holocron/rbac-adapter-typeorm';
+import { RbacModule } from '@callairis/rbac-nestjs';
+import { TypeOrmAdapter } from '@callairis/rbac-typeorm';
 
 @Module({
   imports: [
@@ -115,7 +115,7 @@ Use guards and decorators in controllers:
 
 ```typescript
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { RolesGuard, PermissionsGuard, Roles, Permissions } from '@holocron/rbac-nestjs';
+import { RolesGuard, PermissionsGuard, Roles, Permissions } from '@callairis/rbac-nestjs';
 
 @Controller('posts')
 @UseGuards(RolesGuard, PermissionsGuard)
@@ -143,12 +143,12 @@ export class PostsController {
 └────────────────────┬────────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────────┐
-│               @holocron/rbac-nestjs                      │
+│               @callairis/rbac-nestjs                      │
 │  Guards │ Decorators │ Interceptors │ Module            │
 └────────────────────┬────────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────────┐
-│               @holocron/rbac-core                        │
+│               @callairis/rbac-core                        │
 │  RBACEngine │ PermissionChecker │ Interfaces            │
 └─────┬────────────────────────────────────┬──────────────┘
       │                                    │
@@ -253,13 +253,13 @@ npm run typecheck
 
 ```bash
 # Build specific package
-npm run build --workspace=@holocron/rbac-core
+npm run build --workspace=@callairis/rbac-core
 
 # Test specific package
-npm run test --workspace=@holocron/rbac-nestjs
+npm run test --workspace=@callairis/rbac-nestjs
 
 # Watch mode for development
-npm run dev --workspace=@holocron/rbac-core
+npm run dev --workspace=@callairis/rbac-core
 ```
 
 ## Performance
@@ -313,7 +313,7 @@ Please ensure:
 
 MIT License - see [LICENSE](./LICENSE) file for details.
 
-Copyright (c) 2026 Holocron
+Copyright (c) 2026 CallAiris
 
 ## Acknowledgments
 

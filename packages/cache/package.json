@@ -1,5 +1,5 @@
 {
-  "name": "@holocron/rbac-cache",
+  "name": "@callairis/rbac-cache",
   "version": "1.0.0",
   "description": "High-performance caching adapters for RBAC with LRU memory cache and Redis support",
   "main": "dist/index.js",
@@ -29,10 +29,10 @@
     "caching",
     "authorization"
   ],
-  "author": "Holocron Team",
+  "author": "CallAiris Team",
   "license": "MIT",
   "dependencies": {
-    "@holocron/rbac-core": "*"
+    "@callairis/rbac-core": "*"
   },
   "peerDependencies": {
     "ioredis": "^5.0.0"

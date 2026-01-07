@@ -14,7 +14,7 @@
  * - Comprehensive metrics collection
  */
 
-import { ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@holocron/rbac-core';
+import { ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@callairis/rbac-core';
 import { ICacheAdapter, ICacheEntry, ICacheMetrics, ICacheHealthStatus } from '../interfaces';
 import { LRUStrategy, LRUEvictionEvent } from '../strategies/lru-strategy';
 import { TTLStrategy } from '../strategies/ttl-strategy';

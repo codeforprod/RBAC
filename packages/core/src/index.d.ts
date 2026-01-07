@@ -4,5 +4,5 @@ export { RBACError, RBACErrorCode, RBACErrorContext, PermissionDeniedError, Perm
 export { WildcardParser, ParsedPermission, WildcardMatchResult, wildcardParser, PermissionMatcher, PermissionMatchContext, PermissionMatcherResult, permissionMatcher, RoleHierarchyResolver, HierarchyResolutionResult, hierarchyUtils, } from './utils';
 export { RBACEngine, PermissionChecker, PermissionCheckerOptions, InMemoryAuditLogger, ContextualAuditLogger, createAuditLogger, } from './services';
 export declare const VERSION = "1.0.0";
-export declare const PACKAGE_NAME = "@holocron/rbac-core";
+export declare const PACKAGE_NAME = "@callairis/rbac-core";
 //# sourceMappingURL=index.d.ts.map

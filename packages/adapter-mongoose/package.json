@@ -1,7 +1,7 @@
 {
-  "name": "@holocron/rbac-adapter-mongoose",
+  "name": "@callairis/rbac-mongoose",
   "version": "1.0.0",
-  "description": "MongoDB/Mongoose adapter for @holocron/rbac-core RBAC library",
+  "description": "MongoDB/Mongoose adapter for @callairis/rbac-core RBAC library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,13 +29,13 @@
     "mongodb",
     "mongoose"
   ],
-  "author": "Holocron Team",
+  "author": "CallAiris Team",
   "license": "MIT",
   "peerDependencies": {
     "mongoose": "^7.0.0 || ^8.0.0"
   },
   "dependencies": {
-    "@holocron/rbac-core": "*"
+    "@callairis/rbac-core": "*"
   },
   "devDependencies": {
     "@types/jest": "^29.5.11",

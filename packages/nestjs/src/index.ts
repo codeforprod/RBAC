@@ -1,5 +1,5 @@
 /**
- * @holocron/rbac-nestjs
+ * @callairis/rbac-nestjs
  *
  * NestJS integration for RBAC system
  */

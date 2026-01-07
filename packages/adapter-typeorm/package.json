@@ -1,7 +1,7 @@
 {
-  "name": "@holocron/rbac-adapter-typeorm",
+  "name": "@callairis/rbac-typeorm",
   "version": "1.0.0",
-  "description": "TypeORM adapter for @holocron/rbac-core providing PostgreSQL/MySQL/SQLite database integration",
+  "description": "TypeORM adapter for @callairis/rbac-core providing PostgreSQL/MySQL/SQLite database integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -34,10 +34,10 @@
     "mysql",
     "sqlite"
   ],
-  "author": "Holocron Team",
+  "author": "CallAiris Team",
   "license": "MIT",
   "dependencies": {
-    "@holocron/rbac-core": "*"
+    "@callairis/rbac-core": "*"
   },
   "peerDependencies": {
     "reflect-metadata": "^0.1.13 || ^0.2.0",

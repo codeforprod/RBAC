@@ -1,7 +1,7 @@
 {
-  "name": "@holocron/rbac-nestjs",
+  "name": "@callairis/rbac-nestjs",
   "version": "1.0.0",
-  "description": "NestJS integration for @holocron/rbac-core with decorators, guards, and dynamic modules",
+  "description": "NestJS integration for @callairis/rbac-core with decorators, guards, and dynamic modules",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -29,10 +29,10 @@
     "guards",
     "decorators"
   ],
-  "author": "Holocron Team",
+  "author": "CallAiris Team",
   "license": "MIT",
   "dependencies": {
-    "@holocron/rbac-core": "*"
+    "@callairis/rbac-core": "*"
   },
   "peerDependencies": {
     "@nestjs/common": "^9.0.0 || ^10.0.0",

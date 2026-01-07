@@ -1,7 +1,7 @@
 /**
  * @fileoverview
  * Central export file for all RBAC error classes.
- * Import from '@holocron/rbac-core' to access all errors.
+ * Import from '@callairis/rbac-core' to access all errors.
  *
  * @example
  * ```typescript
@@ -11,7 +11,7 @@
  *   PermissionDeniedError,
  *   RoleNotFoundError,
  *   CircularHierarchyError
- * } from '@holocron/rbac-core';
+ * } from '@callairis/rbac-core';
  *
  * // Check error types
  * if (RBACError.isRBACError(error)) {

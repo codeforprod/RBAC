@@ -1,6 +1,6 @@
-# @holocron/rbac-adapter-mongoose
+# @callairis/rbac-mongoose
 
-MongoDB adapter for @holocron/rbac-core using Mongoose ODM for document-based RBAC storage.
+MongoDB adapter for @callairis/rbac-core using Mongoose ODM for document-based RBAC storage.
 
 ## Features
 
@@ -15,19 +15,19 @@ MongoDB adapter for @holocron/rbac-core using Mongoose ODM for document-based RB
 ## Installation
 
 ```bash
-npm install @holocron/rbac-adapter-mongoose @holocron/rbac-core mongoose
+npm install @callairis/rbac-mongoose @callairis/rbac-core mongoose
 # or
-yarn add @holocron/rbac-adapter-mongoose @holocron/rbac-core mongoose
+yarn add @callairis/rbac-mongoose @callairis/rbac-core mongoose
 # or
-pnpm add @holocron/rbac-adapter-mongoose @holocron/rbac-core mongoose
+pnpm add @callairis/rbac-mongoose @callairis/rbac-core mongoose
 ```
 
 ## Quick Start
 
 ```typescript
 import mongoose from 'mongoose';
-import { RBACEngine } from '@holocron/rbac-core';
-import { MongooseAdapter } from '@holocron/rbac-adapter-mongoose';
+import { RBACEngine } from '@callairis/rbac-core';
+import { MongooseAdapter } from '@callairis/rbac-mongoose';
 
 // 1. Connect to MongoDB
 await mongoose.connect('mongodb://localhost:27017/myapp', {
@@ -48,7 +48,7 @@ const rbac = await RBACEngine.create({ adapter });
 
 ```typescript
 import mongoose from 'mongoose';
-import { MongooseAdapter } from '@holocron/rbac-adapter-mongoose';
+import { MongooseAdapter } from '@callairis/rbac-mongoose';
 
 // Basic connection
 await mongoose.connect('mongodb://localhost:27017/myapp');
@@ -100,7 +100,7 @@ The adapter provides five main schemas:
 Represents roles in the system.
 
 ```typescript
-import { RoleModel } from '@holocron/rbac-adapter-mongoose';
+import { RoleModel } from '@callairis/rbac-mongoose';
 
 // Schema structure
 interface IRole {
@@ -129,7 +129,7 @@ const role = await RoleModel.create({
 Represents permissions that can be assigned to roles.
 
 ```typescript
-import { PermissionModel } from '@holocron/rbac-adapter-mongoose';
+import { PermissionModel } from '@callairis/rbac-mongoose';
 
 interface IPermission {
   _id: ObjectId;
@@ -156,7 +156,7 @@ const permission = await PermissionModel.create({
 Junction collection linking roles and permissions.
 
 ```typescript
-import { RolePermissionModel } from '@holocron/rbac-adapter-mongoose';
+import { RolePermissionModel } from '@callairis/rbac-mongoose';
 
 interface IRolePermission {
   _id: ObjectId;
@@ -179,7 +179,7 @@ const rolePermission = await RolePermissionModel.create({
 Associates users with roles.
 
 ```typescript
-import { UserRoleModel } from '@holocron/rbac-adapter-mongoose';
+import { UserRoleModel } from '@callairis/rbac-mongoose';
 
 interface IUserRole {
   _id: ObjectId;
@@ -205,7 +205,7 @@ const userRole = await UserRoleModel.create({
 Tracks all RBAC operations for audit purposes.
 
 ```typescript
-import { AuditLogModel } from '@holocron/rbac-adapter-mongoose';
+import { AuditLogModel } from '@callairis/rbac-mongoose';
 
 interface IAuditLog {
   _id: ObjectId;
@@ -236,7 +236,7 @@ The adapter provides specialized repositories for database operations.
 ### RoleRepository
 
 ```typescript
-import { RoleRepository } from '@holocron/rbac-adapter-mongoose';
+import { RoleRepository } from '@callairis/rbac-mongoose';
 
 const roleRepo = new RoleRepository(mongoose.connection);
 
@@ -268,7 +268,7 @@ const rolesWithHierarchy = await roleRepo.findWithParents();
 ### PermissionRepository
 
 ```typescript
-import { PermissionRepository } from '@holocron/rbac-adapter-mongoose';
+import { PermissionRepository } from '@callairis/rbac-mongoose';
 
 const permRepo = new PermissionRepository(mongoose.connection);
 
@@ -297,7 +297,7 @@ const postPerms = await permRepo.findByResource('posts');
 ### UserRoleRepository
 
 ```typescript
-import { UserRoleRepository } from '@holocron/rbac-adapter-mongoose';
+import { UserRoleRepository } from '@callairis/rbac-mongoose';
 
 const userRoleRepo = new UserRoleRepository(mongoose.connection);
 
@@ -352,7 +352,7 @@ auditLogSchema.index({ timestamp: -1 });
 Use MongoDB aggregation for complex queries:
 
 ```typescript
-import { RoleModel } from '@holocron/rbac-adapter-mongoose';
+import { RoleModel } from '@callairis/rbac-mongoose';
 
 // Get roles with permission counts
 const rolesWithCounts = await RoleModel.aggregate([
@@ -440,7 +440,7 @@ const orgRoles = await RoleModel.find({
 Use MongoDB transactions for atomic operations:
 
 ```typescript
-import { MongooseAdapter } from '@holocron/rbac-adapter-mongoose';
+import { MongooseAdapter } from '@callairis/rbac-mongoose';
 
 const adapter = new MongooseAdapter(mongoose.connection);
 
@@ -519,8 +519,8 @@ await RoleModel.updateMany(
 
 ```typescript
 import mongoose from 'mongoose';
-import { RBACEngine } from '@holocron/rbac-core';
-import { MongooseAdapter } from '@holocron/rbac-adapter-mongoose';
+import { RBACEngine } from '@callairis/rbac-core';
+import { MongooseAdapter } from '@callairis/rbac-mongoose';
 
 async function main() {
   // 1. Connect to MongoDB
@@ -557,7 +557,7 @@ async function main() {
   console.log('Can edit posts:', canEdit); // true
 
   // 6. Query with Mongoose directly
-  const { RoleModel } = await import('@holocron/rbac-adapter-mongoose');
+  const { RoleModel } = await import('@callairis/rbac-mongoose');
   const activeRoles = await RoleModel.find({ isActive: true }).lean();
   console.log('Active roles:', activeRoles);
 
@@ -573,7 +573,7 @@ main().catch(console.error);
 Custom validators are included:
 
 ```typescript
-import { RoleModel } from '@holocron/rbac-adapter-mongoose';
+import { RoleModel } from '@callairis/rbac-mongoose';
 
 // Name validation
 try {
@@ -598,8 +598,8 @@ try {
 ## Migration from Other Databases
 
 ```typescript
-import { MongooseAdapter } from '@holocron/rbac-adapter-mongoose';
-import { TypeORMAdapter } from '@holocron/rbac-adapter-typeorm';
+import { MongooseAdapter } from '@callairis/rbac-mongoose';
+import { TypeORMAdapter } from '@callairis/rbac-typeorm';
 
 async function migrateFromPostgres() {
   // Setup both adapters

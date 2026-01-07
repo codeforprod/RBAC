@@ -9,7 +9,7 @@ import {
   ICreateUserRoleOptions,
   IUserAuthorizationContext,
   IDetailedPermissionCheckResult,
-} from '@holocron/rbac-core';
+} from '@callairis/rbac-core';
 import type { RbacModuleOptions } from '../types/module-options.types';
 import { RBAC_OPTIONS_TOKEN } from '../providers';
 
