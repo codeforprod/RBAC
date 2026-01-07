@@ -67,7 +67,7 @@ Required secrets in GitHub repository settings:
 
 1. Login to [npmjs.com](https://www.npmjs.com/)
 2. Create organization `@holocron` if not exists:
-   - Go to https://www.npmjs.com/org/create
+   - Go to [https://www.npmjs.com/org/create](https://www.npmjs.com/org/create)
    - Create organization named `holocron`
 3. Generate NPM Automation Token:
    - Go to Access Tokens → Generate New Token
@@ -117,13 +117,13 @@ For each feature or fix:
 
 The packages have the following dependency structure:
 
-```
+```text
 @holocron/rbac-core (standalone)
        ↓
 ┌──────┴──────┬─────────────┐
 ↓             ↓             ↓
 adapter-      adapter-      cache
-mongoose      typeorm
+mongoose      typeorm       (depends on core)
        ↓             ↓
        └──────┬──────┘
               ↓
