@@ -148,5 +148,5 @@ export function createRoleModel(
   if (mongoose.models.Role) {
     return mongoose.models.Role as RoleModel;
   }
-  return mongoose.model(RoleDocument, 'Role', RoleSchema);
+  return mongoose.model('Role', RoleSchema) as RoleModel;
 }

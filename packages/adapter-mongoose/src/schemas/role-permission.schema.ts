@@ -124,5 +124,5 @@ export function createRolePermissionModel(
   if (mongoose.models.RolePermission) {
     return mongoose.models.RolePermission as RolePermissionModel;
   }
-  return mongoose.model(RolePermissionDocument, 'RolePermission', RolePermissionSchema);
+  return mongoose.model('RolePermission', RolePermissionSchema) as RolePermissionModel;
 }

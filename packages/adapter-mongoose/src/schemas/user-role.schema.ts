@@ -165,5 +165,5 @@ export function createUserRoleModel(
   if (mongoose.models.UserRole) {
     return mongoose.models.UserRole as UserRoleModel;
   }
-  return mongoose.model(UserRoleDocument, 'UserRole', UserRoleSchema);
+  return mongoose.model('UserRole', UserRoleSchema) as UserRoleModel;
 }

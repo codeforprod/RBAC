@@ -245,7 +245,7 @@ export function createAuditLogModel(
   if (mongoose.models.AuditLog) {
     return mongoose.models.AuditLog as AuditLogModel;
   }
-  return mongoose.model(AuditLogDocument, 'AuditLog', AuditLogSchema);
+  return mongoose.model('AuditLog', AuditLogSchema) as AuditLogModel;
 }
 
 /**
