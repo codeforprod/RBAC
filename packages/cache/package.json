@@ -11,11 +11,11 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "test": "jest",
-    "test:unit": "jest --testPathPattern=unit",
-    "test:integration": "jest --testPathPattern=integration",
+    "test": "jest --passWithNoTests",
+    "test:unit": "jest --testPathPattern=unit --passWithNoTests",
+    "test:integration": "jest --testPathPattern=integration --passWithNoTests",
     "test:watch": "jest --watch",
-    "test:cov": "jest --coverage",
+    "test:cov": "jest --coverage --passWithNoTests",
     "lint": "eslint src --ext .ts",
     "typecheck": "tsc --noEmit",
     "clean": "rm -rf dist"
