@@ -53,3 +53,12 @@ temp/
 .eslintcache
 .npm/
 .yarn/
+
+# TypeScript incremental build files
+**/*.tsbuildinfo
+tsconfig.build.tsbuildinfo
+
+# Coverage directories and files (nested packages)
+**/coverage/
+**/.nyc_output/
+**/*.lcov

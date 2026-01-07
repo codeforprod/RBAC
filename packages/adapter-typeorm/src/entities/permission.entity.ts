@@ -3,11 +3,9 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  ManyToMany,
   Index,
   OneToMany,
 } from 'typeorm';
-import { RoleEntity } from './role.entity';
 import { RolePermissionEntity } from './role-permission.entity';
 
 /**
@@ -44,13 +42,8 @@ export class PermissionEntity {
   createdAt!: Date;
 
   /**
-   * Roles that have this permission assigned.
-   */
-  @ManyToMany(() => RoleEntity, (role) => role.permissions)
-  roles?: RoleEntity[];
-
-  /**
-   * Role-permission junction table entries.
+   * Role-permission junction table entries with audit metadata.
+   * Use this relationship to access roles: rolePermissions[].role
    */
   @OneToMany(() => RolePermissionEntity, (rolePermission) => rolePermission.permission)
   rolePermissions?: RolePermissionEntity[];

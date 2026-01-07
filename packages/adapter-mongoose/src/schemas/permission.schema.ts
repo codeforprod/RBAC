@@ -1,4 +1,4 @@
-import { Schema, Document, Model, model, Types } from 'mongoose';
+import { Schema, Document, Model, Types } from 'mongoose';
 
 /**
  * Mongoose document interface for Permission.
@@ -129,5 +129,5 @@ export function createPermissionModel(
   if (mongoose.models.Permission) {
     return mongoose.models.Permission as PermissionModel;
   }
-  return model<PermissionDocument>('Permission', PermissionSchema);
+  return mongoose.model(PermissionDocument, 'Permission', PermissionSchema);
 }

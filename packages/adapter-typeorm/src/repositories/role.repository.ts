@@ -74,7 +74,11 @@ export class RoleRepository {
       queryBuilder.andWhere('role.isActive = :isActive', { isActive: true });
     }
 
-    const sortBy = options?.sortBy ?? 'createdAt';
+    // Whitelist allowed sort columns to prevent SQL injection
+    const ALLOWED_SORT_COLUMNS = ['createdAt', 'updatedAt', 'name', 'priority', 'isActive'];
+    const sortBy = options?.sortBy && ALLOWED_SORT_COLUMNS.includes(options.sortBy)
+      ? options.sortBy
+      : 'createdAt';
     const sortOrder = options?.sortOrder?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
     queryBuilder.orderBy(`role.${sortBy}`, sortOrder);
 

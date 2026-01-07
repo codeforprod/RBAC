@@ -1,4 +1,4 @@
-import { Schema, Document, Model, model, Types } from 'mongoose';
+import { Schema, Document, Model, Types } from 'mongoose';
 
 /**
  * Mongoose document interface for RolePermission.
@@ -124,5 +124,5 @@ export function createRolePermissionModel(
   if (mongoose.models.RolePermission) {
     return mongoose.models.RolePermission as RolePermissionModel;
   }
-  return model<RolePermissionDocument>('RolePermission', RolePermissionSchema);
+  return mongoose.model(RolePermissionDocument, 'RolePermission', RolePermissionSchema);
 }

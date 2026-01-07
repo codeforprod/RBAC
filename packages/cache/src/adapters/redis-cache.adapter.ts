@@ -37,11 +37,12 @@ interface RedisClient {
   info(section?: string): Promise<string>;
   ping(): Promise<string>;
   quit(): Promise<string>;
-  subscribe(channel: string, callback: (channel: string, message: string) => void): void;
+  subscribe(...channels: string[]): Promise<number>;
   publish(channel: string, message: string): Promise<number>;
   duplicate(): RedisClient;
-  on(event: string, callback: (...args: unknown[]) => void): void;
+  on(event: string, callback: (...args: any[]) => void): void;
   status: string;
+  connect?: () => Promise<void>;
 }
 
 /**
@@ -933,7 +934,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
   }
 
   /**
-   * Set up pub/sub for cache invalidation.
+   * Set up pub/sub for cache invalidation (ioredis v5 pattern).
    */
   private async setupPubSub(): Promise<void> {
     if (!this.client) {
@@ -943,7 +944,16 @@ export class RedisCacheAdapter implements ICacheAdapter {
     // Create a duplicate connection for subscribing
     this.subscriber = this.client.duplicate();
 
-    this.subscriber.subscribe(this.options.pubSubChannel, (channel: string, message: string) => {
+    // Ensure subscriber is connected (ioredis v5 may require explicit connection)
+    if (typeof (this.subscriber as any).connect === 'function') {
+      await (this.subscriber as any).connect();
+    }
+
+    // Subscribe to the channel (ioredis v5 pattern)
+    await this.subscriber.subscribe(this.options.pubSubChannel);
+
+    // Attach message handler
+    this.subscriber.on('message', (channel: string, message: string) => {
       if (channel === this.options.pubSubChannel) {
         // Notify all callbacks
         for (const callback of this.invalidationCallbacks) {

@@ -1,4 +1,4 @@
-import { Schema, Document, Model, model, Types } from 'mongoose';
+import { Schema, Document, Model, Types } from 'mongoose';
 
 /**
  * Mongoose document interface for Role.
@@ -148,5 +148,5 @@ export function createRoleModel(
   if (mongoose.models.Role) {
     return mongoose.models.Role as RoleModel;
   }
-  return model<RoleDocument>('Role', RoleSchema);
+  return mongoose.model(RoleDocument, 'Role', RoleSchema);
 }

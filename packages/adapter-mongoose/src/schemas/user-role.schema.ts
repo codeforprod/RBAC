@@ -1,4 +1,4 @@
-import { Schema, Document, Model, model, Types } from 'mongoose';
+import { Schema, Document, Model, Types } from 'mongoose';
 
 /**
  * Mongoose document interface for UserRole.
@@ -165,5 +165,5 @@ export function createUserRoleModel(
   if (mongoose.models.UserRole) {
     return mongoose.models.UserRole as UserRoleModel;
   }
-  return model<UserRoleDocument>('UserRole', UserRoleSchema);
+  return mongoose.model(UserRoleDocument, 'UserRole', UserRoleSchema);
 }

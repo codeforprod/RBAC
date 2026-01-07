@@ -4,12 +4,9 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  ManyToMany,
-  JoinTable,
   OneToMany,
   Index,
 } from 'typeorm';
-import { PermissionEntity } from './permission.entity';
 import { UserRoleEntity } from './user-role.entity';
 import { RolePermissionEntity } from './role-permission.entity';
 
@@ -66,20 +63,9 @@ export class RoleEntity {
   userRoles?: UserRoleEntity[];
 
   /**
-   * Role-permission junction table entries.
+   * Role-permission junction table entries with audit metadata.
+   * Use this relationship to access permissions: rolePermissions[].permission
    */
   @OneToMany(() => RolePermissionEntity, (rolePermission) => rolePermission.role)
   rolePermissions?: RolePermissionEntity[];
-
-  /**
-   * Direct permissions assigned to this role via many-to-many.
-   * Populated through rolePermissions relationship.
-   */
-  @ManyToMany(() => PermissionEntity, (permission) => permission.roles)
-  @JoinTable({
-    name: 'rbac_role_permissions',
-    joinColumn: { name: 'role_id', referencedColumnName: 'id' },
-    inverseJoinColumn: { name: 'permission_id', referencedColumnName: 'id' },
-  })
-  permissions?: PermissionEntity[];
 }
