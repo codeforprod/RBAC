@@ -1,6 +1,6 @@
 # Release Process
 
-This document describes the automated CI/CD pipeline for publishing the @callairis/rbac packages to NPM.
+This document describes the automated CI/CD pipeline for publishing the @prodforcode/rbac packages to NPM.
 
 ## Overview
 
@@ -42,7 +42,7 @@ Located at `.changeset/config.json`:
 
 ```json
 {
-  "linked": [["@callairis/rbac-*"]],
+  "linked": [["@prodforcode/rbac-*"]],
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch"
@@ -50,7 +50,7 @@ Located at `.changeset/config.json`:
 ```
 
 **Key settings:**
-- `linked`: All @callairis/rbac-* packages are linked for coordinated version bumps
+- `linked`: All @prodforcode/rbac-* packages are linked for coordinated version bumps
 - `access`: Public packages (required for scoped packages)
 - `updateInternalDependencies`: Automatically bump internal deps on patch releases
 
@@ -66,7 +66,7 @@ Required secrets in GitHub repository settings:
 ## NPM Organization Setup
 
 1. Login to [npmjs.com](https://www.npmjs.com/)
-2. Create organization `@callairis` if not exists:
+2. Create organization `@prodforcode` if not exists:
    - Go to [https://www.npmjs.com/org/create](https://www.npmjs.com/org/create)
    - Create organization named `callairis`
 3. Generate NPM Automation Token:
@@ -118,7 +118,7 @@ For each feature or fix:
 The packages have the following dependency structure:
 
 ```text
-@callairis/rbac-core (standalone)
+@prodforcode/rbac-core (standalone)
        ↓
 ┌──────┴──────┬─────────────┐
 ↓             ↓             ↓
@@ -127,7 +127,7 @@ mongoose      typeorm       (depends on core)
        ↓             ↓
        └──────┬──────┘
               ↓
-      @callairis/rbac-nestjs
+      @prodforcode/rbac-nestjs
       (depends on core)
 ```
 
@@ -151,7 +151,7 @@ Before merging to main, ensure:
 If publishing fails:
 
 1. Check NPM_TOKEN is valid
-2. Verify @callairis organization exists
+2. Verify @prodforcode organization exists
 3. Check package names are available
 4. Review GitHub Actions logs
 

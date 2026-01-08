@@ -28,7 +28,7 @@ module.exports = {
     },
   },
   moduleNameMapper: {
-    '@callairis/rbac-core': '<rootDir>/../core/src',
+    '@prodforcode/rbac-core': '<rootDir>/../core/src',
   },
   verbose: true,
 };

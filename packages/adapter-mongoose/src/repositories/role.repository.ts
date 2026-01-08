@@ -6,7 +6,7 @@ import {
   IUpdateRoleOptions,
   IQueryOptions,
   IPaginatedResult,
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 import { RoleModel, RoleDocument, createRoleModel } from '../schemas/role.schema';
 import {
   RolePermissionModel,

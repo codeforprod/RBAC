@@ -1,5 +1,5 @@
 /**
- * @callairis/rbac-typeorm
+ * @prodforcode/rbac-typeorm
  *
  * TypeORM adapter for RBAC system (PostgreSQL)
  */

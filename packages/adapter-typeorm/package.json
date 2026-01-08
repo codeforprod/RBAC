@@ -1,7 +1,7 @@
 {
-  "name": "@callairis/rbac-typeorm",
+  "name": "@prodforcode/rbac-typeorm",
   "version": "1.0.0",
-  "description": "TypeORM adapter for @callairis/rbac-core providing PostgreSQL/MySQL/SQLite database integration",
+  "description": "TypeORM adapter for @prodforcode/rbac-core providing PostgreSQL/MySQL/SQLite database integration",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -37,7 +37,7 @@
   "author": "CallAiris Team",
   "license": "MIT",
   "dependencies": {
-    "@callairis/rbac-core": "*"
+    "@prodforcode/rbac-core": "*"
   },
   "peerDependencies": {
     "reflect-metadata": "^0.1.13 || ^0.2.0",

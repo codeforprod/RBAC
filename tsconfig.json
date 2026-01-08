@@ -31,11 +31,11 @@
     "emitDecoratorMetadata": true,
     "baseUrl": ".",
     "paths": {
-      "@callairis/rbac-core": ["packages/core/dist"],
-      "@callairis/rbac-cache": ["packages/cache/dist"],
-      "@callairis/rbac-typeorm": ["packages/adapter-typeorm/dist"],
-      "@callairis/rbac-mongoose": ["packages/adapter-mongoose/dist"],
-      "@callairis/rbac-nestjs": ["packages/nestjs/dist"]
+      "@prodforcode/rbac-core": ["packages/core/dist"],
+      "@prodforcode/rbac-cache": ["packages/cache/dist"],
+      "@prodforcode/rbac-typeorm": ["packages/adapter-typeorm/dist"],
+      "@prodforcode/rbac-mongoose": ["packages/adapter-mongoose/dist"],
+      "@prodforcode/rbac-nestjs": ["packages/nestjs/dist"]
     }
   },
   "exclude": ["node_modules", "dist", "**/*.spec.ts", "**/*.test.ts"]

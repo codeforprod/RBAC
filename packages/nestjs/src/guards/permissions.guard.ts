@@ -1,7 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
-import { RBACEngine } from '@callairis/rbac-core';
+import { RBACEngine } from '@prodforcode/rbac-core';
 
 /**
  * Guard that checks if user has required permissions

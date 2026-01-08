@@ -1,7 +1,7 @@
 {
-  "name": "@callairis/rbac-nestjs",
+  "name": "@prodforcode/rbac-nestjs",
   "version": "1.0.0",
-  "description": "NestJS integration for @callairis/rbac-core with decorators, guards, and dynamic modules",
+  "description": "NestJS integration for @prodforcode/rbac-core with decorators, guards, and dynamic modules",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -32,7 +32,7 @@
   "author": "CallAiris Team",
   "license": "MIT",
   "dependencies": {
-    "@callairis/rbac-core": "*"
+    "@prodforcode/rbac-core": "*"
   },
   "peerDependencies": {
     "@nestjs/common": "^9.0.0 || ^10.0.0",

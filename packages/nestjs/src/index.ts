@@ -1,5 +1,5 @@
 /**
- * @callairis/rbac-nestjs
+ * @prodforcode/rbac-nestjs
  *
  * NestJS integration for RBAC system
  */

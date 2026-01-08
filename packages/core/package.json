@@ -1,5 +1,5 @@
 {
-  "name": "@callairis/rbac-core",
+  "name": "@prodforcode/rbac-core",
   "version": "1.0.0",
   "description": "Core RBAC engine with database-agnostic interfaces and authorization logic",
   "main": "dist/index.js",

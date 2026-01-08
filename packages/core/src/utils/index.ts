@@ -1,7 +1,7 @@
 /**
  * @fileoverview
  * Central export file for all RBAC utility functions and classes.
- * Import from '@callairis/rbac-core' to access all utilities.
+ * Import from '@prodforcode/rbac-core' to access all utilities.
  *
  * @example
  * ```typescript
@@ -12,7 +12,7 @@
  *   wildcardParser,
  *   permissionMatcher,
  *   hierarchyUtils
- * } from '@callairis/rbac-core';
+ * } from '@prodforcode/rbac-core';
  * ```
  */
 

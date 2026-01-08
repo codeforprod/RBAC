@@ -7,7 +7,7 @@ import {
   PermissionChecker,
   InMemoryCache,
   NoOpAuditLogger,
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 import { RolesGuard } from '../guards/roles.guard';
 import { PermissionsGuard } from '../guards/permissions.guard';
 

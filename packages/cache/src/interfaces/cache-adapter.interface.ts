@@ -2,7 +2,7 @@
  * @fileoverview Extended cache adapter interface with additional capabilities.
  */
 
-import type { IRBACCache, ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@callairis/rbac-core';
+import type { IRBACCache, ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@prodforcode/rbac-core';
 
 // Re-export types that are used elsewhere
 export type { ICacheSetOptions, ICacheGetOptions, ICacheStats };

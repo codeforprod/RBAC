@@ -1,5 +1,5 @@
 import { Types, FilterQuery, Connection } from 'mongoose';
-import { IPermission, IQueryOptions, IPaginatedResult } from '@callairis/rbac-core';
+import { IPermission, IQueryOptions, IPaginatedResult } from '@prodforcode/rbac-core';
 import {
   PermissionModel,
   PermissionDocument,
