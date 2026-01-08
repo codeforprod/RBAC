@@ -1,4 +1,4 @@
-# @callairis/rbac-core
+# @prodforcode/rbac-core
 
 A framework-agnostic, production-ready Role-Based Access Control (RBAC) library for TypeScript applications.
 
@@ -16,11 +16,11 @@ A framework-agnostic, production-ready Role-Based Access Control (RBAC) library 
 ## Installation
 
 ```bash
-npm install @callairis/rbac-core
+npm install @prodforcode/rbac-core
 # or
-yarn add @callairis/rbac-core
+yarn add @prodforcode/rbac-core
 # or
-pnpm add @callairis/rbac-core
+pnpm add @prodforcode/rbac-core
 ```
 
 ## Quick Start
@@ -31,7 +31,7 @@ import {
   IRBACAdapter,
   InMemoryCache,
   InMemoryAuditLogger
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 
 // 1. Implement your database adapter (see Adapters section)
 const adapter: IRBACAdapter = new MyDatabaseAdapter();
@@ -208,7 +208,7 @@ import {
   ICreateRoleOptions,
   ICreatePermissionOptions,
   ICreateUserRoleOptions
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 
 class PostgresAdapter implements IRBACAdapter {
   constructor(private db: Database) {}
@@ -252,7 +252,7 @@ class PostgresAdapter implements IRBACAdapter {
 ### Using Built-in InMemoryCache
 
 ```typescript
-import { InMemoryCache } from '@callairis/rbac-core';
+import { InMemoryCache } from '@prodforcode/rbac-core';
 
 const cache = new InMemoryCache({
   maxSize: 10000,           // Maximum entries
@@ -276,7 +276,7 @@ const rbac = await RBACEngine.create({
 ### Implementing Custom Cache (e.g., Redis)
 
 ```typescript
-import { IRBACCache, ICacheSetOptions, ICacheGetOptions } from '@callairis/rbac-core';
+import { IRBACCache, ICacheSetOptions, ICacheGetOptions } from '@prodforcode/rbac-core';
 import Redis from 'ioredis';
 
 class RedisCache implements IRBACCache {
@@ -332,7 +332,7 @@ class RedisCache implements IRBACCache {
 ### Using InMemoryAuditLogger
 
 ```typescript
-import { InMemoryAuditLogger, AuditAction } from '@callairis/rbac-core';
+import { InMemoryAuditLogger, AuditAction } from '@prodforcode/rbac-core';
 
 const auditLogger = new InMemoryAuditLogger({
   maxEntries: 10000,
@@ -367,7 +367,7 @@ import {
   ICreateAuditEntryOptions,
   IAuditQueryOptions,
   IAuditQueryResult
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 
 class DatabaseAuditLogger implements IAuditLogger {
   constructor(private db: Database) {}
@@ -469,7 +469,7 @@ import {
   RoleNotFoundError,
   CircularHierarchyError,
   isPermissionDeniedError
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 
 try {
   await rbac.authorize('user-123', 'admin:delete');
@@ -547,7 +547,7 @@ class RBACEngine {
 
 ```typescript
 // Wildcard Parser
-import { WildcardParser, wildcardParser } from '@callairis/rbac-core';
+import { WildcardParser, wildcardParser } from '@prodforcode/rbac-core';
 
 const parser = new WildcardParser();
 const parsed = parser.parse('posts:*:read');
@@ -557,14 +557,14 @@ const matches = parser.matches('posts:*', 'posts:read');  // true
 const specificity = parser.getSpecificity('posts:*');     // 2
 
 // Permission Matcher
-import { PermissionMatcher, permissionMatcher } from '@callairis/rbac-core';
+import { PermissionMatcher, permissionMatcher } from '@prodforcode/rbac-core';
 
 const matcher = new PermissionMatcher();
 const result = matcher.findBestMatch('posts:read', permissions, context);
 // { matched: true, matchedPermission: {...}, matchedPattern: 'posts:*' }
 
 // Role Hierarchy Resolver
-import { RoleHierarchyResolver, hierarchyUtils } from '@callairis/rbac-core';
+import { RoleHierarchyResolver, hierarchyUtils } from '@prodforcode/rbac-core';
 
 const resolver = new RoleHierarchyResolver(adapter, cache);
 const permissions = await resolver.getInheritedPermissions('role-id');
@@ -586,7 +586,7 @@ import type {
   IRBACAdapter,
   IRBACCache,
   IAuditLogger
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 ```
 
 ## License

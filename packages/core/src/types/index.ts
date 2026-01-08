@@ -1,7 +1,7 @@
 /**
  * @fileoverview
  * Central export file for all RBAC core types.
- * Import from '@callairis/rbac-core' to access all types.
+ * Import from '@prodforcode/rbac-core' to access all types.
  *
  * @example
  * ```typescript
@@ -10,7 +10,7 @@
  *   CacheOptions,
  *   AuditOptions,
  *   PermissionString,
- * } from '@callairis/rbac-core';
+ * } from '@prodforcode/rbac-core';
  * ```
  */
 

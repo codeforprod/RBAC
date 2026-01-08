@@ -15,7 +15,7 @@
  *   RequiresAll,
  *   CurrentUser,
  *   Public,
- * } from '@callairis/rbac-nestjs';
+ * } from '@prodforcode/rbac-nestjs';
  *
  * @Controller('users')
  * @UseGuards(JwtAuthGuard, RBACGuard)

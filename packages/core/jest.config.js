@@ -1,11 +1,11 @@
 /**
- * Jest configuration for @callairis/rbac-core package.
+ * Jest configuration for @prodforcode/rbac-core package.
  *
  * @type {import('jest').Config}
  */
 module.exports = {
   // Display name for test runs
-  displayName: '@callairis/rbac-core',
+  displayName: '@prodforcode/rbac-core',
 
   // Root directory
   rootDir: '.',

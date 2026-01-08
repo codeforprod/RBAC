@@ -1,7 +1,7 @@
 {
-  "name": "@callairis/rbac-mongoose",
+  "name": "@prodforcode/rbac-mongoose",
   "version": "1.0.0",
-  "description": "MongoDB/Mongoose adapter for @callairis/rbac-core RBAC library",
+  "description": "MongoDB/Mongoose adapter for @prodforcode/rbac-core RBAC library",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -35,7 +35,7 @@
     "mongoose": "^7.0.0 || ^8.0.0"
   },
   "dependencies": {
-    "@callairis/rbac-core": "*"
+    "@prodforcode/rbac-core": "*"
   },
   "devDependencies": {
     "@types/jest": "^29.5.11",

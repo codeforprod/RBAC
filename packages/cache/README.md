@@ -1,6 +1,6 @@
-# @callairis/rbac-cache
+# @prodforcode/rbac-cache
 
-High-performance caching layer for @callairis/rbac-core with LRU memory cache and Redis support.
+High-performance caching layer for @prodforcode/rbac-core with LRU memory cache and Redis support.
 
 ## Features
 
@@ -15,11 +15,11 @@ High-performance caching layer for @callairis/rbac-core with LRU memory cache an
 ## Installation
 
 ```bash
-npm install @callairis/rbac-cache
+npm install @prodforcode/rbac-cache
 # or
-yarn add @callairis/rbac-cache
+yarn add @prodforcode/rbac-cache
 # or
-pnpm add @callairis/rbac-cache
+pnpm add @prodforcode/rbac-cache
 ```
 
 For Redis support:
@@ -30,8 +30,8 @@ npm install ioredis
 ## Quick Start
 
 ```typescript
-import { RBACEngine } from '@callairis/rbac-core';
-import { MemoryCacheAdapter } from '@callairis/rbac-cache';
+import { RBACEngine } from '@prodforcode/rbac-core';
+import { MemoryCacheAdapter } from '@prodforcode/rbac-cache';
 
 const cache = new MemoryCacheAdapter({
   maxSize: 10000,
@@ -53,7 +53,7 @@ The `MemoryCacheAdapter` provides a high-performance in-memory cache with LRU ev
 ### Configuration Options
 
 ```typescript
-import { MemoryCacheAdapter } from '@callairis/rbac-cache';
+import { MemoryCacheAdapter } from '@prodforcode/rbac-cache';
 
 const cache = new MemoryCacheAdapter({
   // Maximum number of entries (default: 1000)
@@ -144,7 +144,7 @@ The `RedisCacheAdapter` provides production-ready Redis caching with cluster sup
 ### Configuration Options
 
 ```typescript
-import { RedisCacheAdapter } from '@callairis/rbac-cache';
+import { RedisCacheAdapter } from '@prodforcode/rbac-cache';
 import Redis from 'ioredis';
 
 // Create Redis client
@@ -248,8 +248,8 @@ await cache.shutdown();
 Configure cache TTLs for different data types:
 
 ```typescript
-import { RBACEngine } from '@callairis/rbac-core';
-import { RedisCacheAdapter } from '@callairis/rbac-cache';
+import { RBACEngine } from '@prodforcode/rbac-core';
+import { RedisCacheAdapter } from '@prodforcode/rbac-cache';
 
 const cache = new RedisCacheAdapter({ redis });
 
@@ -282,7 +282,7 @@ await cache.delete('user:user-123:permissions');
 Least Recently Used eviction with O(1) operations:
 
 ```typescript
-import { LRUStrategy } from '@callairis/rbac-cache';
+import { LRUStrategy } from '@prodforcode/rbac-cache';
 
 const lru = new LRUStrategy<string, any>(1000);
 
@@ -300,7 +300,7 @@ const val = lru.get('key'); // Marks as recently used
 Time-to-live management with automatic cleanup:
 
 ```typescript
-import { TTLStrategy } from '@callairis/rbac-cache';
+import { TTLStrategy } from '@prodforcode/rbac-cache';
 
 const ttl = new TTLStrategy({
   defaultTtl: 300,
@@ -317,7 +317,7 @@ if (ttl.isExpired('key')) {
 ## Error Handling
 
 ```typescript
-import { CacheError, CacheConnectionError, CacheSerializationError } from '@callairis/rbac-cache';
+import { CacheError, CacheConnectionError, CacheSerializationError } from '@prodforcode/rbac-cache';
 
 try {
   await cache.set('key', value);

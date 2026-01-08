@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
-import { IAuditLogger } from '@callairis/rbac-core';
+import { IAuditLogger } from '@prodforcode/rbac-core';
 import { Reflector } from '@nestjs/core';
 import { PERMISSIONS_KEY } from '../decorators/permissions.decorator';
 import { ROLES_KEY } from '../decorators/roles.decorator';

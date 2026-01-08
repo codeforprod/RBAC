@@ -1,5 +1,5 @@
 /**
- * @callairis/rbac-cache
+ * @prodforcode/rbac-cache
  *
  * Caching layer for RBAC system with multiple adapter support
  */

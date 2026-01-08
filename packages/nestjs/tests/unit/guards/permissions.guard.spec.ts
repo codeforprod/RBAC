@@ -1,7 +1,7 @@
 import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { PermissionsGuard } from '../../../src/guards/permissions.guard';
-import { RBACEngine } from '@callairis/rbac-core';
+import { RBACEngine } from '@prodforcode/rbac-core';
 
 describe('PermissionsGuard', () => {
   let guard: PermissionsGuard;

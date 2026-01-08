@@ -1,6 +1,6 @@
-# @callairis/rbac-typeorm
+# @prodforcode/rbac-typeorm
 
-TypeORM adapter for @callairis/rbac-core providing PostgreSQL, MySQL, and SQLite database integration.
+TypeORM adapter for @prodforcode/rbac-core providing PostgreSQL, MySQL, and SQLite database integration.
 
 ## Features
 
@@ -15,11 +15,11 @@ TypeORM adapter for @callairis/rbac-core providing PostgreSQL, MySQL, and SQLite
 ## Installation
 
 ```bash
-npm install @callairis/rbac-typeorm @callairis/rbac-core typeorm reflect-metadata
+npm install @prodforcode/rbac-typeorm @prodforcode/rbac-core typeorm reflect-metadata
 # or
-yarn add @callairis/rbac-typeorm @callairis/rbac-core typeorm reflect-metadata
+yarn add @prodforcode/rbac-typeorm @prodforcode/rbac-core typeorm reflect-metadata
 # or
-pnpm add @callairis/rbac-typeorm @callairis/rbac-core typeorm reflect-metadata
+pnpm add @prodforcode/rbac-typeorm @prodforcode/rbac-core typeorm reflect-metadata
 ```
 
 Install database driver:
@@ -38,8 +38,8 @@ npm install better-sqlite3
 
 ```typescript
 import { DataSource } from 'typeorm';
-import { RBACEngine } from '@callairis/rbac-core';
-import { TypeORMAdapter, entities } from '@callairis/rbac-typeorm';
+import { RBACEngine } from '@prodforcode/rbac-core';
+import { TypeORMAdapter, entities } from '@prodforcode/rbac-typeorm';
 
 // 1. Create TypeORM DataSource
 const dataSource = new DataSource({
@@ -68,7 +68,7 @@ const rbac = await RBACEngine.create({ adapter });
 
 ```typescript
 import { DataSource } from 'typeorm';
-import { entities } from '@callairis/rbac-typeorm';
+import { entities } from '@prodforcode/rbac-typeorm';
 
 const dataSource = new DataSource({
   type: 'postgres',
@@ -121,7 +121,7 @@ The adapter provides five main entities:
 Represents roles in the system.
 
 ```typescript
-import { RoleEntity } from '@callairis/rbac-typeorm';
+import { RoleEntity } from '@prodforcode/rbac-typeorm';
 
 // Entity structure
 class RoleEntity {
@@ -147,7 +147,7 @@ class RoleEntity {
 Represents permissions that can be assigned to roles.
 
 ```typescript
-import { PermissionEntity } from '@callairis/rbac-typeorm';
+import { PermissionEntity } from '@prodforcode/rbac-typeorm';
 
 class PermissionEntity {
   id: string;                    // UUID primary key
@@ -169,7 +169,7 @@ class PermissionEntity {
 Junction table linking roles and permissions.
 
 ```typescript
-import { RolePermissionEntity } from '@callairis/rbac-typeorm';
+import { RolePermissionEntity } from '@prodforcode/rbac-typeorm';
 
 class RolePermissionEntity {
   id: string;
@@ -189,7 +189,7 @@ class RolePermissionEntity {
 Associates users with roles.
 
 ```typescript
-import { UserRoleEntity } from '@callairis/rbac-typeorm';
+import { UserRoleEntity } from '@prodforcode/rbac-typeorm';
 
 class UserRoleEntity {
   id: string;
@@ -210,7 +210,7 @@ class UserRoleEntity {
 Tracks all RBAC operations for audit purposes.
 
 ```typescript
-import { AuditLogEntity } from '@callairis/rbac-typeorm';
+import { AuditLogEntity } from '@prodforcode/rbac-typeorm';
 
 class AuditLogEntity {
   id: string;
@@ -231,7 +231,7 @@ The adapter provides specialized repositories for database operations.
 ### RoleRepository
 
 ```typescript
-import { RoleRepository } from '@callairis/rbac-typeorm';
+import { RoleRepository } from '@prodforcode/rbac-typeorm';
 
 const roleRepo = new RoleRepository(dataSource);
 
@@ -258,7 +258,7 @@ await roleRepo.deactivateRole(role.id);
 ### PermissionRepository
 
 ```typescript
-import { PermissionRepository } from '@callairis/rbac-typeorm';
+import { PermissionRepository } from '@prodforcode/rbac-typeorm';
 
 const permRepo = new PermissionRepository(dataSource);
 
@@ -284,7 +284,7 @@ const perms = await permRepo.bulkCreatePermissions([
 ### UserRoleRepository
 
 ```typescript
-import { UserRoleRepository } from '@callairis/rbac-typeorm';
+import { UserRoleRepository } from '@prodforcode/rbac-typeorm';
 
 const userRoleRepo = new UserRoleRepository(dataSource);
 
@@ -309,7 +309,7 @@ const hasRole = await userRoleRepo.hasRole('user-123', role.id, 'org-123');
 ### AuditRepository
 
 ```typescript
-import { AuditRepository } from '@callairis/rbac-typeorm';
+import { AuditRepository } from '@prodforcode/rbac-typeorm';
 
 const auditRepo = new AuditRepository(dataSource);
 
@@ -388,7 +388,7 @@ export class CreateRBACTables1704067200000 implements MigrationInterface {
 Use TypeORM transactions for atomic operations:
 
 ```typescript
-import { TypeORMAdapter } from '@callairis/rbac-typeorm';
+import { TypeORMAdapter } from '@prodforcode/rbac-typeorm';
 
 const adapter = new TypeORMAdapter(dataSource);
 
@@ -471,8 +471,8 @@ const roles = await dataSource
 ```typescript
 import 'reflect-metadata';
 import { DataSource } from 'typeorm';
-import { RBACEngine } from '@callairis/rbac-core';
-import { TypeORMAdapter, entities } from '@callairis/rbac-typeorm';
+import { RBACEngine } from '@prodforcode/rbac-core';
+import { TypeORMAdapter, entities } from '@prodforcode/rbac-typeorm';
 
 async function main() {
   // 1. Initialize database

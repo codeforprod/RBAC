@@ -1,5 +1,5 @@
 {
-  "name": "@callairis/rbac-cache",
+  "name": "@prodforcode/rbac-cache",
   "version": "1.0.0",
   "description": "High-performance caching adapters for RBAC with LRU memory cache and Redis support",
   "main": "dist/index.js",
@@ -32,7 +32,7 @@
   "author": "CallAiris Team",
   "license": "MIT",
   "dependencies": {
-    "@callairis/rbac-core": "*"
+    "@prodforcode/rbac-core": "*"
   },
   "peerDependencies": {
     "ioredis": "^5.0.0"

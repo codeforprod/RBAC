@@ -1,4 +1,4 @@
-# @callairis/rbac
+# @prodforcode/rbac
 
 A production-ready, framework-agnostic Role-Based Access Control (RBAC) system for Node.js applications. Built with TypeScript and designed for high performance and flexibility.
 
@@ -19,40 +19,40 @@ A production-ready, framework-agnostic Role-Based Access Control (RBAC) system f
 
 | Package | Version | Description |
 |---------|---------|-------------|
-| [@callairis/rbac-core](./packages/core) | 1.0.0 | Core RBAC engine and interfaces |
-| [@callairis/rbac-nestjs](./packages/nestjs) | 1.0.0 | NestJS integration with guards and decorators |
-| [@callairis/rbac-cache](./packages/cache) | 1.0.0 | Cache adapters (Memory, Redis) |
-| [@callairis/rbac-typeorm](./packages/adapter-typeorm) | 1.0.0 | TypeORM database adapter |
-| [@callairis/rbac-mongoose](./packages/adapter-mongoose) | 1.0.0 | Mongoose database adapter |
+| [@prodforcode/rbac-core](./packages/core) | 1.0.0 | Core RBAC engine and interfaces |
+| [@prodforcode/rbac-nestjs](./packages/nestjs) | 1.0.0 | NestJS integration with guards and decorators |
+| [@prodforcode/rbac-cache](./packages/cache) | 1.0.0 | Cache adapters (Memory, Redis) |
+| [@prodforcode/rbac-typeorm](./packages/adapter-typeorm) | 1.0.0 | TypeORM database adapter |
+| [@prodforcode/rbac-mongoose](./packages/adapter-mongoose) | 1.0.0 | Mongoose database adapter |
 
 ## Installation
 
 Install the core package:
 
 ```bash
-npm install @callairis/rbac-core
+npm install @prodforcode/rbac-core
 ```
 
 For NestJS applications:
 
 ```bash
-npm install @callairis/rbac-core @callairis/rbac-nestjs
+npm install @prodforcode/rbac-core @prodforcode/rbac-nestjs
 ```
 
 Choose a database adapter:
 
 ```bash
 # TypeORM
-npm install @callairis/rbac-typeorm
+npm install @prodforcode/rbac-typeorm
 
 # Mongoose
-npm install @callairis/rbac-mongoose
+npm install @prodforcode/rbac-mongoose
 ```
 
 Optional cache adapter:
 
 ```bash
-npm install @callairis/rbac-cache
+npm install @prodforcode/rbac-cache
 ```
 
 ## Quick Start
@@ -60,9 +60,9 @@ npm install @callairis/rbac-cache
 ### Basic Usage
 
 ```typescript
-import { RBACEngine } from '@callairis/rbac-core';
-import { TypeOrmAdapter } from '@callairis/rbac-typeorm';
-import { RedisCacheAdapter } from '@callairis/rbac-cache';
+import { RBACEngine } from '@prodforcode/rbac-core';
+import { TypeOrmAdapter } from '@prodforcode/rbac-typeorm';
+import { RedisCacheAdapter } from '@prodforcode/rbac-cache';
 
 // Create RBAC engine
 const rbac = await RBACEngine.create({
@@ -94,8 +94,8 @@ const canRead = await rbac.can('user-123', 'posts:read'); // true (inherited fro
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { RbacModule } from '@callairis/rbac-nestjs';
-import { TypeOrmAdapter } from '@callairis/rbac-typeorm';
+import { RbacModule } from '@prodforcode/rbac-nestjs';
+import { TypeOrmAdapter } from '@prodforcode/rbac-typeorm';
 
 @Module({
   imports: [
@@ -115,7 +115,7 @@ Use guards and decorators in controllers:
 
 ```typescript
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { RolesGuard, PermissionsGuard, Roles, Permissions } from '@callairis/rbac-nestjs';
+import { RolesGuard, PermissionsGuard, Roles, Permissions } from '@prodforcode/rbac-nestjs';
 
 @Controller('posts')
 @UseGuards(RolesGuard, PermissionsGuard)
@@ -143,12 +143,12 @@ export class PostsController {
 └────────────────────┬────────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────────┐
-│               @callairis/rbac-nestjs                      │
+│               @prodforcode/rbac-nestjs                      │
 │  Guards │ Decorators │ Interceptors │ Module            │
 └────────────────────┬────────────────────────────────────┘
                      │
 ┌────────────────────▼────────────────────────────────────┐
-│               @callairis/rbac-core                        │
+│               @prodforcode/rbac-core                        │
 │  RBACEngine │ PermissionChecker │ Interfaces            │
 └─────┬────────────────────────────────────┬──────────────┘
       │                                    │
@@ -253,13 +253,13 @@ npm run typecheck
 
 ```bash
 # Build specific package
-npm run build --workspace=@callairis/rbac-core
+npm run build --workspace=@prodforcode/rbac-core
 
 # Test specific package
-npm run test --workspace=@callairis/rbac-nestjs
+npm run test --workspace=@prodforcode/rbac-nestjs
 
 # Watch mode for development
-npm run dev --workspace=@callairis/rbac-core
+npm run dev --workspace=@prodforcode/rbac-core
 ```
 
 ## Performance

@@ -1,6 +1,6 @@
-# @callairis/rbac-nestjs
+# @prodforcode/rbac-nestjs
 
-NestJS integration for @callairis/rbac-core with decorators, guards, interceptors, and dynamic module configuration.
+NestJS integration for @prodforcode/rbac-core with decorators, guards, interceptors, and dynamic module configuration.
 
 ## Features
 
@@ -15,20 +15,20 @@ NestJS integration for @callairis/rbac-core with decorators, guards, interceptor
 ## Installation
 
 ```bash
-npm install @callairis/rbac-nestjs @callairis/rbac-core @nestjs/common @nestjs/core reflect-metadata rxjs
+npm install @prodforcode/rbac-nestjs @prodforcode/rbac-core @nestjs/common @nestjs/core reflect-metadata rxjs
 # or
-yarn add @callairis/rbac-nestjs @callairis/rbac-core @nestjs/common @nestjs/core reflect-metadata rxjs
+yarn add @prodforcode/rbac-nestjs @prodforcode/rbac-core @nestjs/common @nestjs/core reflect-metadata rxjs
 # or
-pnpm add @callairis/rbac-nestjs @callairis/rbac-core @nestjs/common @nestjs/core reflect-metadata rxjs
+pnpm add @prodforcode/rbac-nestjs @prodforcode/rbac-core @nestjs/common @nestjs/core reflect-metadata rxjs
 ```
 
 ## Quick Start
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { RbacModule } from '@callairis/rbac-nestjs';
-import { TypeORMAdapter } from '@callairis/rbac-typeorm';
-import { RedisCacheAdapter } from '@callairis/rbac-cache';
+import { RbacModule } from '@prodforcode/rbac-nestjs';
+import { TypeORMAdapter } from '@prodforcode/rbac-typeorm';
+import { RedisCacheAdapter } from '@prodforcode/rbac-cache';
 
 @Module({
   imports: [
@@ -53,9 +53,9 @@ Use `forRoot()` when your configuration is static:
 
 ```typescript
 import { Module } from '@nestjs/common';
-import { RbacModule } from '@callairis/rbac-nestjs';
-import { TypeORMAdapter } from '@callairis/rbac-typeorm';
-import { MemoryCacheAdapter } from '@callairis/rbac-cache';
+import { RbacModule } from '@prodforcode/rbac-nestjs';
+import { TypeORMAdapter } from '@prodforcode/rbac-typeorm';
+import { MemoryCacheAdapter } from '@prodforcode/rbac-cache';
 
 @Module({
   imports: [
@@ -91,7 +91,7 @@ Use `forRootAsync()` when you need to inject dependencies:
 ```typescript
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { RbacModule } from '@callairis/rbac-nestjs';
+import { RbacModule } from '@prodforcode/rbac-nestjs';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { DataSource } from 'typeorm';
 
@@ -133,7 +133,7 @@ Specify required roles for a route. User must have at least ONE of the specified
 
 ```typescript
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { Roles, RolesGuard } from '@callairis/rbac-nestjs';
+import { Roles, RolesGuard } from '@prodforcode/rbac-nestjs';
 
 @Controller('admin')
 @UseGuards(RolesGuard)
@@ -158,7 +158,7 @@ Specify required permissions for a route. User must have ALL specified permissio
 
 ```typescript
 import { Controller, Post, UseGuards } from '@nestjs/common';
-import { Permissions, PermissionsGuard } from '@callairis/rbac-nestjs';
+import { Permissions, PermissionsGuard } from '@prodforcode/rbac-nestjs';
 
 @Controller('users')
 @UseGuards(PermissionsGuard)
@@ -183,7 +183,7 @@ Alternative decorator that throws an exception if role is missing:
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
-import { RequiresRole } from '@callairis/rbac-nestjs';
+import { RequiresRole } from '@prodforcode/rbac-nestjs';
 
 @Controller('reports')
 export class ReportsController {
@@ -201,7 +201,7 @@ Alternative decorator that throws if permission is missing:
 
 ```typescript
 import { Controller, Delete } from '@nestjs/common';
-import { RequiresPermission } from '@callairis/rbac-nestjs';
+import { RequiresPermission } from '@prodforcode/rbac-nestjs';
 
 @Controller('posts')
 export class PostsController {
@@ -219,7 +219,7 @@ User must have at least one of the specified permissions:
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
-import { RequiresAny } from '@callairis/rbac-nestjs';
+import { RequiresAny } from '@prodforcode/rbac-nestjs';
 
 @Controller('content')
 export class ContentController {
@@ -237,7 +237,7 @@ User must have all specified permissions:
 
 ```typescript
 import { Controller, Post } from '@nestjs/common';
-import { RequiresAll } from '@callairis/rbac-nestjs';
+import { RequiresAll } from '@prodforcode/rbac-nestjs';
 
 @Controller('deployments')
 export class DeploymentsController {
@@ -255,7 +255,7 @@ Extract the current user from the request:
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
-import { CurrentUser } from '@callairis/rbac-nestjs';
+import { CurrentUser } from '@prodforcode/rbac-nestjs';
 
 interface User {
   id: string;
@@ -277,7 +277,7 @@ Mark a route as public (skip all RBAC checks):
 
 ```typescript
 import { Controller, Get } from '@nestjs/common';
-import { Public } from '@callairis/rbac-nestjs';
+import { Public } from '@prodforcode/rbac-nestjs';
 
 @Controller('health')
 export class HealthController {
@@ -297,7 +297,7 @@ Validates that the user has the required roles.
 
 ```typescript
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { RolesGuard, Roles } from '@callairis/rbac-nestjs';
+import { RolesGuard, Roles } from '@prodforcode/rbac-nestjs';
 
 @Controller('api')
 @UseGuards(RolesGuard)
@@ -316,7 +316,7 @@ Validates that the user has the required permissions.
 
 ```typescript
 import { Controller, Post, UseGuards } from '@nestjs/common';
-import { PermissionsGuard, Permissions } from '@callairis/rbac-nestjs';
+import { PermissionsGuard, Permissions } from '@prodforcode/rbac-nestjs';
 
 @Controller('api')
 @UseGuards(PermissionsGuard)
@@ -336,7 +336,7 @@ Apply guards globally to all routes:
 ```typescript
 import { Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { RbacModule, PermissionsGuard } from '@callairis/rbac-nestjs';
+import { RbacModule, PermissionsGuard } from '@prodforcode/rbac-nestjs';
 
 @Module({
   imports: [RbacModule.forRoot({ /* ... */ })],
@@ -357,7 +357,7 @@ Use multiple guards together:
 ```typescript
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard, Roles } from '@callairis/rbac-nestjs';
+import { RolesGuard, Roles } from '@prodforcode/rbac-nestjs';
 
 @Controller('secure')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
@@ -378,7 +378,7 @@ Automatically log all authorization events:
 
 ```typescript
 import { Controller, UseInterceptors } from '@nestjs/common';
-import { AuditInterceptor } from '@callairis/rbac-nestjs';
+import { AuditInterceptor } from '@prodforcode/rbac-nestjs';
 
 @Controller('users')
 @UseInterceptors(AuditInterceptor)
@@ -394,7 +394,7 @@ Apply audit logging to all routes:
 ```typescript
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { RbacModule, AuditInterceptor } from '@callairis/rbac-nestjs';
+import { RbacModule, AuditInterceptor } from '@prodforcode/rbac-nestjs';
 
 @Module({
   imports: [RbacModule.forRoot({ /* ... */ })],
@@ -414,7 +414,7 @@ Access the RBAC engine directly in your services:
 
 ```typescript
 import { Injectable } from '@nestjs/common';
-import { RBACEngine } from '@callairis/rbac-core';
+import { RBACEngine } from '@prodforcode/rbac-core';
 
 @Injectable()
 export class UsersService {
@@ -450,9 +450,9 @@ export class UsersService {
 // app.module.ts
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { RbacModule } from '@callairis/rbac-nestjs';
-import { TypeORMAdapter, entities } from '@callairis/rbac-typeorm';
-import { RedisCacheAdapter } from '@callairis/rbac-cache';
+import { RbacModule } from '@prodforcode/rbac-nestjs';
+import { TypeORMAdapter, entities } from '@prodforcode/rbac-typeorm';
+import { RedisCacheAdapter } from '@prodforcode/rbac-cache';
 import { DataSource } from 'typeorm';
 import Redis from 'ioredis';
 
@@ -514,7 +514,7 @@ import {
   RolesGuard,
   PermissionsGuard,
   AuditInterceptor
-} from '@callairis/rbac-nestjs';
+} from '@prodforcode/rbac-nestjs';
 import { AuthGuard } from '@nestjs/passport';
 
 interface User {
@@ -570,7 +570,7 @@ export class UsersController {
 ```typescript
 // rbac.service.ts
 import { Injectable } from '@nestjs/common';
-import { RBACEngine } from '@callairis/rbac-core';
+import { RBACEngine } from '@prodforcode/rbac-core';
 
 @Injectable()
 export class RbacService {
@@ -637,7 +637,7 @@ export class RbacService {
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { RBACEngine } from '@callairis/rbac-core';
+import { RBACEngine } from '@prodforcode/rbac-core';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -669,7 +669,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
 ```typescript
 import { Test, TestingModule } from '@nestjs/testing';
-import { RBACEngine } from '@callairis/rbac-core';
+import { RBACEngine } from '@prodforcode/rbac-core';
 import { UsersController } from './users.controller';
 
 describe('UsersController', () => {

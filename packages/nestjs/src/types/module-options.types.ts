@@ -10,7 +10,7 @@ import {
   MultiTenancyOptions,
   PerformanceOptions,
   ValidationOptions,
-} from '@callairis/rbac-core';
+} from '@prodforcode/rbac-core';
 
 /**
  * User extraction strategy for obtaining the current user from the request context.

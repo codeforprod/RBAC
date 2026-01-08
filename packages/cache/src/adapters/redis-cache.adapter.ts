@@ -11,7 +11,7 @@
  * Requires `ioredis` as a peer dependency.
  */
 
-import { ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@callairis/rbac-core';
+import { ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@prodforcode/rbac-core';
 import { ICacheAdapter, ICacheMetrics, ICacheHealthStatus } from '../interfaces';
 import { RedisCacheOptions, DEFAULT_REDIS_CACHE_OPTIONS } from '../types';
 import { CacheError, CacheErrorCode, CacheConnectionError, CacheSerializationError } from '../errors';
