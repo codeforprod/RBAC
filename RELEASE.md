@@ -68,7 +68,7 @@ Required secrets in GitHub repository settings:
 1. Login to [npmjs.com](https://www.npmjs.com/)
 2. Create organization `@prodforcode` if not exists:
    - Go to [https://www.npmjs.com/org/create](https://www.npmjs.com/org/create)
-   - Create organization named `callairis`
+   - Create organization named `prodforcode`
 3. Generate NPM Automation Token:
    - Go to Access Tokens → Generate New Token
    - Select "Automation" token type
