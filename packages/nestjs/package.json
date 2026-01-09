@@ -1,6 +1,6 @@
 {
   "name": "@prodforcode/rbac-nestjs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "NestJS integration for @prodforcode/rbac-core with decorators, guards, and dynamic modules",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
