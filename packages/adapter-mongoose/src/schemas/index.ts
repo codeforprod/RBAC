@@ -16,12 +16,7 @@ export {
 } from './permission.schema';
 
 // Role schema
-export {
-  RoleSchema,
-  RoleDocument,
-  RoleModel,
-  createRoleModel,
-} from './role.schema';
+export { RoleSchema, RoleDocument, RoleModel, createRoleModel } from './role.schema';
 
 // Role-Permission junction schema
 export {

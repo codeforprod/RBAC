@@ -77,9 +77,10 @@ export class RoleRepository {
 
     // Whitelist allowed sort columns to prevent SQL injection
     const ALLOWED_SORT_COLUMNS = ['createdAt', 'updatedAt', 'name', 'priority', 'isActive'];
-    const sortBy = options?.sortBy && ALLOWED_SORT_COLUMNS.includes(options.sortBy)
-      ? options.sortBy
-      : 'createdAt';
+    const sortBy =
+      options?.sortBy && ALLOWED_SORT_COLUMNS.includes(options.sortBy)
+        ? options.sortBy
+        : 'createdAt';
     const sortOrder = options?.sortOrder?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC';
     queryBuilder.orderBy(`role.${sortBy}`, sortOrder);
 
@@ -144,7 +145,11 @@ export class RoleRepository {
   /**
    * Check if a role name already exists within an organization.
    */
-  async existsByName(name: string, organizationId?: string | null, excludeId?: string): Promise<boolean> {
+  async existsByName(
+    name: string,
+    organizationId?: string | null,
+    excludeId?: string,
+  ): Promise<boolean> {
     const queryBuilder = this.repository
       .createQueryBuilder('role')
       .where('role.name = :name', { name });

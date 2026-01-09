@@ -249,11 +249,7 @@ export interface IRBACCache {
    * );
    * ```
    */
-  getOrSet<T>(
-    key: string,
-    factory: () => Promise<T>,
-    options?: ICacheSetOptions
-  ): Promise<T>;
+  getOrSet<T>(key: string, factory: () => Promise<T>, options?: ICacheSetOptions): Promise<T>;
 
   /**
    * Lock a key to prevent concurrent cache population (cache stampede protection).
@@ -513,7 +509,7 @@ export class InMemoryCache implements IRBACCache {
     let count = 0;
 
     for (const [key, entry] of this.cache.entries()) {
-      if (entry.tags.some(t => tagSet.has(t))) {
+      if (entry.tags.some((t) => tagSet.has(t))) {
         this.cache.delete(key);
         count++;
       }
@@ -561,7 +557,7 @@ export class InMemoryCache implements IRBACCache {
   async getOrSet<T>(
     key: string,
     factory: () => Promise<T>,
-    options?: ICacheSetOptions
+    options?: ICacheSetOptions,
   ): Promise<T> {
     const cached = await this.get<T>(key);
     if (cached !== null) {

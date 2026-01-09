@@ -152,7 +152,7 @@ export interface IUserRoleService {
    */
   getUserRoleAssignments(
     userId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<IUserRoleAssignment[]>;
 
   /**
@@ -181,7 +181,7 @@ export interface IUserRoleService {
    */
   getUserEffectivePermissions(
     userId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<IUserPermissionResult>;
 
   /**
@@ -261,7 +261,7 @@ export interface IUserRoleService {
   hasPermission(
     userId: string,
     permission: string,
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean>;
 
   /**
@@ -275,7 +275,7 @@ export interface IUserRoleService {
   hasAnyPermission(
     userId: string,
     permissions: string[],
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean>;
 
   /**
@@ -289,7 +289,7 @@ export interface IUserRoleService {
   hasAllPermissions(
     userId: string,
     permissions: string[],
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean>;
 
   /**

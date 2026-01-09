@@ -120,7 +120,7 @@ export class CacheError extends Error {
     code: CacheErrorCode,
     message: string,
     context: CacheErrorContext = {},
-    cause?: Error
+    cause?: Error,
   ) {
     super(message);
     this.name = 'CacheError';
@@ -138,9 +138,8 @@ export class CacheError extends Error {
    * Create a string representation of the error.
    */
   toString(): string {
-    const contextStr = Object.keys(this.context).length > 0
-      ? ` Context: ${JSON.stringify(this.context)}`
-      : '';
+    const contextStr =
+      Object.keys(this.context).length > 0 ? ` Context: ${JSON.stringify(this.context)}` : '';
     return `${this.name} [${this.code}]: ${this.message}${contextStr}`;
   }
 

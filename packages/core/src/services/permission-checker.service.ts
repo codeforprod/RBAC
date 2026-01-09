@@ -1,8 +1,16 @@
 import { IPermission, IPermissionCheckResult } from '../interfaces/permission.interface';
 import { IRole } from '../interfaces/role.interface';
 import { IRBACAdapter } from '../interfaces/adapter.interface';
-import { IRBACCache, DefaultCacheKeyGenerator, ICacheKeyGenerator } from '../interfaces/cache.interface';
-import { IUserAuthorizationContext, IDetailedPermissionCheckResult, ICheckPermissionOptions } from '../interfaces/user.interface';
+import {
+  IRBACCache,
+  DefaultCacheKeyGenerator,
+  ICacheKeyGenerator,
+} from '../interfaces/cache.interface';
+import {
+  IUserAuthorizationContext,
+  IDetailedPermissionCheckResult,
+  ICheckPermissionOptions,
+} from '../interfaces/user.interface';
 import { PermissionMatcher, PermissionMatchContext } from '../utils/permission-matcher';
 import { RoleHierarchyResolver } from '../utils/role-hierarchy';
 import { PermissionDeniedError } from '../errors/permission-denied.error';
@@ -81,7 +89,7 @@ export class PermissionChecker {
     adapter: IRBACAdapter,
     hierarchyResolver: RoleHierarchyResolver,
     cache?: IRBACCache,
-    options: PermissionCheckerOptions = {}
+    options: PermissionCheckerOptions = {},
   ) {
     this.adapter = adapter;
     this.hierarchyResolver = hierarchyResolver;
@@ -91,10 +99,12 @@ export class PermissionChecker {
     this.cacheOptions = { ...DEFAULT_CACHE_OPTIONS, ...options.cacheOptions };
 
     this.matcher = new PermissionMatcher(permissionOptions);
-    this.keyGenerator = options.cacheKeyGenerator ?? new DefaultCacheKeyGenerator({
-      prefix: this.cacheOptions.keyPrefix,
-      separator: this.cacheOptions.keySeparator,
-    });
+    this.keyGenerator =
+      options.cacheKeyGenerator ??
+      new DefaultCacheKeyGenerator({
+        prefix: this.cacheOptions.keyPrefix,
+        separator: this.cacheOptions.keySeparator,
+      });
 
     this.options = {
       permissionOptions,
@@ -131,7 +141,7 @@ export class PermissionChecker {
   async hasPermission(
     userId: string,
     permission: string,
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean> {
     const result = await this.check({
       userId,
@@ -169,7 +179,7 @@ export class PermissionChecker {
   async hasAnyPermission(
     userId: string,
     permissions: string[],
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean> {
     for (const permission of permissions) {
       const result = await this.check({ userId, permission, context });
@@ -200,7 +210,7 @@ export class PermissionChecker {
   async hasAllPermissions(
     userId: string,
     permissions: string[],
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean> {
     for (const permission of permissions) {
       const result = await this.check({ userId, permission, context });
@@ -237,7 +247,7 @@ export class PermissionChecker {
    * ```
    */
   async checkPermissionDetailed(
-    options: ICheckPermissionOptions
+    options: ICheckPermissionOptions,
   ): Promise<IDetailedPermissionCheckResult> {
     const startTime = Date.now();
     const { userId, permission, context, skipCache } = options;
@@ -246,7 +256,7 @@ export class PermissionChecker {
     const { permissions, roles, fromCache } = await this.getUserEffectivePermissions(
       userId,
       context?.organizationId,
-      skipCache
+      skipCache,
     );
 
     // Build match context
@@ -263,10 +273,7 @@ export class PermissionChecker {
 
     if (matchResult.matched && matchResult.matchedPermission) {
       // Find which role granted this permission
-      const grantedByRole = this.findRoleWithPermission(
-        roles,
-        matchResult.matchedPermission.id
-      );
+      const grantedByRole = this.findRoleWithPermission(roles, matchResult.matchedPermission.id);
 
       return {
         allowed: true,
@@ -302,7 +309,7 @@ export class PermissionChecker {
   async getUserEffectivePermissions(
     userId: string,
     organizationId?: string | null,
-    skipCache?: boolean
+    skipCache?: boolean,
   ): Promise<{ permissions: IPermission[]; roles: IRole[]; fromCache: boolean }> {
     const cacheKey = this.keyGenerator.forUserPermissions(userId, organizationId);
 
@@ -320,13 +327,13 @@ export class PermissionChecker {
     // Filter active, non-expired assignments
     const now = new Date();
     const activeAssignments = assignments.filter(
-      a => a.isActive && (!a.expiresAt || a.expiresAt > now)
+      (a) => a.isActive && (!a.expiresAt || a.expiresAt > now),
     );
 
     // Get all roles
-    const roleIds = activeAssignments.map(a => a.roleId);
+    const roleIds = activeAssignments.map((a) => a.roleId);
     const roles = await this.adapter.findRolesByIds(roleIds);
-    const activeRoles = roles.filter(r => r.isActive);
+    const activeRoles = roles.filter((r) => r.isActive);
 
     // Collect all permissions including inherited
     const permissionMap = new Map<string, IPermission>();
@@ -349,7 +356,7 @@ export class PermissionChecker {
 
     const result = {
       permissions: Array.from(permissionMap.values()),
-      roles: [...new Map(allRoles.map(r => [r.id, r])).values()], // Deduplicate
+      roles: [...new Map(allRoles.map((r) => [r.id, r])).values()], // Deduplicate
     };
 
     // Cache the result
@@ -396,7 +403,7 @@ export class PermissionChecker {
     const { permissions } = await this.getUserEffectivePermissions(
       userId,
       context?.organizationId,
-      skipCache
+      skipCache,
     );
 
     // Build match context
@@ -418,7 +425,7 @@ export class PermissionChecker {
    */
   private findRoleWithPermission(roles: IRole[], permissionId: string): IRole | undefined {
     for (const role of roles) {
-      if (role.permissions.some(p => p.id === permissionId)) {
+      if (role.permissions.some((p) => p.id === permissionId)) {
         return role;
       }
     }

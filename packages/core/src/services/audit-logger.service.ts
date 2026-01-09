@@ -57,10 +57,12 @@ export class InMemoryAuditLogger implements IAuditLogger {
    *
    * @param config - Logger configuration
    */
-  constructor(config: {
-    maxEntries?: number;
-    auditOptions?: Partial<AuditOptions>;
-  } = {}) {
+  constructor(
+    config: {
+      maxEntries?: number;
+      auditOptions?: Partial<AuditOptions>;
+    } = {},
+  ) {
     this.storage = {
       entries: [],
       maxEntries: config.maxEntries ?? 10000,
@@ -95,7 +97,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
       requestId?: string;
       organizationId?: string | null;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry> {
     // Check if we should log this type of check
     if (granted && !this.options.logSuccessfulChecks) {
@@ -142,7 +144,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
       organizationId?: string | null;
       expiresAt?: Date;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry> {
     if (!this.options.logRoleChanges) {
       return this.createEntry({
@@ -179,7 +181,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
       organizationId?: string | null;
       reason?: string;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry> {
     if (!this.options.logRoleChanges) {
       return this.createEntry({
@@ -211,7 +213,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
   async logRoleCreation(
     roleId: string,
     createdBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     if (!this.options.logRoleChanges) {
       return this.createEntry({
@@ -239,7 +241,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
     roleId: string,
     updatedBy: string,
     previousState: Record<string, unknown>,
-    newState: Record<string, unknown>
+    newState: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     if (!this.options.logRoleChanges) {
       return this.createEntry({
@@ -267,7 +269,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
   async logRoleDeletion(
     roleId: string,
     deletedBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     if (!this.options.logRoleChanges) {
       return this.createEntry({
@@ -296,36 +298,36 @@ export class InMemoryAuditLogger implements IAuditLogger {
 
     // Apply filters
     if (options.action) {
-      filtered = filtered.filter(e => e.action === options.action);
+      filtered = filtered.filter((e) => e.action === options.action);
     }
 
     if (options.actions && options.actions.length > 0) {
       const actionSet = new Set(options.actions);
-      filtered = filtered.filter(e => actionSet.has(e.action));
+      filtered = filtered.filter((e) => actionSet.has(e.action));
     }
 
     if (options.actorId) {
-      filtered = filtered.filter(e => e.actorId === options.actorId);
+      filtered = filtered.filter((e) => e.actorId === options.actorId);
     }
 
     if (options.targetId) {
-      filtered = filtered.filter(e => e.targetId === options.targetId);
+      filtered = filtered.filter((e) => e.targetId === options.targetId);
     }
 
     if (options.targetType) {
-      filtered = filtered.filter(e => e.targetType === options.targetType);
+      filtered = filtered.filter((e) => e.targetType === options.targetType);
     }
 
     if (options.success !== undefined) {
-      filtered = filtered.filter(e => e.success === options.success);
+      filtered = filtered.filter((e) => e.success === options.success);
     }
 
     if (options.organizationId !== undefined) {
-      filtered = filtered.filter(e => e.organizationId === options.organizationId);
+      filtered = filtered.filter((e) => e.organizationId === options.organizationId);
     }
 
     if (options.severity) {
-      filtered = filtered.filter(e => e.severity === options.severity);
+      filtered = filtered.filter((e) => e.severity === options.severity);
     }
 
     if (options.minSeverity) {
@@ -336,15 +338,15 @@ export class InMemoryAuditLogger implements IAuditLogger {
         AuditSeverity.CRITICAL,
       ];
       const minIndex = severityOrder.indexOf(options.minSeverity);
-      filtered = filtered.filter(e => severityOrder.indexOf(e.severity) >= minIndex);
+      filtered = filtered.filter((e) => severityOrder.indexOf(e.severity) >= minIndex);
     }
 
     if (options.startDate) {
-      filtered = filtered.filter(e => e.timestamp >= options.startDate!);
+      filtered = filtered.filter((e) => e.timestamp >= options.startDate!);
     }
 
     if (options.endDate) {
-      filtered = filtered.filter(e => e.timestamp <= options.endDate!);
+      filtered = filtered.filter((e) => e.timestamp <= options.endDate!);
     }
 
     // Sort
@@ -380,7 +382,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
    */
   async getByUser(
     userId: string,
-    options?: Omit<IAuditQueryOptions, 'actorId'>
+    options?: Omit<IAuditQueryOptions, 'actorId'>,
   ): Promise<IAuditQueryResult> {
     return this.query({ ...options, actorId: userId });
   }
@@ -391,7 +393,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
   async getByTarget(
     targetId: string,
     targetType: string,
-    options?: Omit<IAuditQueryOptions, 'targetId' | 'targetType'>
+    options?: Omit<IAuditQueryOptions, 'targetId' | 'targetType'>,
   ): Promise<IAuditQueryResult> {
     return this.query({ ...options, targetId, targetType });
   }
@@ -400,20 +402,20 @@ export class InMemoryAuditLogger implements IAuditLogger {
    * Get a summary of audit activity.
    */
   async getSummary(
-    options?: Pick<IAuditQueryOptions, 'startDate' | 'endDate' | 'organizationId'>
+    options?: Pick<IAuditQueryOptions, 'startDate' | 'endDate' | 'organizationId'>,
   ): Promise<IAuditSummary> {
     let filtered = [...this.storage.entries];
 
     if (options?.startDate) {
-      filtered = filtered.filter(e => e.timestamp >= options.startDate!);
+      filtered = filtered.filter((e) => e.timestamp >= options.startDate!);
     }
 
     if (options?.endDate) {
-      filtered = filtered.filter(e => e.timestamp <= options.endDate!);
+      filtered = filtered.filter((e) => e.timestamp <= options.endDate!);
     }
 
     if (options?.organizationId !== undefined) {
-      filtered = filtered.filter(e => e.organizationId === options.organizationId);
+      filtered = filtered.filter((e) => e.organizationId === options.organizationId);
     }
 
     const byAction: Record<string, number> = {};
@@ -437,7 +439,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
       }
     }
 
-    const timestamps = filtered.map(e => e.timestamp.getTime());
+    const timestamps = filtered.map((e) => e.timestamp.getTime());
     const startDate = timestamps.length > 0 ? new Date(Math.min(...timestamps)) : new Date();
     const endDate = timestamps.length > 0 ? new Date(Math.max(...timestamps)) : new Date();
 
@@ -457,17 +459,14 @@ export class InMemoryAuditLogger implements IAuditLogger {
    */
   async purge(olderThan: Date): Promise<number> {
     const originalLength = this.storage.entries.length;
-    this.storage.entries = this.storage.entries.filter(e => e.timestamp >= olderThan);
+    this.storage.entries = this.storage.entries.filter((e) => e.timestamp >= olderThan);
     return originalLength - this.storage.entries.length;
   }
 
   /**
    * Export audit entries.
    */
-  async export(
-    options: IAuditQueryOptions,
-    format: 'json' | 'csv'
-  ): Promise<string> {
+  async export(options: IAuditQueryOptions, format: 'json' | 'csv'): Promise<string> {
     const result = await this.query({ ...options, limit: 100000 });
 
     if (format === 'json') {
@@ -496,7 +495,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
       'organizationId',
     ];
 
-    const rows = result.entries.map(entry => [
+    const rows = result.entries.map((entry) => [
       entry.id,
       entry.timestamp.toISOString(),
       entry.action,
@@ -515,7 +514,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
 
     const csvContent = [
       headers.join(','),
-      ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
+      ...rows.map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(',')),
     ].join('\n');
 
     return csvContent;
@@ -585,7 +584,7 @@ export class InMemoryAuditLogger implements IAuditLogger {
 export class ContextualAuditLogger implements IAuditLogger {
   constructor(
     private readonly delegate: IAuditLogger,
-    private readonly context: IAuditContext
+    private readonly context: IAuditContext,
   ) {}
 
   async log(options: ICreateAuditEntryOptions): Promise<IAuditEntry> {
@@ -612,7 +611,7 @@ export class ContextualAuditLogger implements IAuditLogger {
       requestId?: string;
       organizationId?: string | null;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry> {
     return this.delegate.logPermissionCheck(userId, permission, granted, {
       ...context,
@@ -632,7 +631,7 @@ export class ContextualAuditLogger implements IAuditLogger {
       organizationId?: string | null;
       expiresAt?: Date;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry> {
     return this.delegate.logRoleAssignment(userId, roleId, assignedBy, {
       ...context,
@@ -649,7 +648,7 @@ export class ContextualAuditLogger implements IAuditLogger {
       organizationId?: string | null;
       reason?: string;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry> {
     return this.delegate.logRoleRemoval(userId, roleId, removedBy, {
       ...context,
@@ -661,7 +660,7 @@ export class ContextualAuditLogger implements IAuditLogger {
   async logRoleCreation(
     roleId: string,
     createdBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     return this.delegate.logRoleCreation(roleId, createdBy, roleData);
   }
@@ -670,7 +669,7 @@ export class ContextualAuditLogger implements IAuditLogger {
     roleId: string,
     updatedBy: string,
     previousState: Record<string, unknown>,
-    newState: Record<string, unknown>
+    newState: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     return this.delegate.logRoleUpdate(roleId, updatedBy, previousState, newState);
   }
@@ -678,7 +677,7 @@ export class ContextualAuditLogger implements IAuditLogger {
   async logRoleDeletion(
     roleId: string,
     deletedBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     return this.delegate.logRoleDeletion(roleId, deletedBy, roleData);
   }
@@ -687,19 +686,24 @@ export class ContextualAuditLogger implements IAuditLogger {
     return this.delegate.query(options);
   }
 
-  getByUser(userId: string, options?: Omit<IAuditQueryOptions, 'actorId'>): Promise<IAuditQueryResult> {
+  getByUser(
+    userId: string,
+    options?: Omit<IAuditQueryOptions, 'actorId'>,
+  ): Promise<IAuditQueryResult> {
     return this.delegate.getByUser(userId, options);
   }
 
   getByTarget(
     targetId: string,
     targetType: string,
-    options?: Omit<IAuditQueryOptions, 'targetId' | 'targetType'>
+    options?: Omit<IAuditQueryOptions, 'targetId' | 'targetType'>,
   ): Promise<IAuditQueryResult> {
     return this.delegate.getByTarget(targetId, targetType, options);
   }
 
-  getSummary(options?: Pick<IAuditQueryOptions, 'startDate' | 'endDate' | 'organizationId'>): Promise<IAuditSummary> {
+  getSummary(
+    options?: Pick<IAuditQueryOptions, 'startDate' | 'endDate' | 'organizationId'>,
+  ): Promise<IAuditSummary> {
     return this.delegate.getSummary(options);
   }
 

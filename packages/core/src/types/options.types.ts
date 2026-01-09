@@ -305,7 +305,10 @@ export const DEFAULT_VALIDATION_OPTIONS: ValidationOptions = {
  * });
  * ```
  */
-export function mergeOptions(options: RBACEngineOptions): Required<Omit<RBACEngineOptions, 'adapter' | 'cache' | 'auditLogger'>> & Pick<RBACEngineOptions, 'adapter' | 'cache' | 'auditLogger'> {
+export function mergeOptions(
+  options: RBACEngineOptions,
+): Required<Omit<RBACEngineOptions, 'adapter' | 'cache' | 'auditLogger'>> &
+  Pick<RBACEngineOptions, 'adapter' | 'cache' | 'auditLogger'> {
   return {
     adapter: options.adapter,
     cache: options.cache,
@@ -361,7 +364,7 @@ export type PermissionCheckCallback = (
   userId: UserId,
   permission: PermissionString,
   allowed: boolean,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ) => void | Promise<void>;
 
 /**
@@ -371,7 +374,7 @@ export type RoleChangeCallback = (
   event: 'assigned' | 'removed' | 'expired',
   userId: UserId,
   roleId: string,
-  context?: Record<string, unknown>
+  context?: Record<string, unknown>,
 ) => void | Promise<void>;
 
 /**

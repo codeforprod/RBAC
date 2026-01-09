@@ -65,7 +65,7 @@ export const UserRoleSchema = new Schema<UserRoleDocument>(
   {
     timestamps: true,
     collection: 'rbac_user_roles',
-  }
+  },
 );
 
 /**
@@ -74,7 +74,7 @@ export const UserRoleSchema = new Schema<UserRoleDocument>(
  */
 UserRoleSchema.index(
   { userId: 1, roleId: 1, organizationId: 1 },
-  { unique: true, name: 'user_role_unique_idx' }
+  { unique: true, name: 'user_role_unique_idx' },
 );
 
 /**
@@ -82,16 +82,13 @@ UserRoleSchema.index(
  */
 UserRoleSchema.index(
   { userId: 1, organizationId: 1, isActive: 1 },
-  { name: 'user_org_active_roles_idx' }
+  { name: 'user_org_active_roles_idx' },
 );
 
 /**
  * Index for finding all users with a specific role.
  */
-UserRoleSchema.index(
-  { roleId: 1, isActive: 1 },
-  { name: 'role_active_users_idx' }
-);
+UserRoleSchema.index({ roleId: 1, isActive: 1 }, { name: 'role_active_users_idx' });
 
 /**
  * Index for cleaning up expired assignments.
@@ -101,7 +98,7 @@ UserRoleSchema.index(
   {
     name: 'expired_assignments_idx',
     partialFilterExpression: { expiresAt: { $ne: null }, isActive: true },
-  }
+  },
 );
 
 /**
@@ -158,9 +155,7 @@ export type UserRoleModel = Model<UserRoleDocument>;
  * Create UserRole model.
  * This function creates the model lazily to support different connection instances.
  */
-export function createUserRoleModel(
-  connection?: typeof import('mongoose')
-): UserRoleModel {
+export function createUserRoleModel(connection?: typeof import('mongoose')): UserRoleModel {
   const mongoose = connection ?? require('mongoose');
   if (mongoose.models.UserRole) {
     return mongoose.models.UserRole as UserRoleModel;

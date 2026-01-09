@@ -93,17 +93,8 @@ export class RbacModule {
 
     return {
       module: RbacModule,
-      providers: [
-        ...providers,
-        RolesGuard,
-        PermissionsGuard,
-      ],
-      exports: [
-        RBACEngine,
-        PermissionChecker,
-        RolesGuard,
-        PermissionsGuard,
-      ],
+      providers: [...providers, RolesGuard, PermissionsGuard],
+      exports: [RBACEngine, PermissionChecker, RolesGuard, PermissionsGuard],
       global: true,
     };
   }
@@ -124,20 +115,21 @@ export class RbacModule {
         {
           provide: RBACEngine,
           useFactory: async (options: RbacModuleOptions) => {
-            const adapter = typeof options.adapter === 'function'
-              ? new (options.adapter as Type<IRBACAdapter>)()
-              : options.adapter;
+            const adapter =
+              typeof options.adapter === 'function'
+                ? new (options.adapter as Type<IRBACAdapter>)()
+                : options.adapter;
 
             const cache = options.cache
-              ? (typeof options.cache === 'function'
-                  ? new (options.cache as Type<IRBACCache>)()
-                  : options.cache)
+              ? typeof options.cache === 'function'
+                ? new (options.cache as Type<IRBACCache>)()
+                : options.cache
               : new InMemoryCache();
 
             const auditLogger = options.auditLogger
-              ? (typeof options.auditLogger === 'function'
-                  ? new (options.auditLogger as Type<IAuditLogger>)()
-                  : options.auditLogger)
+              ? typeof options.auditLogger === 'function'
+                ? new (options.auditLogger as Type<IAuditLogger>)()
+                : options.auditLogger
               : new NoOpAuditLogger();
 
             return await RBACEngine.create({
@@ -151,12 +143,7 @@ export class RbacModule {
         RolesGuard,
         PermissionsGuard,
       ],
-      exports: [
-        RBACEngine,
-        PermissionChecker,
-        RolesGuard,
-        PermissionsGuard,
-      ],
+      exports: [RBACEngine, PermissionChecker, RolesGuard, PermissionsGuard],
       global: true,
     };
   }
@@ -169,20 +156,21 @@ export class RbacModule {
       {
         provide: RBACEngine,
         useFactory: async () => {
-          const adapter = typeof options.adapter === 'function'
-            ? new (options.adapter as Type<IRBACAdapter>)()
-            : options.adapter;
+          const adapter =
+            typeof options.adapter === 'function'
+              ? new (options.adapter as Type<IRBACAdapter>)()
+              : options.adapter;
 
           const cache = options.cache
-            ? (typeof options.cache === 'function'
-                ? new (options.cache as Type<IRBACCache>)()
-                : options.cache)
+            ? typeof options.cache === 'function'
+              ? new (options.cache as Type<IRBACCache>)()
+              : options.cache
             : new InMemoryCache();
 
           const auditLogger = options.auditLogger
-            ? (typeof options.auditLogger === 'function'
-                ? new (options.auditLogger as Type<IAuditLogger>)()
-                : options.auditLogger)
+            ? typeof options.auditLogger === 'function'
+              ? new (options.auditLogger as Type<IAuditLogger>)()
+              : options.auditLogger
             : new NoOpAuditLogger();
 
           return await RBACEngine.create({

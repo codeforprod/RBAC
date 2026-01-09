@@ -181,21 +181,18 @@ export class WildcardParser {
     }
 
     // Check resource
-    if (!parsedPattern.isResourceWildcard &&
-        parsedPattern.resource !== parsedPermission.resource) {
+    if (!parsedPattern.isResourceWildcard && parsedPattern.resource !== parsedPermission.resource) {
       return false;
     }
 
     // Check action
-    if (!parsedPattern.isActionWildcard &&
-        parsedPattern.action !== parsedPermission.action) {
+    if (!parsedPattern.isActionWildcard && parsedPattern.action !== parsedPermission.action) {
       return false;
     }
 
     // Check scope (if pattern has scope)
     if (parsedPattern.scope !== undefined && !parsedPattern.isScopeWildcard) {
-      if (parsedPermission.scope === undefined ||
-          parsedPattern.scope !== parsedPermission.scope) {
+      if (parsedPermission.scope === undefined || parsedPattern.scope !== parsedPermission.scope) {
         return false;
       }
     }
@@ -215,16 +212,19 @@ export class WildcardParser {
     const parsedPermission = this.parse(permission);
 
     const matchedParts = {
-      resource: parsedPattern.isGlobstar ||
-                parsedPattern.isResourceWildcard ||
-                parsedPattern.resource === parsedPermission.resource,
-      action: parsedPattern.isGlobstar ||
-              parsedPattern.isActionWildcard ||
-              parsedPattern.action === parsedPermission.action,
-      scope: parsedPattern.isGlobstar ||
-             parsedPattern.isScopeWildcard ||
-             parsedPattern.scope === undefined ||
-             parsedPattern.scope === parsedPermission.scope,
+      resource:
+        parsedPattern.isGlobstar ||
+        parsedPattern.isResourceWildcard ||
+        parsedPattern.resource === parsedPermission.resource,
+      action:
+        parsedPattern.isGlobstar ||
+        parsedPattern.isActionWildcard ||
+        parsedPattern.action === parsedPermission.action,
+      scope:
+        parsedPattern.isGlobstar ||
+        parsedPattern.isScopeWildcard ||
+        parsedPattern.scope === undefined ||
+        parsedPattern.scope === parsedPermission.scope,
     };
 
     return {
@@ -318,9 +318,11 @@ export class WildcardParser {
    * @returns True if permission contains wildcards
    */
   hasWildcard(permission: string): boolean {
-    return permission.includes(this.wildcardChar) ||
-           permission === this.globstarChar ||
-           permission.includes(this.globstarChar);
+    return (
+      permission.includes(this.wildcardChar) ||
+      permission === this.globstarChar ||
+      permission.includes(this.globstarChar)
+    );
   }
 
   /**
@@ -339,7 +341,7 @@ export class WildcardParser {
    * ```
    */
   expand(pattern: string, availablePermissions: string[]): string[] {
-    return availablePermissions.filter(permission => this.matches(pattern, permission));
+    return availablePermissions.filter((permission) => this.matches(pattern, permission));
   }
 
   /**
@@ -418,7 +420,7 @@ export class WildcardParser {
       };
     }
 
-    if (parts.some(part => part === '')) {
+    if (parts.some((part) => part === '')) {
       return {
         valid: false,
         error: `Permission contains empty parts: ${permission}`,

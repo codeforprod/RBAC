@@ -65,11 +65,7 @@ export class RoleHierarchyResolver implements IRoleHierarchy {
    * @param cache - Optional cache implementation
    * @param options - Hierarchy options
    */
-  constructor(
-    adapter: IRBACAdapter,
-    cache?: IRBACCache,
-    options: Partial<HierarchyOptions> = {}
-  ) {
+  constructor(adapter: IRBACAdapter, cache?: IRBACCache, options: Partial<HierarchyOptions> = {}) {
     this.adapter = adapter;
     this.cache = cache;
     this.options = { ...DEFAULT_HIERARCHY_OPTIONS, ...options };
@@ -270,7 +266,7 @@ export class RoleHierarchyResolver implements IRoleHierarchy {
     }
 
     const parentRoles = await this.getParentRoles(roleId);
-    const ancestorChain = [roleId, ...parentRoles.map(r => r.id)];
+    const ancestorChain = [roleId, ...parentRoles.map((r) => r.id)];
 
     // Collect all unique permissions
     const permissionMap = new Map<string, IPermission>();
@@ -361,15 +357,11 @@ export class RoleHierarchyResolver implements IRoleHierarchy {
     collected: IRole[],
     visited: Set<string>,
     depth: number,
-    maxDepth: number
+    maxDepth: number,
   ): Promise<void> {
     if (depth >= maxDepth) {
       if (this.options.detectCircularDependencies) {
-        throw CircularHierarchyError.maxDepthExceeded(
-          role.id,
-          Array.from(visited),
-          maxDepth
-        );
+        throw CircularHierarchyError.maxDepthExceeded(role.id, Array.from(visited), maxDepth);
       }
       return;
     }
@@ -381,11 +373,7 @@ export class RoleHierarchyResolver implements IRoleHierarchy {
     for (const parentId of role.parentRoles) {
       if (visited.has(parentId)) {
         if (this.options.detectCircularDependencies) {
-          throw new CircularHierarchyError(
-            role.id,
-            parentId,
-            [...Array.from(visited), parentId]
-          );
+          throw new CircularHierarchyError(role.id, parentId, [...Array.from(visited), parentId]);
         }
         continue;
       }
@@ -437,7 +425,7 @@ export class RoleHierarchyResolver implements IRoleHierarchy {
   private async buildTree(
     role: IRole,
     depth: number,
-    visitedInPath: Set<string>
+    visitedInPath: Set<string>,
   ): Promise<IRoleHierarchyTree> {
     const children: IRoleHierarchyTree[] = [];
     const childRoles = await this.getChildRoles(role.id);
@@ -490,7 +478,7 @@ export const hierarchyUtils = {
     if (tree.children.length === 0) {
       return tree.depth;
     }
-    return Math.max(...tree.children.map(child => this.getMaxDepth(child)));
+    return Math.max(...tree.children.map((child) => this.getMaxDepth(child)));
   },
 
   /**

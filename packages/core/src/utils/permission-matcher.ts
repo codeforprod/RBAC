@@ -1,4 +1,8 @@
-import { IPermission, IPermissionMatcher, IPermissionCheckResult } from '../interfaces/permission.interface';
+import {
+  IPermission,
+  IPermissionMatcher,
+  IPermissionCheckResult,
+} from '../interfaces/permission.interface';
 import { WildcardParser, ParsedPermission } from './wildcard-parser';
 import { PermissionOptions, DEFAULT_PERMISSION_OPTIONS } from '../types/options.types';
 
@@ -110,7 +114,7 @@ export class PermissionMatcher implements IPermissionMatcher {
   matches(
     required: string | string[],
     available: IPermission[],
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
   ): boolean {
     const requiredArray = Array.isArray(required) ? required : [required];
 
@@ -144,7 +148,7 @@ export class PermissionMatcher implements IPermissionMatcher {
   matchesAll(
     required: string[],
     available: IPermission[],
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
   ): boolean {
     for (const permission of required) {
       if (!this.matchSingle(permission, available, context)) {
@@ -238,7 +242,9 @@ export class PermissionMatcher implements IPermissionMatcher {
     }
 
     return {
-      id: permission.id ?? `perm_${permission.resource ?? 'unknown'}_${permission.action ?? 'unknown'}`,
+      id:
+        permission.id ??
+        `perm_${permission.resource ?? 'unknown'}_${permission.action ?? 'unknown'}`,
       resource: permission.resource ?? '*',
       action: permission.action ?? '*',
       scope: permission.scope,
@@ -269,7 +275,7 @@ export class PermissionMatcher implements IPermissionMatcher {
   findBestMatch(
     required: string,
     available: IPermission[],
-    context?: PermissionMatchContext
+    context?: PermissionMatchContext,
   ): PermissionMatcherResult {
     const parsedRequired = this.parser.parse(required);
     let bestMatch: PermissionMatcherResult = {
@@ -283,12 +289,7 @@ export class PermissionMatcher implements IPermissionMatcher {
       const parsedAvailable = this.parser.parse(permString);
 
       // Check if this permission matches
-      const matchResult = this.evaluateMatch(
-        parsedRequired,
-        parsedAvailable,
-        permission,
-        context
-      );
+      const matchResult = this.evaluateMatch(parsedRequired, parsedAvailable, permission, context);
 
       if (matchResult.matched && matchResult.matchScore > bestMatch.matchScore) {
         bestMatch = matchResult;
@@ -309,7 +310,7 @@ export class PermissionMatcher implements IPermissionMatcher {
   check(
     required: string,
     available: IPermission[],
-    context?: PermissionMatchContext
+    context?: PermissionMatchContext,
   ): IPermissionCheckResult {
     const result = this.findBestMatch(required, available, context);
 
@@ -330,10 +331,9 @@ export class PermissionMatcher implements IPermissionMatcher {
    * @returns Array of matching permissions
    */
   findAllMatches(pattern: string, available: IPermission[]): IPermission[] {
-    return available.filter(permission => {
+    return available.filter((permission) => {
       const permString = this.permissionToString(permission);
-      return this.parser.matches(pattern, permString) ||
-             this.parser.matches(permString, pattern);
+      return this.parser.matches(pattern, permString) || this.parser.matches(permString, pattern);
     });
   }
 
@@ -348,7 +348,7 @@ export class PermissionMatcher implements IPermissionMatcher {
   private checkScope(
     permission: IPermission,
     requiredScope: string | undefined,
-    context?: PermissionMatchContext
+    context?: PermissionMatchContext,
   ): boolean {
     // No scope required
     if (!requiredScope) {
@@ -390,10 +390,7 @@ export class PermissionMatcher implements IPermissionMatcher {
    * @param context - Context for condition evaluation
    * @returns True if conditions are satisfied
    */
-  private evaluateConditions(
-    permission: IPermission,
-    context?: PermissionMatchContext
-  ): boolean {
+  private evaluateConditions(permission: IPermission, context?: PermissionMatchContext): boolean {
     if (!permission.conditions || Object.keys(permission.conditions).length === 0) {
       return true;
     }
@@ -418,7 +415,7 @@ export class PermissionMatcher implements IPermissionMatcher {
   private matchSingle(
     required: string,
     available: IPermission[],
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
   ): boolean {
     const parsedRequired = this.parser.parse(required);
 
@@ -427,7 +424,14 @@ export class PermissionMatcher implements IPermissionMatcher {
       const parsedAvailable = this.parser.parse(permString);
 
       // Check if available permission matches required
-      if (this.permissionMatches(parsedRequired, parsedAvailable, permission, context as PermissionMatchContext)) {
+      if (
+        this.permissionMatches(
+          parsedRequired,
+          parsedAvailable,
+          permission,
+          context as PermissionMatchContext,
+        )
+      ) {
         return true;
       }
     }
@@ -442,7 +446,7 @@ export class PermissionMatcher implements IPermissionMatcher {
     required: ParsedPermission,
     available: ParsedPermission,
     permission: IPermission,
-    context?: PermissionMatchContext
+    context?: PermissionMatchContext,
   ): boolean {
     // Globstar matches everything
     if (available.isGlobstar) {
@@ -450,16 +454,20 @@ export class PermissionMatcher implements IPermissionMatcher {
     }
 
     // Check resource
-    if (!available.isResourceWildcard &&
-        !required.isResourceWildcard &&
-        available.resource !== required.resource) {
+    if (
+      !available.isResourceWildcard &&
+      !required.isResourceWildcard &&
+      available.resource !== required.resource
+    ) {
       return false;
     }
 
     // Check action
-    if (!available.isActionWildcard &&
-        !required.isActionWildcard &&
-        available.action !== required.action) {
+    if (
+      !available.isActionWildcard &&
+      !required.isActionWildcard &&
+      available.action !== required.action
+    ) {
       return false;
     }
 
@@ -483,7 +491,7 @@ export class PermissionMatcher implements IPermissionMatcher {
     required: ParsedPermission,
     available: ParsedPermission,
     permission: IPermission,
-    context?: PermissionMatchContext
+    context?: PermissionMatchContext,
   ): PermissionMatcherResult {
     const permString = this.permissionToString(permission);
 

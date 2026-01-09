@@ -39,7 +39,7 @@ export class PermissionRepository {
   async findByResourceAction(
     resource: string,
     action: string,
-    scope?: string
+    scope?: string,
   ): Promise<IPermission | null> {
     const filter: FilterQuery<PermissionDocument> = { resource, action };
     if (scope !== undefined) {
@@ -139,7 +139,7 @@ export class PermissionRepository {
             ...(updates.description !== undefined && { description: updates.description }),
           },
         },
-        { new: true, runValidators: true }
+        { new: true, runValidators: true },
       )
       .lean()
       .exec();
@@ -167,7 +167,7 @@ export class PermissionRepository {
    * Bulk create permissions.
    */
   async bulkCreate(
-    permissions: Array<Omit<IPermission, 'id' | 'createdAt'>>
+    permissions: Array<Omit<IPermission, 'id' | 'createdAt'>>,
   ): Promise<IPermission[]> {
     const docs = await this.model.insertMany(
       permissions.map((p) => ({
@@ -178,10 +178,12 @@ export class PermissionRepository {
         metadata: p.metadata,
         description: p.description,
       })),
-      { ordered: false }
+      { ordered: false },
     );
 
-    return docs.map((doc) => this.toPermission(doc.toObject() as unknown as Record<string, unknown>));
+    return docs.map((doc) =>
+      this.toPermission(doc.toObject() as unknown as Record<string, unknown>),
+    );
   }
 
   /**
@@ -200,12 +202,7 @@ export class PermissionRepository {
     };
 
     const [docs, total] = await Promise.all([
-      this.model
-        .find(filter)
-        .skip(offset)
-        .limit(limit)
-        .lean()
-        .exec(),
+      this.model.find(filter).skip(offset).limit(limit).lean().exec(),
       this.model.countDocuments(filter).exec(),
     ]);
 

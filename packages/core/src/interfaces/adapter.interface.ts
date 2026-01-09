@@ -237,7 +237,7 @@ export interface IRBACAdapter {
   findPermissionByResourceAction(
     resource: string,
     action: string,
-    scope?: string
+    scope?: string,
   ): Promise<IPermission | null>;
 
   /**
@@ -322,7 +322,10 @@ export interface IRBACAdapter {
    * const roles = assignments.map(a => a.role);
    * ```
    */
-  findUserRoleAssignments(userId: string, organizationId?: string | null): Promise<IUserRoleAssignment[]>;
+  findUserRoleAssignments(
+    userId: string,
+    organizationId?: string | null,
+  ): Promise<IUserRoleAssignment[]>;
 
   /**
    * Find all users assigned to a specific role.
@@ -331,7 +334,10 @@ export interface IRBACAdapter {
    * @param options - Query options
    * @returns Paginated result of user-role assignments
    */
-  findUsersByRoleId(roleId: string, options?: IQueryOptions): Promise<IPaginatedResult<IUserRoleAssignment>>;
+  findUsersByRoleId(
+    roleId: string,
+    options?: IQueryOptions,
+  ): Promise<IPaginatedResult<IUserRoleAssignment>>;
 
   /**
    * Assign a role to a user.
@@ -359,7 +365,11 @@ export interface IRBACAdapter {
    * @param organizationId - Optional organization ID
    * @returns True if removed
    */
-  removeRoleFromUser(userId: string, roleId: string, organizationId?: string | null): Promise<boolean>;
+  removeRoleFromUser(
+    userId: string,
+    roleId: string,
+    organizationId?: string | null,
+  ): Promise<boolean>;
 
   /**
    * Check if a user has a specific role.

@@ -33,11 +33,7 @@ export interface ConnectionErrorContext extends CacheErrorContext {
  * Error thrown when cache connection fails.
  */
 export class CacheConnectionError extends CacheError {
-  constructor(
-    message: string,
-    context: ConnectionErrorContext = {},
-    cause?: Error
-  ) {
+  constructor(message: string, context: ConnectionErrorContext = {}, cause?: Error) {
     super(CacheErrorCode.CONNECTION_FAILED, message, context, cause);
     this.name = 'CacheConnectionError';
   }
@@ -49,7 +45,7 @@ export class CacheConnectionError extends CacheError {
     host: string,
     port: number,
     timeoutMs: number,
-    cause?: Error
+    cause?: Error,
   ): CacheConnectionError {
     return new CacheConnectionError(
       `Connection to ${host}:${port} timed out after ${timeoutMs}ms`,
@@ -59,18 +55,14 @@ export class CacheConnectionError extends CacheError {
         adapter: 'redis',
         operation: 'connect',
       },
-      cause
+      cause,
     );
   }
 
   /**
    * Create a connection refused error.
    */
-  static refused(
-    host: string,
-    port: number,
-    cause?: Error
-  ): CacheConnectionError {
+  static refused(host: string, port: number, cause?: Error): CacheConnectionError {
     return new CacheConnectionError(
       `Connection to ${host}:${port} was refused`,
       {
@@ -79,7 +71,7 @@ export class CacheConnectionError extends CacheError {
         adapter: 'redis',
         operation: 'connect',
       },
-      cause
+      cause,
     );
   }
 
@@ -91,7 +83,7 @@ export class CacheConnectionError extends CacheError {
     port: number,
     retryAttempts: number,
     maxRetries: number,
-    cause?: Error
+    cause?: Error,
   ): CacheConnectionError {
     return new CacheConnectionError(
       `Failed to connect to ${host}:${port} after ${retryAttempts} attempts (max: ${maxRetries})`,
@@ -103,7 +95,7 @@ export class CacheConnectionError extends CacheError {
         adapter: 'redis',
         operation: 'connect',
       },
-      cause
+      cause,
     );
   }
 }

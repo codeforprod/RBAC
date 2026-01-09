@@ -128,56 +128,44 @@ export const AuditLogSchema = new Schema<AuditLogDocument>(
   {
     timestamps: false,
     collection: 'rbac_audit_logs',
-  }
+  },
 );
 
 /**
  * Compound index for time-range queries by action type.
  */
-AuditLogSchema.index(
-  { action: 1, timestamp: -1 },
-  { name: 'audit_action_timestamp_idx' }
-);
+AuditLogSchema.index({ action: 1, timestamp: -1 }, { name: 'audit_action_timestamp_idx' });
 
 /**
  * Compound index for user activity queries.
  */
-AuditLogSchema.index(
-  { actorId: 1, timestamp: -1 },
-  { name: 'audit_actor_timestamp_idx' }
-);
+AuditLogSchema.index({ actorId: 1, timestamp: -1 }, { name: 'audit_actor_timestamp_idx' });
 
 /**
  * Compound index for target entity queries.
  */
 AuditLogSchema.index(
   { targetId: 1, targetType: 1, timestamp: -1 },
-  { name: 'audit_target_timestamp_idx' }
+  { name: 'audit_target_timestamp_idx' },
 );
 
 /**
  * Compound index for organization queries.
  */
-AuditLogSchema.index(
-  { organizationId: 1, timestamp: -1 },
-  { name: 'audit_org_timestamp_idx' }
-);
+AuditLogSchema.index({ organizationId: 1, timestamp: -1 }, { name: 'audit_org_timestamp_idx' });
 
 /**
  * Compound index for permission check auditing.
  */
 AuditLogSchema.index(
   { actorId: 1, permission: 1, success: 1, timestamp: -1 },
-  { name: 'audit_permission_check_idx' }
+  { name: 'audit_permission_check_idx' },
 );
 
 /**
  * Index for severity-based queries.
  */
-AuditLogSchema.index(
-  { severity: 1, timestamp: -1 },
-  { name: 'audit_severity_timestamp_idx' }
-);
+AuditLogSchema.index({ severity: 1, timestamp: -1 }, { name: 'audit_severity_timestamp_idx' });
 
 /**
  * Index for error analysis.
@@ -187,7 +175,7 @@ AuditLogSchema.index(
   {
     name: 'audit_failures_idx',
     partialFilterExpression: { success: false },
-  }
+  },
 );
 
 /**
@@ -200,7 +188,7 @@ AuditLogSchema.index(
   {
     name: 'audit_ttl_idx',
     expireAfterSeconds: 0, // Disabled by default
-  }
+  },
 );
 
 /**
@@ -238,9 +226,7 @@ export type AuditLogModel = Model<AuditLogDocument>;
  * Create AuditLog model.
  * This function creates the model lazily to support different connection instances.
  */
-export function createAuditLogModel(
-  connection?: typeof import('mongoose')
-): AuditLogModel {
+export function createAuditLogModel(connection?: typeof import('mongoose')): AuditLogModel {
   const mongoose = connection ?? require('mongoose');
   if (mongoose.models.AuditLog) {
     return mongoose.models.AuditLog as AuditLogModel;
@@ -263,7 +249,7 @@ export function createAuditLogModel(
  */
 export async function configureTTL(
   model: AuditLogModel,
-  ttlSeconds: number = 90 * 24 * 60 * 60
+  ttlSeconds: number = 90 * 24 * 60 * 60,
 ): Promise<void> {
   const collection = model.collection;
   const indexName = 'audit_ttl_idx';
@@ -281,6 +267,6 @@ export async function configureTTL(
     {
       name: indexName,
       expireAfterSeconds: ttlSeconds,
-    }
+    },
   );
 }

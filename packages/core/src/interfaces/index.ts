@@ -17,11 +17,7 @@
  */
 
 // Permission interfaces
-export {
-  IPermission,
-  IPermissionMatcher,
-  IPermissionCheckResult,
-} from './permission.interface';
+export { IPermission, IPermissionMatcher, IPermissionCheckResult } from './permission.interface';
 
 // Role interfaces
 export {

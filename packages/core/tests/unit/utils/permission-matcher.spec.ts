@@ -9,7 +9,11 @@
  * - Match scoring and best match selection
  */
 
-import { PermissionMatcher, permissionMatcher, PermissionMatchContext } from '../../../src/utils/permission-matcher';
+import {
+  PermissionMatcher,
+  permissionMatcher,
+  PermissionMatchContext,
+} from '../../../src/utils/permission-matcher';
 import { IPermission } from '../../../src/interfaces/permission.interface';
 
 describe('PermissionMatcher', () => {
@@ -122,51 +126,39 @@ describe('PermissionMatcher', () => {
 
   describe('matches - multiple permissions (OR logic)', () => {
     it('should match when any permission matches', () => {
-      const result = matcher.matches(
-        ['users:read', 'users:delete'],
-        permissions
-      );
+      const result = matcher.matches(['users:read', 'users:delete'], permissions);
       expect(result).toBe(true); // users:read matches
     });
 
     it('should return false when none match', () => {
       const result = matcher.matches(
         ['admin:create', 'admin:delete'],
-        permissions.slice(0, 2) // Only users:read and users:write
+        permissions.slice(0, 2), // Only users:read and users:write
       );
       expect(result).toBe(false);
     });
 
     it('should match multiple options', () => {
-      const result = matcher.matches(
-        ['posts:create', 'posts:update'],
-        permissions
-      );
+      const result = matcher.matches(['posts:create', 'posts:update'], permissions);
       expect(result).toBe(true); // Both match via posts:*
     });
   });
 
   describe('matchesAll - AND logic', () => {
     it('should match when all permissions are satisfied', () => {
-      const result = matcher.matchesAll(
-        ['users:read', 'users:write'],
-        permissions
-      );
+      const result = matcher.matchesAll(['users:read', 'users:write'], permissions);
       expect(result).toBe(true);
     });
 
     it('should return false when any permission is missing', () => {
-      const result = matcher.matchesAll(
-        ['users:read', 'users:delete'],
-        permissions.slice(0, 2)
-      );
+      const result = matcher.matchesAll(['users:read', 'users:delete'], permissions.slice(0, 2));
       expect(result).toBe(false); // users:delete not available
     });
 
     it('should match with wildcards', () => {
       const result = matcher.matchesAll(
         ['posts:create', 'posts:update', 'posts:delete'],
-        permissions
+        permissions,
       );
       expect(result).toBe(true); // All match via posts:* or specific permissions
     });
@@ -377,8 +369,8 @@ describe('PermissionMatcher', () => {
       const matches = matcher.findAllMatches('users:*', permissions);
 
       expect(matches.length).toBeGreaterThanOrEqual(2);
-      expect(matches.some(p => p.id === 'perm-1')).toBe(true); // users:read
-      expect(matches.some(p => p.id === 'perm-2')).toBe(true); // users:write
+      expect(matches.some((p) => p.id === 'perm-1')).toBe(true); // users:read
+      expect(matches.some((p) => p.id === 'perm-2')).toBe(true); // users:write
     });
 
     it('should find permissions matching action wildcard', () => {

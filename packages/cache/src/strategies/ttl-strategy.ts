@@ -166,11 +166,7 @@ export class TTLStrategy {
    * @param ttlSeconds - TTL in seconds (uses default if not provided)
    * @param options - Additional options
    */
-  set(
-    key: string,
-    ttlSeconds?: number,
-    options?: { sliding?: boolean }
-  ): void {
+  set(key: string, ttlSeconds?: number, options?: { sliding?: boolean }): void {
     const ttl = ttlSeconds ?? this.options.defaultTtl;
     const ttlMs = ttl * 1000;
     const expiresAt = Date.now() + ttlMs;

@@ -76,7 +76,7 @@ export class CircularHierarchyError extends RBACError {
     roleId: string,
     targetRoleId: string,
     chain: string[],
-    context: Partial<Omit<CircularHierarchyContext, 'roleId' | 'targetRoleId' | 'chain'>> = {}
+    context: Partial<Omit<CircularHierarchyContext, 'roleId' | 'targetRoleId' | 'chain'>> = {},
   ) {
     const message = CircularHierarchyError.buildMessage(roleId, targetRoleId, chain);
 
@@ -106,11 +106,7 @@ export class CircularHierarchyError extends RBACError {
    * @param chain - The dependency chain
    * @returns Formatted error message
    */
-  private static buildMessage(
-    roleId: string,
-    targetRoleId: string,
-    chain: string[]
-  ): string {
+  private static buildMessage(roleId: string, targetRoleId: string, chain: string[]): string {
     if (roleId === targetRoleId) {
       return `Circular hierarchy detected: Role '${roleId}' cannot inherit from itself`;
     }
@@ -183,7 +179,7 @@ export class CircularHierarchyError extends RBACError {
   static maxDepthExceeded(
     roleId: string,
     chain: string[],
-    maxDepth: number
+    maxDepth: number,
   ): CircularHierarchyError {
     const error = new CircularHierarchyError(roleId, chain[0] ?? roleId, chain, {
       depth: chain.length,
@@ -192,7 +188,8 @@ export class CircularHierarchyError extends RBACError {
 
     // Override the message for max depth scenario
     Object.defineProperty(error, 'message', {
-      value: `Maximum hierarchy depth (${maxDepth}) exceeded for role '${roleId}'. ` +
+      value:
+        `Maximum hierarchy depth (${maxDepth}) exceeded for role '${roleId}'. ` +
         `Chain length: ${chain.length}. This may indicate a circular dependency or excessively deep hierarchy.`,
       writable: false,
     });

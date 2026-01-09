@@ -121,7 +121,7 @@ export class MemoryCacheAdapter implements ICacheAdapter {
       this.options.maxSize,
       (event: LRUEvictionEvent<string, InternalCacheEntry>) => {
         this.handleEviction(event.key, event.value, 'lru');
-      }
+      },
     );
 
     // Initialize TTL strategy
@@ -218,9 +218,7 @@ export class MemoryCacheAdapter implements ICacheAdapter {
       }
 
       // Calculate size estimate
-      const estimatedSize = this.options.trackMemoryUsage
-        ? this.estimateSize(value)
-        : 0;
+      const estimatedSize = this.options.trackMemoryUsage ? this.estimateSize(value) : 0;
 
       // Create entry
       const entry: InternalCacheEntry<T> = {
@@ -449,7 +447,7 @@ export class MemoryCacheAdapter implements ICacheAdapter {
   async getOrSet<T>(
     key: string,
     factory: () => Promise<T>,
-    options?: ICacheSetOptions
+    options?: ICacheSetOptions,
   ): Promise<T> {
     this.ensureInitialized();
 
@@ -527,12 +525,14 @@ export class MemoryCacheAdapter implements ICacheAdapter {
       getOperations: this.metrics.getOperations,
       setOperations: this.metrics.setOperations,
       deleteOperations: this.metrics.deleteOperations,
-      avgGetLatencyMs: this.metrics.getOperations > 0
-        ? this.metrics.getTotalLatencyMs / this.metrics.getOperations
-        : 0,
-      avgSetLatencyMs: this.metrics.setOperations > 0
-        ? this.metrics.setTotalLatencyMs / this.metrics.setOperations
-        : 0,
+      avgGetLatencyMs:
+        this.metrics.getOperations > 0
+          ? this.metrics.getTotalLatencyMs / this.metrics.getOperations
+          : 0,
+      avgSetLatencyMs:
+        this.metrics.setOperations > 0
+          ? this.metrics.setTotalLatencyMs / this.metrics.setOperations
+          : 0,
       startedAt: this.startedAt ?? new Date(),
       uptimeMs: this.startedAt ? Date.now() - this.startedAt.getTime() : 0,
     };
@@ -738,7 +738,7 @@ export class MemoryCacheAdapter implements ICacheAdapter {
       throw new CacheError(
         CacheErrorCode.NOT_INITIALIZED,
         'Memory cache adapter is not initialized. Call initialize() first.',
-        { adapter: this.name }
+        { adapter: this.name },
       );
     }
   }

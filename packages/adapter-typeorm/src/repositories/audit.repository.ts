@@ -167,7 +167,7 @@ export class AuditRepository {
    */
   async getByUser(
     userId: string,
-    options?: Omit<AuditQueryOptions, 'actorId'>
+    options?: Omit<AuditQueryOptions, 'actorId'>,
   ): Promise<{ entries: AuditLogEntity[]; total: number }> {
     return this.query({
       ...options,
@@ -181,7 +181,7 @@ export class AuditRepository {
   async getByTarget(
     targetId: string,
     targetType: string,
-    options?: Omit<AuditQueryOptions, 'targetId' | 'targetType'>
+    options?: Omit<AuditQueryOptions, 'targetId' | 'targetType'>,
   ): Promise<{ entries: AuditLogEntity[]; total: number }> {
     return this.query({
       ...options,

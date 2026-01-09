@@ -14,7 +14,12 @@
 import { ICacheSetOptions, ICacheGetOptions, ICacheStats } from '@prodforcode/rbac-core';
 import { ICacheAdapter, ICacheMetrics, ICacheHealthStatus } from '../interfaces';
 import { RedisCacheOptions, DEFAULT_REDIS_CACHE_OPTIONS } from '../types';
-import { CacheError, CacheErrorCode, CacheConnectionError, CacheSerializationError } from '../errors';
+import {
+  CacheError,
+  CacheErrorCode,
+  CacheConnectionError,
+  CacheSerializationError,
+} from '../errors';
 
 /**
  * Type for ioredis Redis client.
@@ -174,7 +179,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
       if (this.options.cluster && this.options.clusterNodes) {
         // Cluster mode
         this.client = new Redis.Cluster(
-          this.options.clusterNodes.map(node => ({
+          this.options.clusterNodes.map((node) => ({
             host: node.host,
             port: node.port,
           })),
@@ -193,7 +198,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
               tls: this.options.tls ? {} : undefined,
             },
             keyPrefix: this.options.keyPrefix,
-          }
+          },
         ) as unknown as RedisClusterClient;
       } else {
         // Single node mode
@@ -241,11 +246,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
       this.initialized = true;
     } catch (error) {
       const err = error as Error;
-      throw CacheConnectionError.refused(
-        this.options.host,
-        this.options.port,
-        err
-      );
+      throw CacheConnectionError.refused(this.options.host, this.options.port, err);
     }
   }
 
@@ -401,17 +402,15 @@ export class RedisCacheAdapter implements ICacheAdapter {
           'MATCH',
           fullPattern,
           'COUNT',
-          this.options.scanCount
+          this.options.scanCount,
         );
 
         cursor = nextCursor;
 
         if (keys.length > 0) {
           // Remove keyPrefix from keys for deletion
-          const keysToDelete = keys.map(k =>
-            k.startsWith(this.options.keyPrefix)
-              ? k.slice(this.options.keyPrefix.length)
-              : k
+          const keysToDelete = keys.map((k) =>
+            k.startsWith(this.options.keyPrefix) ? k.slice(this.options.keyPrefix.length) : k,
           );
           deletedCount += await this.client!.del(...keysToDelete);
         }
@@ -459,7 +458,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
             'MATCH',
             tagPattern,
             'COUNT',
-            this.options.scanCount
+            this.options.scanCount,
           );
 
           cursor = nextCursor;
@@ -644,7 +643,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
   async getOrSet<T>(
     key: string,
     factory: () => Promise<T>,
-    options?: ICacheSetOptions
+    options?: ICacheSetOptions,
   ): Promise<T> {
     this.ensureInitialized();
 
@@ -747,12 +746,14 @@ export class RedisCacheAdapter implements ICacheAdapter {
       getOperations: this.metrics.getOperations,
       setOperations: this.metrics.setOperations,
       deleteOperations: this.metrics.deleteOperations,
-      avgGetLatencyMs: this.metrics.getOperations > 0
-        ? this.metrics.getTotalLatencyMs / this.metrics.getOperations
-        : 0,
-      avgSetLatencyMs: this.metrics.setOperations > 0
-        ? this.metrics.setTotalLatencyMs / this.metrics.setOperations
-        : 0,
+      avgGetLatencyMs:
+        this.metrics.getOperations > 0
+          ? this.metrics.getTotalLatencyMs / this.metrics.getOperations
+          : 0,
+      avgSetLatencyMs:
+        this.metrics.setOperations > 0
+          ? this.metrics.setTotalLatencyMs / this.metrics.setOperations
+          : 0,
       startedAt: this.startedAt ?? new Date(),
       uptimeMs: this.startedAt ? Date.now() - this.startedAt.getTime() : 0,
     };
@@ -831,15 +832,15 @@ export class RedisCacheAdapter implements ICacheAdapter {
           'MATCH',
           pattern,
           'COUNT',
-          this.options.scanCount
+          this.options.scanCount,
         );
 
         cursor = nextCursor;
-        keys.push(...batch.map(k =>
-          k.startsWith(this.options.keyPrefix)
-            ? k.slice(this.options.keyPrefix.length)
-            : k
-        ));
+        keys.push(
+          ...batch.map((k) =>
+            k.startsWith(this.options.keyPrefix) ? k.slice(this.options.keyPrefix.length) : k,
+          ),
+        );
       } while (cursor !== '0');
 
       return keys;
@@ -898,16 +899,21 @@ export class RedisCacheAdapter implements ICacheAdapter {
   /**
    * Load ioredis dynamically.
    */
-  private async loadRedis(): Promise<{ new (options?: unknown): RedisClient; Cluster: { new (...args: unknown[]): RedisClusterClient } }> {
+  private async loadRedis(): Promise<{
+    new (options?: unknown): RedisClient;
+    Cluster: { new (...args: unknown[]): RedisClusterClient };
+  }> {
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      const Redis = require('ioredis');
-      return Redis;
+      const Redis = await import('ioredis');
+      return Redis.default as unknown as {
+        new (options?: unknown): RedisClient;
+        Cluster: { new (...args: unknown[]): RedisClusterClient };
+      };
     } catch {
       throw new CacheError(
         CacheErrorCode.INVALID_CONFIG,
         'ioredis is required for RedisCacheAdapter. Install it with: npm install ioredis',
-        { adapter: this.name }
+        { adapter: this.name },
       );
     }
   }
@@ -918,11 +924,13 @@ export class RedisCacheAdapter implements ICacheAdapter {
   private async waitForConnection(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       const timeout = setTimeout(() => {
-        reject(CacheConnectionError.timeout(
-          this.options.host,
-          this.options.port,
-          this.options.connectTimeout
-        ));
+        reject(
+          CacheConnectionError.timeout(
+            this.options.host,
+            this.options.port,
+            this.options.connectTimeout,
+          ),
+        );
       }, this.options.connectTimeout);
 
       const checkConnection = () => {
@@ -931,10 +939,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
           resolve();
         } else if (this.client?.status === 'end') {
           clearTimeout(timeout);
-          reject(CacheConnectionError.refused(
-            this.options.host,
-            this.options.port
-          ));
+          reject(CacheConnectionError.refused(this.options.host, this.options.port));
         } else {
           setTimeout(checkConnection, 100);
         }
@@ -1000,11 +1005,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
     try {
       return JSON.stringify(value);
     } catch (error) {
-      throw CacheSerializationError.serialize(
-        key,
-        typeof value,
-        error as Error
-      );
+      throw CacheSerializationError.serialize(key, typeof value, error as Error);
     }
   }
 
@@ -1049,7 +1050,7 @@ export class RedisCacheAdapter implements ICacheAdapter {
       throw new CacheError(
         CacheErrorCode.NOT_INITIALIZED,
         'Redis cache adapter is not initialized. Call initialize() first.',
-        { adapter: this.name }
+        { adapter: this.name },
       );
     }
   }

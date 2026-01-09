@@ -30,7 +30,7 @@ export class PermissionRepository {
   async findByResourceAction(
     resource: string,
     action: string,
-    scope?: string
+    scope?: string,
   ): Promise<PermissionEntity | null> {
     return this.repository.findOne({
       where: {
@@ -212,7 +212,7 @@ export class PermissionRepository {
     resource: string,
     action: string,
     scope?: string,
-    excludeId?: string
+    excludeId?: string,
   ): Promise<boolean> {
     const queryBuilder = this.repository
       .createQueryBuilder('permission')

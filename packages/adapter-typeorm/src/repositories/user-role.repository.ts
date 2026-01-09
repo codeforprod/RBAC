@@ -25,10 +25,7 @@ export class UserRoleRepository {
   /**
    * Find all role assignments for a user.
    */
-  async findByUserId(
-    userId: string,
-    organizationId?: string | null
-  ): Promise<UserRoleEntity[]> {
+  async findByUserId(userId: string, organizationId?: string | null): Promise<UserRoleEntity[]> {
     const queryBuilder = this.repository
       .createQueryBuilder('userRole')
       .leftJoinAndSelect('userRole.role', 'role')
@@ -57,7 +54,7 @@ export class UserRoleRepository {
     options?: {
       limit?: number;
       offset?: number;
-    }
+    },
   ): Promise<{ data: UserRoleEntity[]; total: number }> {
     const queryBuilder = this.repository
       .createQueryBuilder('userRole')
@@ -96,11 +93,7 @@ export class UserRoleRepository {
   /**
    * Remove a role from a user.
    */
-  async remove(
-    userId: string,
-    roleId: string,
-    organizationId?: string | null
-  ): Promise<boolean> {
+  async remove(userId: string, roleId: string, organizationId?: string | null): Promise<boolean> {
     const queryBuilder = this.repository
       .createQueryBuilder()
       .delete()
@@ -121,7 +114,7 @@ export class UserRoleRepository {
   async deactivate(
     userId: string,
     roleId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<boolean> {
     const queryBuilder = this.repository
       .createQueryBuilder()
@@ -144,7 +137,7 @@ export class UserRoleRepository {
   async userHasRole(
     userId: string,
     roleId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<boolean> {
     const queryBuilder = this.repository
       .createQueryBuilder('userRole')
@@ -168,11 +161,7 @@ export class UserRoleRepository {
   /**
    * Check if an assignment already exists.
    */
-  async exists(
-    userId: string,
-    roleId: string,
-    organizationId?: string | null
-  ): Promise<boolean> {
+  async exists(userId: string, roleId: string, organizationId?: string | null): Promise<boolean> {
     const queryBuilder = this.repository
       .createQueryBuilder('userRole')
       .where('userRole.userId = :userId', { userId })
@@ -219,10 +208,7 @@ export class UserRoleRepository {
   /**
    * Get all role IDs for a user (for caching purposes).
    */
-  async getRoleIdsForUser(
-    userId: string,
-    organizationId?: string | null
-  ): Promise<string[]> {
+  async getRoleIdsForUser(userId: string, organizationId?: string | null): Promise<string[]> {
     const queryBuilder = this.repository
       .createQueryBuilder('userRole')
       .select('userRole.roleId')
@@ -248,7 +234,7 @@ export class UserRoleRepository {
   async userHasAnyRole(
     userId: string,
     roleIds: string[],
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<boolean> {
     if (roleIds.length === 0) {
       return false;

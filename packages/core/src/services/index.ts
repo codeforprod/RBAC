@@ -29,10 +29,7 @@
 export { RBACEngine } from './rbac-engine.service';
 
 // Permission Checker
-export {
-  PermissionChecker,
-  PermissionCheckerOptions,
-} from './permission-checker.service';
+export { PermissionChecker, PermissionCheckerOptions } from './permission-checker.service';
 
 // Audit Logger
 export {

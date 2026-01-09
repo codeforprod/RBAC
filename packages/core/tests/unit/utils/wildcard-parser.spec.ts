@@ -336,46 +336,23 @@ describe('WildcardParser', () => {
 
   describe('expand', () => {
     it('should expand wildcard pattern to matching permissions', () => {
-      const available = [
-        'users:read',
-        'users:write',
-        'users:delete',
-        'posts:read',
-        'posts:write',
-      ];
+      const available = ['users:read', 'users:write', 'users:delete', 'posts:read', 'posts:write'];
 
       const result = parser.expand('users:*', available);
 
-      expect(result).toEqual([
-        'users:read',
-        'users:write',
-        'users:delete',
-      ]);
+      expect(result).toEqual(['users:read', 'users:write', 'users:delete']);
     });
 
     it('should expand action wildcard', () => {
-      const available = [
-        'users:read',
-        'posts:read',
-        'comments:read',
-        'users:write',
-      ];
+      const available = ['users:read', 'posts:read', 'comments:read', 'users:write'];
 
       const result = parser.expand('*:read', available);
 
-      expect(result).toEqual([
-        'users:read',
-        'posts:read',
-        'comments:read',
-      ]);
+      expect(result).toEqual(['users:read', 'posts:read', 'comments:read']);
     });
 
     it('should expand globstar to all permissions', () => {
-      const available = [
-        'users:read',
-        'posts:write',
-        'comments:delete:own',
-      ];
+      const available = ['users:read', 'posts:write', 'comments:delete:own'];
 
       const result = parser.expand('**', available);
 
@@ -422,22 +399,16 @@ describe('WildcardParser', () => {
 
   describe('sortBySpecificity', () => {
     it('should sort permissions from most to least specific', () => {
-      const permissions = [
-        '**',
-        'users:*',
-        'users:read',
-        'posts:update:own',
-        '*:read',
-      ];
+      const permissions = ['**', 'users:*', 'users:read', 'posts:update:own', '*:read'];
 
       const sorted = parser.sortBySpecificity(permissions);
 
       expect(sorted).toEqual([
         'posts:update:own', // specificity 3
-        'users:read',       // specificity 2
-        'users:*',          // specificity 1
-        '*:read',           // specificity 1
-        '**',               // specificity 0
+        'users:read', // specificity 2
+        'users:*', // specificity 1
+        '*:read', // specificity 1
+        '**', // specificity 0
       ]);
     });
 

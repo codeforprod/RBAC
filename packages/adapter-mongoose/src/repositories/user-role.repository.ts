@@ -32,15 +32,12 @@ export class UserRoleRepository {
    */
   async findByUserId(
     userId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<IUserRoleAssignment[]> {
     const filter: FilterQuery<UserRoleDocument> = {
       userId,
       isActive: true,
-      $or: [
-        { expiresAt: null },
-        { expiresAt: { $gt: new Date() } },
-      ],
+      $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }],
     };
 
     if (organizationId !== undefined) {
@@ -61,7 +58,7 @@ export class UserRoleRepository {
    */
   async findByRoleId(
     roleId: string,
-    options?: IQueryOptions
+    options?: IQueryOptions,
   ): Promise<IPaginatedResult<IUserRoleAssignment>> {
     if (!Types.ObjectId.isValid(roleId)) {
       return {
@@ -79,10 +76,7 @@ export class UserRoleRepository {
     const filter: FilterQuery<UserRoleDocument> = {
       roleId: new Types.ObjectId(roleId),
       isActive: true,
-      $or: [
-        { expiresAt: null },
-        { expiresAt: { $gt: new Date() } },
-      ],
+      $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }],
     };
 
     if (options?.organizationId !== undefined) {
@@ -90,12 +84,7 @@ export class UserRoleRepository {
     }
 
     const [docs, total] = await Promise.all([
-      this.userRoleModel
-        .find(filter)
-        .skip(offset)
-        .limit(limit)
-        .lean()
-        .exec(),
+      this.userRoleModel.find(filter).skip(offset).limit(limit).lean().exec(),
       this.userRoleModel.countDocuments(filter).exec(),
     ]);
 
@@ -129,17 +118,16 @@ export class UserRoleRepository {
     // Get role data
     const roles = await this.getRolesWithPermissions([doc.roleId]);
 
-    return this.toUserRoleAssignment(doc.toObject() as unknown as Record<string, unknown>, roles.get(options.roleId));
+    return this.toUserRoleAssignment(
+      doc.toObject() as unknown as Record<string, unknown>,
+      roles.get(options.roleId),
+    );
   }
 
   /**
    * Remove a role from a user.
    */
-  async delete(
-    userId: string,
-    roleId: string,
-    organizationId?: string | null
-  ): Promise<boolean> {
+  async delete(userId: string, roleId: string, organizationId?: string | null): Promise<boolean> {
     if (!Types.ObjectId.isValid(roleId)) {
       return false;
     }
@@ -163,7 +151,7 @@ export class UserRoleRepository {
   async userHasRole(
     userId: string,
     roleId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<boolean> {
     if (!Types.ObjectId.isValid(roleId)) {
       return false;
@@ -173,10 +161,7 @@ export class UserRoleRepository {
       userId,
       roleId: new Types.ObjectId(roleId),
       isActive: true,
-      $or: [
-        { expiresAt: null },
-        { expiresAt: { $gt: new Date() } },
-      ],
+      $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }],
     };
 
     if (organizationId !== undefined) {
@@ -197,7 +182,7 @@ export class UserRoleRepository {
           expiresAt: { $lte: new Date() },
           isActive: true,
         },
-        { $set: { isActive: false } }
+        { $set: { isActive: false } },
       )
       .exec();
 
@@ -207,17 +192,11 @@ export class UserRoleRepository {
   /**
    * Get all effective roles for a user (including inherited roles).
    */
-  async getEffectiveRoles(
-    userId: string,
-    organizationId?: string | null
-  ): Promise<IRole[]> {
+  async getEffectiveRoles(userId: string, organizationId?: string | null): Promise<IRole[]> {
     const filter: FilterQuery<UserRoleDocument> = {
       userId,
       isActive: true,
-      $or: [
-        { expiresAt: null },
-        { expiresAt: { $gt: new Date() } },
-      ],
+      $or: [{ expiresAt: null }, { expiresAt: { $gt: new Date() } }],
     };
 
     if (organizationId !== undefined) {
@@ -278,11 +257,13 @@ export class UserRoleRepository {
 
     // Deduplicate roles
     const uniqueRoles = Array.from(
-      new Map(roleDocs.map((doc) => [(doc._id as Types.ObjectId).toString(), doc])).values()
+      new Map(roleDocs.map((doc) => [(doc._id as Types.ObjectId).toString(), doc])).values(),
     );
 
     // Get permissions for all roles
-    const roleIds = uniqueRoles.map((doc) => new Types.ObjectId((doc._id as Types.ObjectId).toString()));
+    const roleIds = uniqueRoles.map(
+      (doc) => new Types.ObjectId((doc._id as Types.ObjectId).toString()),
+    );
     const permissionsMap = await this.getPermissionsForRoles(roleIds);
 
     return uniqueRoles.map((doc) => {
@@ -293,9 +274,8 @@ export class UserRoleRepository {
         displayName: doc.displayName as string | undefined,
         description: doc.description as string | undefined,
         permissions: permissionsMap.get(roleId) ?? [],
-        parentRoles: (doc.parentRoles as Types.ObjectId[] | undefined)?.map((id) =>
-          id.toString()
-        ) ?? [],
+        parentRoles:
+          (doc.parentRoles as Types.ObjectId[] | undefined)?.map((id) => id.toString()) ?? [],
         isSystem: doc.isSystem as boolean | undefined,
         isActive: doc.isActive as boolean,
         organizationId: doc.organizationId as string | null | undefined,
@@ -309,9 +289,7 @@ export class UserRoleRepository {
   /**
    * Get roles with their permissions using aggregation.
    */
-  private async getRolesWithPermissions(
-    roleIds: Types.ObjectId[]
-  ): Promise<Map<string, IRole>> {
+  private async getRolesWithPermissions(roleIds: Types.ObjectId[]): Promise<Map<string, IRole>> {
     if (roleIds.length === 0) {
       return new Map();
     }
@@ -362,7 +340,7 @@ export class UserRoleRepository {
         name: doc.name as string,
         displayName: doc.displayName as string | undefined,
         description: doc.description as string | undefined,
-        permissions: (doc.permissions as Array<Record<string, unknown>> || []).map((p) => ({
+        permissions: ((doc.permissions as Array<Record<string, unknown>>) || []).map((p) => ({
           id: (p._id as Types.ObjectId).toString(),
           resource: p.resource as string,
           action: p.action as string,
@@ -372,9 +350,8 @@ export class UserRoleRepository {
           description: p.description as string | undefined,
           createdAt: p.createdAt as Date | undefined,
         })),
-        parentRoles: (doc.parentRoles as Types.ObjectId[] | undefined)?.map((id) =>
-          id.toString()
-        ) ?? [],
+        parentRoles:
+          (doc.parentRoles as Types.ObjectId[] | undefined)?.map((id) => id.toString()) ?? [],
         isSystem: doc.isSystem as boolean | undefined,
         isActive: doc.isActive as boolean,
         organizationId: doc.organizationId as string | null | undefined,
@@ -391,7 +368,7 @@ export class UserRoleRepository {
    * Get permissions for multiple roles.
    */
   private async getPermissionsForRoles(
-    roleIds: Types.ObjectId[]
+    roleIds: Types.ObjectId[],
   ): Promise<Map<string, IPermission[]>> {
     if (roleIds.length === 0) {
       return new Map();
@@ -432,7 +409,7 @@ export class UserRoleRepository {
           metadata: p.metadata as Record<string, unknown> | undefined,
           description: p.description as string | undefined,
           createdAt: p.createdAt as Date | undefined,
-        }))
+        })),
       );
     }
 
@@ -442,10 +419,7 @@ export class UserRoleRepository {
   /**
    * Convert Mongoose document to IUserRoleAssignment interface.
    */
-  private toUserRoleAssignment(
-    doc: Record<string, unknown>,
-    role?: IRole
-  ): IUserRoleAssignment {
+  private toUserRoleAssignment(doc: Record<string, unknown>, role?: IRole): IUserRoleAssignment {
     return {
       id: (doc._id as Types.ObjectId).toString(),
       userId: doc.userId as string,

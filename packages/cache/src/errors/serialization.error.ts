@@ -27,7 +27,7 @@ export class CacheSerializationError extends CacheError {
     code: CacheErrorCode.SERIALIZATION_ERROR | CacheErrorCode.DESERIALIZATION_ERROR,
     message: string,
     context: SerializationErrorContext = {},
-    cause?: Error
+    cause?: Error,
   ) {
     super(code, message, context, cause);
     this.name = 'CacheSerializationError';
@@ -36,11 +36,7 @@ export class CacheSerializationError extends CacheError {
   /**
    * Create a serialization error.
    */
-  static serialize(
-    key: string,
-    valueType: string,
-    cause?: Error
-  ): CacheSerializationError {
+  static serialize(key: string, valueType: string, cause?: Error): CacheSerializationError {
     return new CacheSerializationError(
       CacheErrorCode.SERIALIZATION_ERROR,
       `Failed to serialize value for key "${key}" (type: ${valueType})`,
@@ -49,17 +45,14 @@ export class CacheSerializationError extends CacheError {
         valueType,
         operation: 'serialize',
       },
-      cause
+      cause,
     );
   }
 
   /**
    * Create a deserialization error.
    */
-  static deserialize(
-    key: string,
-    cause?: Error
-  ): CacheSerializationError {
+  static deserialize(key: string, cause?: Error): CacheSerializationError {
     return new CacheSerializationError(
       CacheErrorCode.DESERIALIZATION_ERROR,
       `Failed to deserialize value for key "${key}"`,
@@ -67,17 +60,14 @@ export class CacheSerializationError extends CacheError {
         key,
         operation: 'deserialize',
       },
-      cause
+      cause,
     );
   }
 
   /**
    * Create a circular reference error.
    */
-  static circularReference(
-    key: string,
-    cause?: Error
-  ): CacheSerializationError {
+  static circularReference(key: string, cause?: Error): CacheSerializationError {
     return new CacheSerializationError(
       CacheErrorCode.SERIALIZATION_ERROR,
       `Circular reference detected while serializing key "${key}"`,
@@ -85,7 +75,7 @@ export class CacheSerializationError extends CacheError {
         key,
         operation: 'serialize',
       },
-      cause
+      cause,
     );
   }
 }

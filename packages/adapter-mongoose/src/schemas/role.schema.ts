@@ -68,7 +68,7 @@ export const RoleSchema = new Schema<RoleDocument>(
   {
     timestamps: true,
     collection: 'rbac_roles',
-  }
+  },
 );
 
 /**
@@ -77,31 +77,25 @@ export const RoleSchema = new Schema<RoleDocument>(
  */
 RoleSchema.index(
   { name: 1, organizationId: 1 },
-  { unique: true, name: 'role_name_org_unique_idx' }
+  { unique: true, name: 'role_name_org_unique_idx' },
 );
 
 /**
  * Index for finding roles by parent for hierarchy queries.
  */
-RoleSchema.index(
-  { parentRoles: 1 },
-  { name: 'role_parent_roles_idx' }
-);
+RoleSchema.index({ parentRoles: 1 }, { name: 'role_parent_roles_idx' });
 
 /**
  * Index for finding active roles within an organization.
  */
-RoleSchema.index(
-  { organizationId: 1, isActive: 1 },
-  { name: 'role_org_active_idx' }
-);
+RoleSchema.index({ organizationId: 1, isActive: 1 }, { name: 'role_org_active_idx' });
 
 /**
  * Text index for searching roles.
  */
 RoleSchema.index(
   { name: 'text', displayName: 'text', description: 'text' },
-  { name: 'role_text_search_idx' }
+  { name: 'role_text_search_idx' },
 );
 
 /**
@@ -127,7 +121,9 @@ RoleSchema.pre('save', async function (next) {
 
     visited.add(roleIdStr);
 
-    const role = await doc.model('Role').findById(roleId).select('parentRoles').lean() as { parentRoles?: Types.ObjectId[] } | null;
+    const role = (await doc.model('Role').findById(roleId).select('parentRoles').lean()) as {
+      parentRoles?: Types.ObjectId[];
+    } | null;
     if (!role || !role.parentRoles || role.parentRoles.length === 0) {
       return false;
     }
@@ -187,9 +183,7 @@ export type RoleModel = Model<RoleDocument>;
  * Create Role model.
  * This function creates the model lazily to support different connection instances.
  */
-export function createRoleModel(
-  connection?: typeof import('mongoose')
-): RoleModel {
+export function createRoleModel(connection?: typeof import('mongoose')): RoleModel {
   const mongoose = connection ?? require('mongoose');
   if (mongoose.models.Role) {
     return mongoose.models.Role as RoleModel;

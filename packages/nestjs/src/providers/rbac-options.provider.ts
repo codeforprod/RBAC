@@ -99,11 +99,19 @@ export const DefaultUserExtractionStrategy = {
     return {
       userId: user?.id,
       organizationId: user?.organizationId,
-      ipAddress: (request?.ip as string | undefined) ??
-                 ((request?.connection as Record<string, unknown> | undefined)?.remoteAddress as string | undefined),
-      userAgent: (request?.headers as Record<string, unknown> | undefined)?.['user-agent'] as string | undefined,
-      requestId: (request?.id as string | undefined) ??
-                 ((request?.headers as Record<string, unknown> | undefined)?.['x-request-id'] as string | undefined),
+      ipAddress:
+        (request?.ip as string | undefined) ??
+        ((request?.connection as Record<string, unknown> | undefined)?.remoteAddress as
+          | string
+          | undefined),
+      userAgent: (request?.headers as Record<string, unknown> | undefined)?.['user-agent'] as
+        | string
+        | undefined,
+      requestId:
+        (request?.id as string | undefined) ??
+        ((request?.headers as Record<string, unknown> | undefined)?.['x-request-id'] as
+          | string
+          | undefined),
     };
   },
 };

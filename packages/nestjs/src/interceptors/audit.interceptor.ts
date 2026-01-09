@@ -41,14 +41,14 @@ export class AuditInterceptor implements NestInterceptor {
     const controller = context.getClass();
 
     // Get required permissions and roles
-    const requiredPermissions = this.reflector.getAllAndOverride<string[]>(
-      PERMISSIONS_KEY,
-      [handler, controller],
-    );
-    const requiredRoles = this.reflector.getAllAndOverride<string[]>(
-      ROLES_KEY,
-      [handler, controller],
-    );
+    const requiredPermissions = this.reflector.getAllAndOverride<string[]>(PERMISSIONS_KEY, [
+      handler,
+      controller,
+    ]);
+    const requiredRoles = this.reflector.getAllAndOverride<string[]>(ROLES_KEY, [
+      handler,
+      controller,
+    ]);
 
     const auditContext = {
       userId: user?.id || 'anonymous',
@@ -67,16 +67,11 @@ export class AuditInterceptor implements NestInterceptor {
         // Success - log permission check
         if (requiredPermissions && requiredPermissions.length > 0) {
           requiredPermissions.forEach((permission) => {
-            this.auditLogger!.logPermissionCheck(
-              user?.id || 'anonymous',
-              permission,
-              true,
-              {
-                resource: auditContext.path,
-                ipAddress: auditContext.ip,
-                userAgent: auditContext.userAgent,
-              }
-            ).catch((error: Error) => {
+            this.auditLogger!.logPermissionCheck(user?.id || 'anonymous', permission, true, {
+              resource: auditContext.path,
+              ipAddress: auditContext.ip,
+              userAgent: auditContext.userAgent,
+            }).catch((error: Error) => {
               console.error('Failed to log audit event:', error);
             });
           });
@@ -84,22 +79,14 @@ export class AuditInterceptor implements NestInterceptor {
       }),
       catchError((error: Error) => {
         // Error - log permission denied if it's an authorization error
-        if (
-          error.name === 'PermissionDeniedError' ||
-          (error as any).status === 403
-        ) {
+        if (error.name === 'PermissionDeniedError' || (error as any).status === 403) {
           if (requiredPermissions && requiredPermissions.length > 0) {
             requiredPermissions.forEach((permission) => {
-              this.auditLogger!.logPermissionCheck(
-                user?.id || 'anonymous',
-                permission,
-                false,
-                {
-                  resource: auditContext.path,
-                  ipAddress: auditContext.ip,
-                  userAgent: auditContext.userAgent,
-                }
-              ).catch((auditError: Error) => {
+              this.auditLogger!.logPermissionCheck(user?.id || 'anonymous', permission, false, {
+                resource: auditContext.path,
+                ipAddress: auditContext.ip,
+                userAgent: auditContext.userAgent,
+              }).catch((auditError: Error) => {
                 console.error('Failed to log audit event:', auditError);
               });
             });

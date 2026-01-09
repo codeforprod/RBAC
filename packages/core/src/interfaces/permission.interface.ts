@@ -49,7 +49,7 @@ export interface IPermissionMatcher {
   matches(
     required: string | string[],
     available: IPermission[],
-    context?: Record<string, unknown>
+    context?: Record<string, unknown>,
   ): boolean;
 
   /**

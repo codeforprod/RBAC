@@ -57,7 +57,7 @@ export const PermissionSchema = new Schema<PermissionDocument>(
   {
     timestamps: true,
     collection: 'rbac_permissions',
-  }
+  },
 );
 
 /**
@@ -66,16 +66,13 @@ export const PermissionSchema = new Schema<PermissionDocument>(
  */
 PermissionSchema.index(
   { resource: 1, action: 1, scope: 1 },
-  { unique: true, name: 'permission_unique_idx' }
+  { unique: true, name: 'permission_unique_idx' },
 );
 
 /**
  * Index for efficient text search on description.
  */
-PermissionSchema.index(
-  { description: 'text' },
-  { name: 'permission_description_text_idx' }
-);
+PermissionSchema.index({ description: 'text' }, { name: 'permission_description_text_idx' });
 
 /**
  * Virtual property to get permission string format.
@@ -122,9 +119,7 @@ export type PermissionModel = Model<PermissionDocument>;
  * Create Permission model.
  * This function creates the model lazily to support different connection instances.
  */
-export function createPermissionModel(
-  connection?: typeof import('mongoose')
-): PermissionModel {
+export function createPermissionModel(connection?: typeof import('mongoose')): PermissionModel {
   const mongoose = connection ?? require('mongoose');
   if (mongoose.models.Permission) {
     return mongoose.models.Permission as PermissionModel;

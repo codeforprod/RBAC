@@ -33,8 +33,4 @@ export {
 } from './permission-matcher';
 
 // Role hierarchy
-export {
-  RoleHierarchyResolver,
-  HierarchyResolutionResult,
-  hierarchyUtils,
-} from './role-hierarchy';
+export { RoleHierarchyResolver, HierarchyResolutionResult, hierarchyUtils } from './role-hierarchy';

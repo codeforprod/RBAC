@@ -1,7 +1,12 @@
 import { IPermission } from '../interfaces/permission.interface';
 import { IRole, ICreateRoleOptions, IUpdateRoleOptions } from '../interfaces/role.interface';
 import { IRBACAdapter } from '../interfaces/adapter.interface';
-import { IRBACCache, InMemoryCache, DefaultCacheKeyGenerator, ICacheKeyGenerator } from '../interfaces/cache.interface';
+import {
+  IRBACCache,
+  InMemoryCache,
+  DefaultCacheKeyGenerator,
+  ICacheKeyGenerator,
+} from '../interfaces/cache.interface';
 import { IAuditLogger, AuditAction, NoOpAuditLogger } from '../interfaces/audit.interface';
 import {
   IUserRoleAssignment,
@@ -78,7 +83,7 @@ export class RBACEngine {
     adapter: IRBACAdapter,
     cache: IRBACCache,
     auditLogger: IAuditLogger,
-    options: ResolvedRBACEngineOptions
+    options: ResolvedRBACEngineOptions,
   ) {
     this.adapter = adapter;
     this.cache = cache;
@@ -90,21 +95,12 @@ export class RBACEngine {
       separator: options.cacheOptions.keySeparator,
     });
 
-    this.hierarchyResolver = new RoleHierarchyResolver(
-      adapter,
-      cache,
-      options.hierarchyOptions
-    );
+    this.hierarchyResolver = new RoleHierarchyResolver(adapter, cache, options.hierarchyOptions);
 
-    this.permissionChecker = new PermissionChecker(
-      adapter,
-      this.hierarchyResolver,
-      cache,
-      {
-        permissionOptions: options.permissionOptions,
-        cacheOptions: options.cacheOptions,
-      }
-    );
+    this.permissionChecker = new PermissionChecker(adapter, this.hierarchyResolver, cache, {
+      permissionOptions: options.permissionOptions,
+      cacheOptions: options.cacheOptions,
+    });
   }
 
   /**
@@ -129,18 +125,13 @@ export class RBACEngine {
     const cache = options.cache ?? new InMemoryCache();
 
     // Create or use provided audit logger
-    const auditLogger = options.auditLogger ?? (
-      resolvedOptions.auditOptions.enabled
+    const auditLogger =
+      options.auditLogger ??
+      (resolvedOptions.auditOptions.enabled
         ? new InMemoryAuditLogger({ auditOptions: resolvedOptions.auditOptions })
-        : new NoOpAuditLogger()
-    );
+        : new NoOpAuditLogger());
 
-    const engine = new RBACEngine(
-      options.adapter,
-      cache,
-      auditLogger,
-      resolvedOptions
-    );
+    const engine = new RBACEngine(options.adapter, cache, auditLogger, resolvedOptions);
 
     // Auto-initialize if configured
     if (resolvedOptions.autoInitialize) {
@@ -219,7 +210,7 @@ export class RBACEngine {
   async can(
     userId: string,
     permission: string,
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean> {
     await this.eventHooks.beforePermissionCheck?.(userId, permission);
 
@@ -261,7 +252,7 @@ export class RBACEngine {
   async authorize(
     userId: string,
     permission: string,
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<void> {
     const allowed = await this.can(userId, permission, context);
 
@@ -284,7 +275,7 @@ export class RBACEngine {
   async canAny(
     userId: string,
     permissions: string[],
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean> {
     return this.permissionChecker.hasAnyPermission(userId, permissions, context);
   }
@@ -300,7 +291,7 @@ export class RBACEngine {
   async canAll(
     userId: string,
     permissions: string[],
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<boolean> {
     return this.permissionChecker.hasAllPermissions(userId, permissions, context);
   }
@@ -316,7 +307,7 @@ export class RBACEngine {
   async checkDetailed(
     userId: string,
     permission: string,
-    context?: Partial<IUserAuthorizationContext>
+    context?: Partial<IUserAuthorizationContext>,
   ): Promise<IDetailedPermissionCheckResult> {
     return this.permissionChecker.checkPermissionDetailed({
       userId,
@@ -335,12 +326,9 @@ export class RBACEngine {
    */
   async getEffectivePermissions(
     userId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<IPermission[]> {
-    const result = await this.permissionChecker.getUserEffectivePermissions(
-      userId,
-      organizationId
-    );
+    const result = await this.permissionChecker.getUserEffectivePermissions(userId, organizationId);
     return result.permissions;
   }
 
@@ -403,11 +391,7 @@ export class RBACEngine {
    * @param actorId - ID of the user making the update
    * @returns Updated role
    */
-  async updateRole(
-    roleId: string,
-    options: IUpdateRoleOptions,
-    actorId?: string
-  ): Promise<IRole> {
+  async updateRole(roleId: string, options: IUpdateRoleOptions, actorId?: string): Promise<IRole> {
     const existingRole = await this.adapter.findRoleById(roleId);
     if (!existingRole) {
       throw RoleNotFoundError.byId(roleId);
@@ -465,11 +449,9 @@ export class RBACEngine {
     }
 
     if (role.isSystem) {
-      throw new RBACError(
-        'Cannot delete system role',
-        RBACErrorCode.SYSTEM_ROLE_MODIFICATION,
-        { roleId }
-      );
+      throw new RBACError('Cannot delete system role', RBACErrorCode.SYSTEM_ROLE_MODIFICATION, {
+        roleId,
+      });
     }
 
     const deleted = await this.adapter.deleteRole(roleId);
@@ -520,7 +502,7 @@ export class RBACEngine {
   async addPermissionsToRole(
     roleId: string,
     permissionIds: string[],
-    actorId?: string
+    actorId?: string,
   ): Promise<void> {
     const role = await this.adapter.findRoleById(roleId);
     if (!role) {
@@ -553,7 +535,7 @@ export class RBACEngine {
   async removePermissionsFromRole(
     roleId: string,
     permissionIds: string[],
-    actorId?: string
+    actorId?: string,
   ): Promise<void> {
     const role = await this.adapter.findRoleById(roleId);
     if (!role) {
@@ -620,14 +602,11 @@ export class RBACEngine {
       {
         organizationId: options.organizationId,
         expiresAt: options.expiresAt ?? undefined,
-      }
+      },
     );
 
     // Invalidate user cache
-    await this.permissionChecker.invalidateUserCache(
-      options.userId,
-      options.organizationId
-    );
+    await this.permissionChecker.invalidateUserCache(options.userId, options.organizationId);
 
     // Fire event hook
     await this.eventHooks.onRoleAssigned?.('assigned', options.userId, options.roleId);
@@ -648,7 +627,7 @@ export class RBACEngine {
     userId: string,
     roleId: string,
     actorId?: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<boolean> {
     const removed = await this.adapter.removeRoleFromUser(userId, roleId, organizationId);
 
@@ -677,7 +656,7 @@ export class RBACEngine {
    */
   async getUserRoles(
     userId: string,
-    organizationId?: string | null
+    organizationId?: string | null,
   ): Promise<IUserRoleAssignment[]> {
     return this.adapter.findUserRoleAssignments(userId, organizationId);
   }
@@ -690,11 +669,7 @@ export class RBACEngine {
    * @param organizationId - Optional organization ID
    * @returns True if user has the role
    */
-  async hasRole(
-    userId: string,
-    roleId: string,
-    organizationId?: string | null
-  ): Promise<boolean> {
+  async hasRole(userId: string, roleId: string, organizationId?: string | null): Promise<boolean> {
     return this.adapter.userHasRole(userId, roleId, organizationId);
   }
 
@@ -781,7 +756,7 @@ export class RBACEngine {
       details.cache = await this.cache.healthCheck();
     }
 
-    const healthy = Object.values(details).every(v => v);
+    const healthy = Object.values(details).every((v) => v);
 
     return { healthy, details };
   }

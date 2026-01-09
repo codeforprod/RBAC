@@ -31,26 +31,13 @@
  */
 
 // Base error class and error codes
-export {
-  RBACError,
-  RBACErrorCode,
-  RBACErrorContext,
-} from './rbac.error';
+export { RBACError, RBACErrorCode, RBACErrorContext } from './rbac.error';
 
 // Permission denied error
-export {
-  PermissionDeniedError,
-  PermissionDeniedContext,
-} from './permission-denied.error';
+export { PermissionDeniedError, PermissionDeniedContext } from './permission-denied.error';
 
 // Role not found error
-export {
-  RoleNotFoundError,
-  RoleNotFoundContext,
-} from './role-not-found.error';
+export { RoleNotFoundError, RoleNotFoundContext } from './role-not-found.error';
 
 // Circular hierarchy error
-export {
-  CircularHierarchyError,
-  CircularHierarchyContext,
-} from './circular-hierarchy.error';
+export { CircularHierarchyError, CircularHierarchyContext } from './circular-hierarchy.error';

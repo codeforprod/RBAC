@@ -48,7 +48,7 @@ describe('RoleHierarchyResolver', () => {
   ];
 
   const mockRoles: Record<string, IRole> = {
-    'admin': {
+    admin: {
       id: 'admin',
       name: 'Admin',
       description: 'Administrator role',
@@ -57,7 +57,7 @@ describe('RoleHierarchyResolver', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
-    'editor': {
+    editor: {
       id: 'editor',
       name: 'Editor',
       description: 'Editor role',
@@ -66,7 +66,7 @@ describe('RoleHierarchyResolver', () => {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
-    'viewer': {
+    viewer: {
       id: 'viewer',
       name: 'Viewer',
       description: 'Viewer role',
@@ -91,9 +91,7 @@ describe('RoleHierarchyResolver', () => {
     mockAdapter = {
       findRoleById: jest.fn((id: string) => Promise.resolve(mockRoles[id] || null)),
       findChildRoles: jest.fn((id: string) => {
-        const children = Object.values(mockRoles).filter(
-          role => role.parentRoles?.includes(id)
-        );
+        const children = Object.values(mockRoles).filter((role) => role.parentRoles?.includes(id));
         return Promise.resolve(children);
       }),
     } as unknown as jest.Mocked<IRBACAdapter>;
@@ -168,7 +166,7 @@ describe('RoleHierarchyResolver', () => {
       expect(mockCache.set).toHaveBeenCalledWith(
         'rbac:role-permissions:admin',
         expect.any(Array),
-        expect.objectContaining({ ttl: expect.any(Number) })
+        expect.objectContaining({ ttl: expect.any(Number) }),
       );
     });
 
@@ -186,9 +184,9 @@ describe('RoleHierarchyResolver', () => {
     it('should handle role not found', async () => {
       mockAdapter.findRoleById.mockResolvedValueOnce(null);
 
-      await expect(
-        resolver.getInheritedPermissions('nonexistent')
-      ).rejects.toThrow(RoleNotFoundError);
+      await expect(resolver.getInheritedPermissions('nonexistent')).rejects.toThrow(
+        RoleNotFoundError,
+      );
     });
   });
 
@@ -210,8 +208,8 @@ describe('RoleHierarchyResolver', () => {
       const parents = await resolver.getParentRoles('junior-editor');
 
       expect(parents.length).toBeGreaterThanOrEqual(1);
-      expect(parents.map(r => r.id)).toContain('editor');
-      expect(parents.map(r => r.id)).toContain('admin');
+      expect(parents.map((r) => r.id)).toContain('editor');
+      expect(parents.map((r) => r.id)).toContain('admin');
     });
 
     it('should respect maxDepth option', async () => {
@@ -243,16 +241,14 @@ describe('RoleHierarchyResolver', () => {
       expect(mockCache.set).toHaveBeenCalledWith(
         'rbac:role-hierarchy:editor',
         expect.any(Array),
-        expect.objectContaining({ ttl: expect.any(Number) })
+        expect.objectContaining({ ttl: expect.any(Number) }),
       );
     });
 
     it('should throw RoleNotFoundError for nonexistent role', async () => {
       mockAdapter.findRoleById.mockResolvedValueOnce(null);
 
-      await expect(
-        resolver.getParentRoles('nonexistent')
-      ).rejects.toThrow(RoleNotFoundError);
+      await expect(resolver.getParentRoles('nonexistent')).rejects.toThrow(RoleNotFoundError);
     });
   });
 
@@ -261,7 +257,7 @@ describe('RoleHierarchyResolver', () => {
       const children = await resolver.getChildRoles('admin');
 
       expect(children.length).toBeGreaterThan(0);
-      expect(children.some(r => r.id === 'editor')).toBe(true);
+      expect(children.some((r) => r.id === 'editor')).toBe(true);
     });
 
     it('should return empty array when no children', async () => {
@@ -299,8 +295,8 @@ describe('RoleHierarchyResolver', () => {
         },
       };
 
-      mockAdapter.findRoleById.mockImplementation(
-        (id: string) => Promise.resolve(circularRoles[id] || null)
+      mockAdapter.findRoleById.mockImplementation((id: string) =>
+        Promise.resolve(circularRoles[id] || null),
       );
 
       const hasCircle = await resolver.hasCircularDependency('role-a');
@@ -379,9 +375,7 @@ describe('RoleHierarchyResolver', () => {
     it('should throw RoleNotFoundError for nonexistent role', async () => {
       mockAdapter.findRoleById.mockResolvedValueOnce(null);
 
-      await expect(
-        resolver.getRoleDepth('nonexistent')
-      ).rejects.toThrow(RoleNotFoundError);
+      await expect(resolver.getRoleDepth('nonexistent')).rejects.toThrow(RoleNotFoundError);
     });
   });
 
@@ -398,21 +392,19 @@ describe('RoleHierarchyResolver', () => {
       const tree = await resolver.getHierarchyTree('admin');
 
       // Should have editor as child
-      const editorNode = tree.children.find(c => c.role.id === 'editor');
+      const editorNode = tree.children.find((c) => c.role.id === 'editor');
       expect(editorNode).toBeDefined();
 
       // Editor should have junior-editor as child
       if (editorNode) {
-        expect(editorNode.children.some(c => c.role.id === 'junior-editor')).toBe(true);
+        expect(editorNode.children.some((c) => c.role.id === 'junior-editor')).toBe(true);
       }
     });
 
     it('should throw RoleNotFoundError for nonexistent role', async () => {
       mockAdapter.findRoleById.mockResolvedValueOnce(null);
 
-      await expect(
-        resolver.getHierarchyTree('nonexistent')
-      ).rejects.toThrow(RoleNotFoundError);
+      await expect(resolver.getHierarchyTree('nonexistent')).rejects.toThrow(RoleNotFoundError);
     });
   });
 
@@ -431,7 +423,7 @@ describe('RoleHierarchyResolver', () => {
     it('should include all unique permissions', async () => {
       const result = await resolver.resolveHierarchy('editor');
 
-      const permissionIds = result.permissions.map(p => p.id);
+      const permissionIds = result.permissions.map((p) => p.id);
       const uniqueIds = new Set(permissionIds);
 
       // No duplicate permissions
@@ -449,9 +441,7 @@ describe('RoleHierarchyResolver', () => {
     it('should throw RoleNotFoundError for nonexistent role', async () => {
       mockAdapter.findRoleById.mockResolvedValueOnce(null);
 
-      await expect(
-        resolver.resolveHierarchy('nonexistent')
-      ).rejects.toThrow(RoleNotFoundError);
+      await expect(resolver.resolveHierarchy('nonexistent')).rejects.toThrow(RoleNotFoundError);
     });
   });
 
@@ -495,13 +485,11 @@ describe('RoleHierarchyResolver', () => {
         };
       }
 
-      mockAdapter.findRoleById.mockImplementation(
-        (id: string) => Promise.resolve(deepRoles[id] || null)
+      mockAdapter.findRoleById.mockImplementation((id: string) =>
+        Promise.resolve(deepRoles[id] || null),
       );
 
-      await expect(
-        resolver.getParentRoles('role-14')
-      ).rejects.toThrow(CircularHierarchyError);
+      await expect(resolver.getParentRoles('role-14')).rejects.toThrow(CircularHierarchyError);
     });
 
     it('should not throw when max depth not exceeded', async () => {
@@ -530,8 +518,8 @@ describe('RoleHierarchyResolver', () => {
         };
       }
 
-      mockAdapter.findRoleById.mockImplementation(
-        (id: string) => Promise.resolve(deepRoles[id] || null)
+      mockAdapter.findRoleById.mockImplementation((id: string) =>
+        Promise.resolve(deepRoles[id] || null),
       );
 
       const parents = await noDetectResolver.getParentRoles('role-4');
@@ -577,9 +565,7 @@ describe('hierarchyUtils', () => {
         children: [
           {
             role: mockChild,
-            children: [
-              { role: mockGrandchild, children: [], depth: 2 },
-            ],
+            children: [{ role: mockGrandchild, children: [], depth: 2 }],
             depth: 1,
           },
         ],
@@ -589,7 +575,7 @@ describe('hierarchyUtils', () => {
       const flattened = hierarchyUtils.flattenTree(tree);
 
       expect(flattened).toHaveLength(3);
-      expect(flattened.map(r => r.id)).toEqual(['root', 'child', 'grandchild']);
+      expect(flattened.map((r) => r.id)).toEqual(['root', 'child', 'grandchild']);
     });
 
     it('should handle tree with no children', () => {
@@ -613,9 +599,7 @@ describe('hierarchyUtils', () => {
         children: [
           {
             role: mockChild,
-            children: [
-              { role: mockGrandchild, children: [], depth: 2 },
-            ],
+            children: [{ role: mockGrandchild, children: [], depth: 2 }],
             depth: 1,
           },
         ],
@@ -678,9 +662,7 @@ describe('hierarchyUtils', () => {
         children: [
           {
             role: mockChild,
-            children: [
-              { role: mockGrandchild, children: [], depth: 2 },
-            ],
+            children: [{ role: mockGrandchild, children: [], depth: 2 }],
             depth: 1,
           },
         ],
@@ -701,9 +683,7 @@ describe('hierarchyUtils', () => {
         children: [
           {
             role: mockChild,
-            children: [
-              { role: mockGrandchild, children: [], depth: 2 },
-            ],
+            children: [{ role: mockGrandchild, children: [], depth: 2 }],
             depth: 1,
           },
         ],
@@ -713,7 +693,7 @@ describe('hierarchyUtils', () => {
       const path = hierarchyUtils.getPathToRole(tree, 'grandchild');
 
       expect(path).toHaveLength(3);
-      expect(path.map(r => r.id)).toEqual(['root', 'child', 'grandchild']);
+      expect(path.map((r) => r.id)).toEqual(['root', 'child', 'grandchild']);
     });
 
     it('should return empty array when role not found', () => {

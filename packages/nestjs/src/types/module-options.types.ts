@@ -49,7 +49,7 @@ export interface IUserExtractionStrategy {
 export type AuthorizationFailureHandler = (
   userId: string | null,
   permission: string,
-  context: Record<string, unknown>
+  context: Record<string, unknown>,
 ) => void | Promise<void>;
 
 /**
@@ -282,7 +282,7 @@ export enum PermissionCheckMode {
  */
 export type CustomAuthorizer = (
   userId: string,
-  context: Record<string, unknown>
+  context: Record<string, unknown>,
 ) => boolean | Promise<boolean>;
 
 /**

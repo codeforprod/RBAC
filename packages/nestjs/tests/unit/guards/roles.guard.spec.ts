@@ -80,7 +80,7 @@ describe('RolesGuard', () => {
       jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(['admin', 'moderator']);
       rbacEngine.hasRole
         .mockResolvedValueOnce(false) // admin: false
-        .mockResolvedValueOnce(true);  // moderator: true
+        .mockResolvedValueOnce(true); // moderator: true
 
       const result = await guard.canActivate(context);
 

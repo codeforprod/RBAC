@@ -328,7 +328,7 @@ export interface IAuditLogger {
       requestId?: string;
       organizationId?: string | null;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry>;
 
   /**
@@ -348,7 +348,7 @@ export interface IAuditLogger {
       organizationId?: string | null;
       expiresAt?: Date;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry>;
 
   /**
@@ -368,7 +368,7 @@ export interface IAuditLogger {
       organizationId?: string | null;
       reason?: string;
       metadata?: Record<string, unknown>;
-    }
+    },
   ): Promise<IAuditEntry>;
 
   /**
@@ -382,7 +382,7 @@ export interface IAuditLogger {
   logRoleCreation(
     roleId: string,
     createdBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry>;
 
   /**
@@ -398,7 +398,7 @@ export interface IAuditLogger {
     roleId: string,
     updatedBy: string,
     previousState: Record<string, unknown>,
-    newState: Record<string, unknown>
+    newState: Record<string, unknown>,
   ): Promise<IAuditEntry>;
 
   /**
@@ -412,7 +412,7 @@ export interface IAuditLogger {
   logRoleDeletion(
     roleId: string,
     deletedBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry>;
 
   /**
@@ -439,7 +439,10 @@ export interface IAuditLogger {
    * @param options - Query options
    * @returns Paginated audit entries
    */
-  getByUser(userId: string, options?: Omit<IAuditQueryOptions, 'actorId'>): Promise<IAuditQueryResult>;
+  getByUser(
+    userId: string,
+    options?: Omit<IAuditQueryOptions, 'actorId'>,
+  ): Promise<IAuditQueryResult>;
 
   /**
    * Get audit entries for a specific target.
@@ -452,7 +455,7 @@ export interface IAuditLogger {
   getByTarget(
     targetId: string,
     targetType: string,
-    options?: Omit<IAuditQueryOptions, 'targetId' | 'targetType'>
+    options?: Omit<IAuditQueryOptions, 'targetId' | 'targetType'>,
   ): Promise<IAuditQueryResult>;
 
   /**
@@ -461,7 +464,9 @@ export interface IAuditLogger {
    * @param options - Query options for the summary period
    * @returns Audit summary statistics
    */
-  getSummary(options?: Pick<IAuditQueryOptions, 'startDate' | 'endDate' | 'organizationId'>): Promise<IAuditSummary>;
+  getSummary(
+    options?: Pick<IAuditQueryOptions, 'startDate' | 'endDate' | 'organizationId'>,
+  ): Promise<IAuditSummary>;
 
   /**
    * Delete audit entries older than a specified date.
@@ -486,10 +491,7 @@ export interface IAuditLogger {
    * @param format - Export format
    * @returns Exported data as string or buffer
    */
-  export?(
-    options: IAuditQueryOptions,
-    format: 'json' | 'csv'
-  ): Promise<string>;
+  export?(options: IAuditQueryOptions, format: 'json' | 'csv'): Promise<string>;
 }
 
 /**
@@ -538,7 +540,7 @@ export class NoOpAuditLogger implements IAuditLogger {
     userId: string,
     permission: string,
     granted: boolean,
-    context?: { resource?: string }
+    context?: { resource?: string },
   ): Promise<IAuditEntry> {
     return this.createEmptyEntry({
       action: granted ? AuditAction.PERMISSION_GRANTED : AuditAction.PERMISSION_DENIED,
@@ -552,7 +554,7 @@ export class NoOpAuditLogger implements IAuditLogger {
   async logRoleAssignment(
     userId: string,
     roleId: string,
-    assignedBy: string
+    assignedBy: string,
   ): Promise<IAuditEntry> {
     return this.createEmptyEntry({
       action: AuditAction.USER_ROLE_ASSIGNED,
@@ -564,11 +566,7 @@ export class NoOpAuditLogger implements IAuditLogger {
     });
   }
 
-  async logRoleRemoval(
-    userId: string,
-    roleId: string,
-    removedBy: string
-  ): Promise<IAuditEntry> {
+  async logRoleRemoval(userId: string, roleId: string, removedBy: string): Promise<IAuditEntry> {
     return this.createEmptyEntry({
       action: AuditAction.USER_ROLE_REMOVED,
       actorId: removedBy,
@@ -582,7 +580,7 @@ export class NoOpAuditLogger implements IAuditLogger {
   async logRoleCreation(
     roleId: string,
     createdBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     return this.createEmptyEntry({
       action: AuditAction.ROLE_CREATED,
@@ -598,7 +596,7 @@ export class NoOpAuditLogger implements IAuditLogger {
     roleId: string,
     updatedBy: string,
     previousState: Record<string, unknown>,
-    newState: Record<string, unknown>
+    newState: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     return this.createEmptyEntry({
       action: AuditAction.ROLE_UPDATED,
@@ -614,7 +612,7 @@ export class NoOpAuditLogger implements IAuditLogger {
   async logRoleDeletion(
     roleId: string,
     deletedBy: string,
-    roleData: Record<string, unknown>
+    roleData: Record<string, unknown>,
   ): Promise<IAuditEntry> {
     return this.createEmptyEntry({
       action: AuditAction.ROLE_DELETED,

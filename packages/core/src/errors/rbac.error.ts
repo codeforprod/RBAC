@@ -124,7 +124,7 @@ export class RBACError extends Error {
     message: string,
     code: RBACErrorCode = RBACErrorCode.UNKNOWN_ERROR,
     context: Partial<RBACErrorContext> = {},
-    isOperational = true
+    isOperational = true,
   ) {
     super(message);
 
@@ -149,9 +149,8 @@ export class RBACError extends Error {
    * @returns Formatted error string
    */
   toString(): string {
-    const contextStr = Object.keys(this.context).length > 1
-      ? ` Context: ${JSON.stringify(this.context)}`
-      : '';
+    const contextStr =
+      Object.keys(this.context).length > 1 ? ` Context: ${JSON.stringify(this.context)}` : '';
     return `[${this.code}] ${this.message}${contextStr}`;
   }
 
@@ -227,7 +226,7 @@ export class RBACError extends Error {
   static wrap(
     error: unknown,
     code: RBACErrorCode = RBACErrorCode.UNKNOWN_ERROR,
-    context: Partial<RBACErrorContext> = {}
+    context: Partial<RBACErrorContext> = {},
   ): RBACError {
     if (RBACError.isRBACError(error)) {
       return error;

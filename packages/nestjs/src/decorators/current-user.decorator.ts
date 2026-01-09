@@ -100,9 +100,13 @@ function extractUserFromContext(ctx: ExecutionContext): Record<string, unknown> 
 
       // TypeScript needs explicit checks for unknown properties
       const contextAny = gqlContext as Record<string, unknown>;
-      return (contextAny.req as Record<string, unknown> | undefined)?.user as Record<string, unknown> | undefined ??
-             contextAny.user as Record<string, unknown> | undefined ??
-             null;
+      return (
+        ((contextAny.req as Record<string, unknown> | undefined)?.user as
+          | Record<string, unknown>
+          | undefined) ??
+        (contextAny.user as Record<string, unknown> | undefined) ??
+        null
+      );
     }
 
     case 'ws': {

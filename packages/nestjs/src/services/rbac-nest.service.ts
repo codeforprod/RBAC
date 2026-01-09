@@ -288,11 +288,7 @@ export class RBACNestService implements OnModuleInit, OnModuleDestroy {
    * @param actorId - ID of the user making the update
    * @returns Updated role
    */
-  async updateRole(
-    roleId: string,
-    options: IUpdateRoleOptions,
-    actorId?: string,
-  ): Promise<IRole> {
+  async updateRole(roleId: string, options: IUpdateRoleOptions, actorId?: string): Promise<IRole> {
     return this.getEngine().updateRole(roleId, options, actorId);
   }
 
@@ -430,11 +426,7 @@ export class RBACNestService implements OnModuleInit, OnModuleDestroy {
    * @param organizationId - Optional organization ID
    * @returns True if user has the role
    */
-  async hasRole(
-    userId: string,
-    roleId: string,
-    organizationId?: string | null,
-  ): Promise<boolean> {
+  async hasRole(userId: string, roleId: string, organizationId?: string | null): Promise<boolean> {
     return this.getEngine().hasRole(userId, roleId, organizationId);
   }
 

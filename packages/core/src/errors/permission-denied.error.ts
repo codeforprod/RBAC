@@ -89,11 +89,7 @@ export class PermissionDeniedError extends RBACError {
    * });
    * ```
    */
-  constructor(
-    permission: string,
-    userId?: string,
-    context: Partial<PermissionDeniedContext> = {}
-  ) {
+  constructor(permission: string, userId?: string, context: Partial<PermissionDeniedContext> = {}) {
     const parsed = PermissionDeniedError.parsePermission(permission);
     const message = PermissionDeniedError.buildMessage(permission, userId, context);
 
@@ -116,7 +112,11 @@ export class PermissionDeniedError extends RBACError {
    * @param permission - Permission string (e.g., "users:read:own")
    * @returns Parsed components
    */
-  private static parsePermission(permission: string): { resource?: string; action?: string; scope?: string } {
+  private static parsePermission(permission: string): {
+    resource?: string;
+    action?: string;
+    scope?: string;
+  } {
     const parts = permission.split(':');
     return {
       resource: parts[0],
@@ -136,7 +136,7 @@ export class PermissionDeniedError extends RBACError {
   private static buildMessage(
     permission: string,
     userId?: string,
-    context?: Partial<PermissionDeniedContext>
+    context?: Partial<PermissionDeniedContext>,
   ): string {
     let message = `Permission denied: '${permission}'`;
 
@@ -188,7 +188,7 @@ export class PermissionDeniedError extends RBACError {
     permission: string,
     userId: string,
     resource: string,
-    resourceId?: string
+    resourceId?: string,
   ): PermissionDeniedError {
     return new PermissionDeniedError(permission, userId, {
       resource,
@@ -216,7 +216,7 @@ export class PermissionDeniedError extends RBACError {
   static forOwnership(
     permission: string,
     userId: string,
-    resourceOwnerId: string
+    resourceOwnerId: string,
   ): PermissionDeniedError {
     return new PermissionDeniedError(permission, userId, {
       denialReason: 'User does not own this resource',
@@ -237,7 +237,7 @@ export class PermissionDeniedError extends RBACError {
     permission: string,
     userId: string,
     requiredRoles: string[],
-    userRoles: string[]
+    userRoles: string[],
   ): PermissionDeniedError {
     return new PermissionDeniedError(permission, userId, {
       checkedRoles: userRoles,

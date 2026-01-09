@@ -103,10 +103,7 @@ export class RoleNotFoundError extends RBACError {
    * @param context - Additional context
    * @returns Formatted error message
    */
-  private static buildMessage(
-    roleIdOrName: string,
-    context: Partial<RoleNotFoundContext>
-  ): string {
+  private static buildMessage(roleIdOrName: string, context: Partial<RoleNotFoundContext>): string {
     const searchType = context.searchType ?? 'id';
     let message = `Role not found: ${searchType === 'name' ? `name '${roleIdOrName}'` : `id '${roleIdOrName}'`}`;
 

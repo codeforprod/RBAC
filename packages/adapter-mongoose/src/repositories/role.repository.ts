@@ -8,10 +8,7 @@ import {
   IPaginatedResult,
 } from '@prodforcode/rbac-core';
 import { RoleModel, RoleDocument, createRoleModel } from '../schemas/role.schema';
-import {
-  RolePermissionModel,
-  createRolePermissionModel,
-} from '../schemas/role-permission.schema';
+import { RolePermissionModel, createRolePermissionModel } from '../schemas/role-permission.schema';
 /**
  * Repository for Role data access operations.
  * Provides pure data access methods with aggregation pipeline support.
@@ -311,7 +308,7 @@ export class RoleRepository {
           metadata: doc.metadata as Record<string, unknown> | undefined,
           description: doc.description as string | undefined,
           createdAt: doc.createdAt as Date | undefined,
-        }))
+        })),
       );
     }
 
@@ -460,7 +457,7 @@ export class RoleRepository {
 
     // Deduplicate roles
     const uniqueDocs = Array.from(
-      new Map(docs.map((doc) => [(doc._id as Types.ObjectId).toString(), doc])).values()
+      new Map(docs.map((doc) => [(doc._id as Types.ObjectId).toString(), doc])).values(),
     );
 
     const roleIds = uniqueDocs.map((doc) => (doc._id as Types.ObjectId).toString());
@@ -482,9 +479,8 @@ export class RoleRepository {
       displayName: doc.displayName as string | undefined,
       description: doc.description as string | undefined,
       permissions,
-      parentRoles: (doc.parentRoles as Types.ObjectId[] | undefined)?.map((id) =>
-        id.toString()
-      ) ?? [],
+      parentRoles:
+        (doc.parentRoles as Types.ObjectId[] | undefined)?.map((id) => id.toString()) ?? [],
       isSystem: doc.isSystem as boolean | undefined,
       isActive: doc.isActive as boolean,
       organizationId: doc.organizationId as string | null | undefined,
