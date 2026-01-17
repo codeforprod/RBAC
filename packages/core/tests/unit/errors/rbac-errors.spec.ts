@@ -194,12 +194,10 @@ describe('RBAC Errors', () => {
       expect(json.context).toEqual(
         expect.objectContaining({
           roleId: 'role-1',
-        })
-      );
-      expect(json.metadata).toEqual(
-        expect.objectContaining({
-          targetRoleId: 'role-2',
-          chain: chain,
+          metadata: expect.objectContaining({
+            targetRoleId: 'role-2',
+            chain: chain,
+          }),
         })
       );
     });
