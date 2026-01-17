@@ -1,0 +1,309 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "service": "rbac",
+    "last_updated": "2026-01-17T16:30:00Z",
+    "total_skills": 8,
+    "description": "Learnings from RBAC NPM Package development, testing, and verification"
+  },
+  "categories": {
+    "testing": [
+      {
+        "id": "test-001",
+        "name": "Mock Setup for Service Tests",
+        "problem": "Service tests fail with 'method is not a function' errors due to incomplete mock objects",
+        "symptoms": [
+          "TypeError: this.hierarchyResolver.getParentRoles is not a function",
+          "Tests pass individually but fail when run together",
+          "Mock objects missing expected methods or properties"
+        ],
+        "root_cause": "Test mocks don't implement all methods required by the service under test, especially for injected dependencies",
+        "investigation": [
+          "Check error stack trace for missing method name",
+          "Review service constructor and injected dependencies",
+          "Verify all interface methods are mocked in test setup",
+          "Look for beforeEach() setup that may be incomplete"
+        ],
+        "solution": [
+          "Create comprehensive mock objects implementing all interface methods",
+          "Add missing properties to role/permission mocks (e.g., permissions: [])",
+          "Use jest.fn() for all methods in mocked services",
+          "Verify mock setup in beforeEach() includes all dependencies"
+        ],
+        "example": {
+          "before": "const mockHierarchyResolver = { resolveHierarchy: jest.fn() };",
+          "after": "const mockHierarchyResolver = { resolveHierarchy: jest.fn(), getParentRoles: jest.fn(), getInheritedPermissions: jest.fn(), validateNoCircularDependencies: jest.fn() };"
+        },
+        "prevention": [
+          "Use interface type checking in mock setup: const mock: IInterface = { ... }",
+          "Create reusable mock factories for common dependencies",
+          "Add integration tests that verify full object graphs",
+          "Use TypeScript strict mode to catch missing properties at compile time"
+        ],
+        "related": ["test-002", "best-practice-001"],
+        "tags": ["jest", "mocking", "unit-tests", "typescript"],
+        "severity": "high"
+      },
+      {
+        "id": "test-002",
+        "name": "Test Coverage for Audit Logging",
+        "problem": "Audit logger service had only 5.33% test coverage, causing overall package coverage to drop below 80% threshold",
+        "symptoms": [
+          "Coverage report shows audit-logger.service.ts at 5-10% coverage",
+          "Package fails coverage threshold checks",
+          "Multiple untested code paths in logging methods"
+        ],
+        "root_cause": "Audit logger was implemented but comprehensive tests were never written, treating it as secondary functionality",
+        "solution": [
+          "Create comprehensive test suite covering all audit logger methods",
+          "Test log creation, querying, filtering, export, and purge operations",
+          "Add tests for circular buffer overflow handling",
+          "Test contextual logger with metadata injection",
+          "Verify factory function edge cases"
+        ],
+        "example": {
+          "test_suite": "audit-logger.service.spec.ts with 170+ test cases",
+          "coverage_improvement": "From 5.33% to 98.48% coverage",
+          "key_tests": [
+            "logPermissionCheck with all possible results",
+            "Query filtering by action, actor, target, dateRange, severity",
+            "Export to JSON and CSV formats",
+            "Circular buffer with max entries limit",
+            "ContextualAuditLogger with metadata injection"
+          ]
+        },
+        "prevention": [
+          "Add audit logging tests immediately after implementation",
+          "Set per-file coverage thresholds in jest.config.js",
+          "Include audit scenarios in acceptance criteria",
+          "Run coverage checks in CI before merging"
+        ],
+        "impact": "Adding these tests increased overall package coverage by 16.5%",
+        "tags": ["testing", "coverage", "audit-logging", "jest"],
+        "severity": "medium"
+      }
+    ],
+    "best-practices": [
+      {
+        "id": "best-practice-001",
+        "name": "Monorepo Test Organization with Turborepo",
+        "pattern": "Organize tests alongside source code in monorepo packages with shared Jest configuration",
+        "context": "Multi-package monorepo with shared testing infrastructure and coverage requirements",
+        "benefits": [
+          "Consistent test configuration across all packages",
+          "Easy to run tests for specific packages or all packages",
+          "Centralized coverage reporting",
+          "Faster CI builds with Turborepo caching"
+        ],
+        "structure": {
+          "root": "jest.config.base.js - shared configuration",
+          "packages": "Each package extends base config and adds package-specific settings",
+          "test_location": "tests/ directory within each package (not src/__tests__)",
+          "test_types": "unit/ and integration/ subdirectories"
+        },
+        "example": {
+          "root_config": "module.exports = { preset: 'ts-jest', testEnvironment: 'node', coverageThreshold: { global: { branches: 80, functions: 80, lines: 80 } } }",
+          "package_config": "module.exports = { ...require('../../jest.config.base'), displayName: 'core', testMatch: ['<rootDir>/tests/**/*.spec.ts'] }"
+        },
+        "related": ["architecture-001"],
+        "tags": ["monorepo", "turborepo", "jest", "testing"],
+        "when_to_use": "Multi-package repositories with shared testing standards"
+      },
+      {
+        "id": "best-practice-002",
+        "name": "Zero Runtime Dependencies in Core Package",
+        "pattern": "Keep core business logic package free of runtime dependencies",
+        "context": "Building reusable library packages that should be lightweight and have minimal dependency conflicts",
+        "benefits": [
+          "Smaller bundle size for consumers",
+          "Fewer version conflicts with consumer applications",
+          "Faster installation times",
+          "More flexible for different runtime environments"
+        ],
+        "implementation": [
+          "Use only devDependencies for build and test tools",
+          "Implement utilities from scratch instead of adding small libraries",
+          "Use peerDependencies for framework integrations",
+          "Separate framework-specific code into adapter packages"
+        ],
+        "example": {
+          "core_package": "dependencies: {} (zero runtime deps)",
+          "nestjs_package": "peerDependencies: { '@nestjs/common': '^9.0.0 || ^10.0.0' }",
+          "mongoose_package": "peerDependencies: { 'mongoose': '^7.0.0 || ^8.0.0' }"
+        },
+        "trade_offs": {
+          "pros": "Lightweight, flexible, fewer conflicts",
+          "cons": "May need to reimplement common utilities"
+        },
+        "related": ["architecture-002"],
+        "tags": ["npm-package", "dependencies", "architecture"],
+        "when_to_use": "Core business logic packages in multi-package libraries"
+      }
+    ],
+    "architecture": [
+      {
+        "id": "architecture-001",
+        "name": "Adapter Pattern for Multi-Database Support",
+        "pattern": "Define database-agnostic interface and create separate adapter packages for each database technology",
+        "problem": "Need to support multiple databases (MongoDB, PostgreSQL, MySQL) without coupling core logic to specific ORM",
+        "trade_offs": {
+          "pros": [
+            "Consumers can choose their preferred database",
+            "Core logic remains database-agnostic",
+            "Easy to add new database adapters",
+            "Each adapter can be versioned independently"
+          ],
+          "cons": [
+            "Need to maintain multiple adapter implementations",
+            "Interface must support features of all adapters",
+            "Testing requires multiple database setups"
+          ]
+        },
+        "when_to_use": "Building libraries that need to work with multiple persistence layers or external systems",
+        "when_to_avoid": "Single-database applications where abstraction adds unnecessary complexity",
+        "implementation": {
+          "core_interface": "IRBACAdapter with methods: findRole, createRole, updateRole, deleteRole, assignRole, etc.",
+          "adapters": [
+            "@prodforcode/rbac-adapter-typeorm - PostgreSQL, MySQL, SQLite via TypeORM entities",
+            "@prodforcode/rbac-adapter-mongoose - MongoDB via Mongoose schemas"
+          ],
+          "usage": "RBACModule.forRoot({ adapter: new MongooseRBACAdapter(connection) })"
+        },
+        "example": {
+          "interface": "interface IRBACAdapter { findRole(id: string): Promise<IRole>; createRole(data: CreateRoleDto): Promise<IRole>; }",
+          "typeorm_impl": "class TypeORMRBACAdapter implements IRBACAdapter { constructor(private dataSource: DataSource) {} async findRole(id: string) { return this.dataSource.getRepository(RoleEntity).findOne({ where: { id } }); } }",
+          "mongoose_impl": "class MongooseRBACAdapter implements IRBACAdapter { constructor(private connection: Connection) {} async findRole(id: string) { return this.connection.model('Role').findById(id); } }"
+        },
+        "related": ["best-practice-002"],
+        "tags": ["design-pattern", "database", "multi-database", "adapter"],
+        "severity": "high"
+      },
+      {
+        "id": "architecture-002",
+        "name": "Wildcard Permission Matching with Parser-Matcher Pattern",
+        "pattern": "Separate permission string parsing from permission matching logic using dedicated parser and matcher classes",
+        "problem": "Need to support complex permission patterns (*, **) with efficient matching and clear separation of concerns",
+        "components": [
+          "WildcardParser - Parses permission strings into structured format",
+          "PermissionMatcher - Matches requested permissions against granted permissions using parsed format",
+          "Permission format: resource:action[:scope] (e.g., 'users:read', 'posts:*', 'admin:**')"
+        ],
+        "wildcards": {
+          "single_level": "* matches one segment (e.g., 'posts:*' matches 'posts:read', 'posts:write')",
+          "multi_level": "** matches any depth (e.g., 'admin:**' matches 'admin:users:delete', 'admin:roles:permissions:grant')",
+          "superadmin": "** alone matches everything"
+        },
+        "implementation": {
+          "parser": "Breaks permission string into parts array: ['users', 'read', 'own']",
+          "matcher": "Compares parts arrays with wildcard support using recursive algorithm"
+        },
+        "benefits": [
+          "Clean separation between parsing and matching",
+          "Easy to test each component independently",
+          "Extensible for additional permission formats",
+          "Efficient matching with early termination"
+        ],
+        "example": {
+          "single_wildcard": "posts:* matches ['posts:read', 'posts:write'] but NOT 'posts:draft:publish'",
+          "multi_wildcard": "admin:** matches ['admin:users:delete', 'admin:roles:permissions:grant']",
+          "superadmin": "** matches everything"
+        },
+        "tags": ["permissions", "rbac", "wildcard", "parser", "matcher"],
+        "when_to_use": "Permission systems requiring flexible pattern matching"
+      }
+    ],
+    "debugging": [
+      {
+        "id": "debug-001",
+        "name": "Diagnosing Circular Role Dependencies",
+        "issue": "Role hierarchy can create circular dependencies causing infinite loops or stack overflow",
+        "detection": [
+          "Check role creation/update operations for parent role assignments",
+          "Validate during role hierarchy resolution",
+          "Look for cycles: A → B → C → A"
+        ],
+        "investigation": [
+          "Log role hierarchy graph during resolution",
+          "Use visited set to track roles already processed",
+          "Throw error when role is visited twice in same resolution path",
+          "Test with known circular scenarios: A → B → A, A → B → C → A"
+        ],
+        "tools": [
+          "RoleHierarchyResolver.validateNoCircularDependencies() method",
+          "Graph traversal with visited set",
+          "Jest tests with circular role mocks"
+        ],
+        "solution": "Implement cycle detection using depth-first search with visited tracking, throw CircularHierarchyError when cycle detected",
+        "example": {
+          "detection_code": "const visited = new Set<string>(); const visiting = new Set<string>(); function detectCycle(roleId: string) { if (visiting.has(roleId)) throw new CircularHierarchyError(roleId); visiting.add(roleId); /* traverse parents */; visiting.delete(roleId); visited.add(roleId); }",
+          "test": "it('should detect circular dependency', () => { const roleA = { id: 'a', parentRoles: ['b'] }; const roleB = { id: 'b', parentRoles: ['a'] }; expect(() => resolver.resolve(roleA)).toThrow(CircularHierarchyError); });"
+        },
+        "prevention": [
+          "Validate role hierarchy on every role update",
+          "Add database constraint preventing self-references",
+          "Run cycle detection in role creation/update endpoints",
+          "Add integration tests for circular scenarios"
+        ],
+        "tags": ["debugging", "role-hierarchy", "circular-dependency", "graph"],
+        "severity": "critical"
+      }
+    ],
+    "configuration": [
+      {
+        "id": "config-001",
+        "name": "Turborepo Pipeline Configuration for Monorepo Builds",
+        "setting": "Pipeline dependencies and caching strategy in turbo.json",
+        "values": {
+          "build": "{ dependsOn: ['^build'], outputs: ['dist/**'] }",
+          "test": "{ dependsOn: ['build'] }",
+          "lint": "{ cache: true }",
+          "typecheck": "{ dependsOn: ['^build'] }"
+        },
+        "impact": "Controls build order, enables incremental builds, and optimizes CI/CD performance",
+        "environment": "Development, CI/CD pipelines",
+        "explanation": {
+          "^build": "Build dependencies before this package",
+          "dependsOn": "Ensures correct execution order",
+          "outputs": "Defines cacheable build artifacts",
+          "cache": "Enables result caching across runs"
+        },
+        "pitfalls": [
+          "Forgetting ^build on packages with internal dependencies causes build failures",
+          "Not specifying outputs prevents caching",
+          "Circular dependencies in pipeline cause infinite loops"
+        ],
+        "example": {
+          "correct": "{ 'build': { 'dependsOn': ['^build'], 'outputs': ['dist/**'] } }",
+          "wrong": "{ 'build': { 'outputs': ['dist/**'] } } // Missing ^build dependency"
+        },
+        "tags": ["turborepo", "monorepo", "build", "configuration"],
+        "related": ["best-practice-001"]
+      },
+      {
+        "id": "config-002",
+        "name": "NestJS peerDependencies for Multi-Version Support",
+        "setting": "peerDependencies version ranges in package.json",
+        "values": {
+          "@nestjs/common": "^9.0.0 || ^10.0.0",
+          "@nestjs/core": "^9.0.0 || ^10.0.0"
+        },
+        "impact": "Enables package to work with both NestJS 9.x and 10.x applications",
+        "environment": "NPM package consumption",
+        "explanation": "Using || allows consumers to use either major version without peer dependency warnings",
+        "pitfalls": [
+          "Using exact versions (^9.0.0) excludes NestJS 10 users",
+          "Not testing both versions can cause runtime issues",
+          "Breaking changes between versions may require conditional code"
+        ],
+        "best_practices": [
+          "Test package with both minimum and maximum supported versions",
+          "Document supported versions in README",
+          "Use peerDependencies, not dependencies, for framework packages",
+          "Keep peerDependency ranges broad but test thoroughly"
+        ],
+        "tags": ["nestjs", "peer-dependencies", "versioning", "npm"],
+        "related": ["best-practice-002"]
+      }
+    ]
+  }
+}
