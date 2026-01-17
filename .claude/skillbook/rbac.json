@@ -2,8 +2,8 @@
   "metadata": {
     "version": "1.0",
     "service": "rbac",
-    "last_updated": "2026-01-17T16:30:00Z",
-    "total_skills": 8,
+    "last_updated": "2026-01-17T17:05:00Z",
+    "total_skills": 9,
     "description": "Learnings from RBAC NPM Package development, testing, and verification"
   },
   "categories": {
