@@ -168,8 +168,8 @@ describe('RBAC Errors', () => {
       expect(error).toBeInstanceOf(CircularHierarchyError);
       expect(error.code).toBe(RBACErrorCode.CIRCULAR_HIERARCHY);
       expect(error.roleId).toBe('role-1');
-      expect(error.parentRoleId).toBe('role-2');
-      expect(error.hierarchyChain).toEqual(['role-1', 'role-2', 'role-1']);
+      expect(error.targetRoleId).toBe('role-2');
+      expect(error.chain).toEqual(['role-1', 'role-2', 'role-1']);
       expect(error.message).toContain('Circular');
       expect(error.message).toContain('role-1');
       expect(error.message).toContain('role-2');
@@ -179,7 +179,7 @@ describe('RBAC Errors', () => {
       const error = CircularHierarchyError.selfReference('role-1');
 
       expect(error.roleId).toBe('role-1');
-      expect(error.parentRoleId).toBe('role-1');
+      expect(error.targetRoleId).toBe('role-1');
       expect(error.message).toContain('self');
       expect(error.message).toContain('role-1');
     });
@@ -194,8 +194,12 @@ describe('RBAC Errors', () => {
       expect(json.context).toEqual(
         expect.objectContaining({
           roleId: 'role-1',
-          parentRoleId: 'role-2',
-          hierarchyChain: chain,
+        })
+      );
+      expect(json.metadata).toEqual(
+        expect.objectContaining({
+          targetRoleId: 'role-2',
+          chain: chain,
         })
       );
     });

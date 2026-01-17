@@ -78,6 +78,7 @@ describe('PermissionChecker', () => {
       resolveEffectiveRoles: jest.fn().mockResolvedValue(['role-1']),
       getEffectivePermissions: jest.fn().mockResolvedValue([mockReadPermission]),
       getInheritedPermissions: jest.fn().mockResolvedValue([mockReadPermission]),
+      getParentRoles: jest.fn().mockResolvedValue([]),
       invalidateCache: jest.fn().mockResolvedValue(undefined),
     } as unknown as jest.Mocked<RoleHierarchyResolver>;
 
@@ -86,12 +87,23 @@ describe('PermissionChecker', () => {
 
   describe('hasPermission', () => {
     it('should return true when user has exact permission', async () => {
-      mockAdapter.findUserPermissions.mockResolvedValue([mockReadPermission]);
+      // Mock role assignment and hierarchy resolution
+      const mockAssignment: IUserRoleAssignment = {
+        userId: 'user-1',
+        roleId: 'role-1',
+        assignedBy: 'admin-1',
+        assignedAt: new Date(),
+        isActive: true,
+        expiresAt: null,
+        organizationId: null,
+      };
+      mockAdapter.findUserRoleAssignments.mockResolvedValue([mockAssignment]);
+      mockHierarchyResolver.getInheritedPermissions.mockResolvedValue([mockReadPermission]);
 
       const result = await checker.hasPermission('user-1', 'posts:read');
 
       expect(result).toBe(true);
-      expect(mockAdapter.findUserPermissions).toHaveBeenCalledWith('user-1', undefined);
+      expect(mockAdapter.findUserRoleAssignments).toHaveBeenCalledWith('user-1', undefined);
     });
 
     it('should return false when user lacks permission', async () => {

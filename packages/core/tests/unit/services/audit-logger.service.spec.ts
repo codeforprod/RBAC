@@ -251,6 +251,7 @@ describe('InMemoryAuditLogger', () => {
       const customLogger = new InMemoryAuditLogger({
         auditOptions: {
           enabled: true,
+          logSuccessfulChecks: true,
           includeIpAddress: true,
           includeUserAgent: true,
           includeContext: true,
@@ -512,20 +513,28 @@ describe('InMemoryAuditLogger', () => {
     });
 
     it('should filter by date range', async () => {
+      // Create fresh logger for this test to avoid interference with beforeEach entries
+      const freshLogger = new InMemoryAuditLogger({
+        auditOptions: {
+          enabled: true,
+          logSuccessfulChecks: true,
+        },
+      });
+
       jest.useFakeTimers();
       const now = new Date('2024-01-01T00:00:00Z');
       jest.setSystemTime(now);
 
-      await logger.logPermissionCheck('user-3', 'posts:read', true);
+      await freshLogger.logPermissionCheck('user-3', 'posts:read', true);
 
       const futureDate = new Date('2024-01-01T00:00:01Z');
       jest.setSystemTime(futureDate);
 
-      await logger.logPermissionCheck('user-4', 'posts:read', true);
+      await freshLogger.logPermissionCheck('user-4', 'posts:read', true);
 
       jest.useRealTimers();
 
-      const result = await logger.query({ startDate: futureDate });
+      const result = await freshLogger.query({ startDate: futureDate });
       expect(result.total).toBe(1);
       expect(result.entries[0].actorId).toBe('user-4');
     });
@@ -628,20 +637,28 @@ describe('InMemoryAuditLogger', () => {
     });
 
     it('should filter summary by date range', async () => {
+      // Create fresh logger for this test to avoid interference with beforeEach entries
+      const freshLogger = new InMemoryAuditLogger({
+        auditOptions: {
+          enabled: true,
+          logSuccessfulChecks: true,
+        },
+      });
+
       jest.useFakeTimers();
       const now = new Date('2024-01-01T00:00:00Z');
       jest.setSystemTime(now);
 
-      await logger.logPermissionCheck('user-3', 'posts:read', true);
+      await freshLogger.logPermissionCheck('user-3', 'posts:read', true);
 
       const futureDate = new Date('2024-01-01T00:00:01Z');
       jest.setSystemTime(futureDate);
 
-      await logger.logPermissionCheck('user-4', 'posts:read', true);
+      await freshLogger.logPermissionCheck('user-4', 'posts:read', true);
 
       jest.useRealTimers();
 
-      const summary = await logger.getSummary({ startDate: futureDate });
+      const summary = await freshLogger.getSummary({ startDate: futureDate });
       expect(summary.totalEntries).toBe(1);
     });
 
