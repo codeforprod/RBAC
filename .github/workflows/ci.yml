@@ -1,40 +1,88 @@
 name: CI
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
-    branches: [main, develop]
+    branches: [main]
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  build-and-test:
+    name: Build and Test
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [18, 20, 22]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8.15.0
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          node-version: '20'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build all packages
-        run: npm run build
-
-      - name: Lint
-        run: npm run lint || true
+        run: pnpm run build
 
       - name: Type check
-        run: npm run typecheck
+        run: pnpm run typecheck
+
+      - name: Lint
+        run: pnpm run lint
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
+
+      - name: Verify npm pack includes dist/
+        run: |
+          set -e
+
+          verify_package() {
+            local pkg_dir=$1
+            local pkg_name=$2
+
+            echo "Checking $pkg_name..."
+            cd "$pkg_dir"
+
+            pnpm pack > /dev/null 2>&1
+            tarball=$(ls *.tgz)
+
+            if tar -tzf "$tarball" | grep -q "dist/.*\.js"; then
+              echo "✅ $pkg_name includes dist/ files"
+              rm "$tarball"
+              cd - > /dev/null
+              return 0
+            else
+              echo "❌ ERROR: dist/ files missing in $pkg_name"
+              rm "$tarball"
+              cd - > /dev/null
+              return 1
+            fi
+          }
+
+          # Verify all packages
+          cd packages
+          verify_package "core" "@prodforcode/rbac-core"
+          verify_package "nestjs" "@prodforcode/rbac-nestjs"
+          verify_package "cache" "@prodforcode/rbac-cache"
+          verify_package "adapter-mongoose" "@prodforcode/rbac-adapter-mongoose"
+          verify_package "adapter-typeorm" "@prodforcode/rbac-adapter-typeorm"
+
+          echo "✅ All packages verified successfully"
