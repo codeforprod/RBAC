@@ -1,0 +1,16 @@
+metadata:
+  version: 1.0
+  service: devops
+  last_updated: 2026-01-19T23:30:00Z
+  total_skills: 6
+  active_skills: 6
+  deprecated_skills: 0
+skills[6]{id,domain,content,context,source_task,confidence,success_rate,use_count,created_at,last_used,status,tags}:
+  devops-00001,ci-cd,Use pnpm/action-setup@v4 before actions/setup-node@v4 with cache: pnpm,GitHub Actions CI with pnpm monorepo,HOL-23,95,1.0,1,2026-01-19T23:30:00Z,2026-01-19T23:30:00Z,active,pnpm;github-actions;ci-cd
+  devops-00002,ci-cd,Add concurrency group with cancel-in-progress only for PRs to prevent duplicate CI runs,GitHub Actions workflow optimization,HOL-23,95,1.0,1,2026-01-19T23:30:00Z,2026-01-19T23:30:00Z,active,concurrency;github-actions;ci-cd
+  devops-00003,ci-cd,Verify npm pack includes dist/ files before publishing to catch missing build artifacts,Monorepo NPM package publishing,HOL-23,98,1.0,1,2026-01-19T23:30:00Z,2026-01-19T23:30:00Z,active,npm;publishing;verification
+  devops-00004,ci-cd,Use changesets/action with createGithubReleases: true for automated release notes,Monorepo versioning and releasing,HOL-23,95,1.0,1,2026-01-19T23:30:00Z,2026-01-19T23:30:00Z,active,changesets;releases;github
+  devops-00005,ci-cd,Add packageManager field to package.json for reproducible pnpm version,pnpm monorepo configuration,HOL-23,98,1.0,1,2026-01-19T23:30:00Z,2026-01-19T23:30:00Z,active,pnpm;package-json;monorepo
+  devops-00006,ci-cd,Never use || true in lint steps - fail fast on quality issues,CI pipeline quality gates,HOL-23,98,1.0,1,2026-01-19T23:30:00Z,2026-01-19T23:30:00Z,active,lint;ci-cd;quality
+categories:
+  ci-cd[6]: devops-00001;devops-00002;devops-00003;devops-00004;devops-00005;devops-00006
