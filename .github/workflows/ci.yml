@@ -61,7 +61,7 @@ jobs:
             echo "Checking $pkg_name..."
             cd "$pkg_dir"
 
-            pnpm pack 2>&1 > /dev/null
+            pnpm pack > /dev/null 2>&1
             tarball=$(ls *.tgz)
 
             if tar -tzf "$tarball" | grep -q "dist/.*\.js"; then
